@@ -1,0 +1,242 @@
+[
+  {
+    "width": 320,
+    "height": 700,
+    "chapter": "invitation",
+    "contained16by9": true,
+    "noHorizontalOverflow": true,
+    "touchTargets44": true
+  },
+  {
+    "width": 320,
+    "height": 700,
+    "chapter": "welcome",
+    "contained16by9": true,
+    "noHorizontalOverflow": true,
+    "touchTargets44": true
+  },
+  {
+    "width": 320,
+    "height": 700,
+    "chapter": "hallway",
+    "contained16by9": true,
+    "noHorizontalOverflow": true,
+    "touchTargets44": true
+  },
+  {
+    "width": 320,
+    "height": 700,
+    "chapter": "room",
+    "contained16by9": true,
+    "noHorizontalOverflow": true,
+    "touchTargets44": true
+  },
+  {
+    "width": 320,
+    "height": 700,
+    "chapter": "finale",
+    "contained16by9": true,
+    "noHorizontalOverflow": true,
+    "touchTargets44": true
+  },
+  {
+    "width": 375,
+    "height": 812,
+    "chapter": "invitation",
+    "contained16by9": true,
+    "noHorizontalOverflow": true,
+    "touchTargets44": true
+  },
+  {
+    "width": 375,
+    "height": 812,
+    "chapter": "welcome",
+    "contained16by9": true,
+    "noHorizontalOverflow": true,
+    "touchTargets44": true
+  },
+  {
+    "width": 375,
+    "height": 812,
+    "chapter": "hallway",
+    "contained16by9": true,
+    "noHorizontalOverflow": true,
+    "touchTargets44": true
+  },
+  {
+    "width": 375,
+    "height": 812,
+    "chapter": "room",
+    "contained16by9": true,
+    "noHorizontalOverflow": true,
+    "touchTargets44": true
+  },
+  {
+    "width": 375,
+    "height": 812,
+    "chapter": "finale",
+    "contained16by9": true,
+    "noHorizontalOverflow": true,
+    "touchTargets44": true
+  },
+  {
+    "width": 390,
+    "height": 844,
+    "chapter": "invitation",
+    "contained16by9": true,
+    "noHorizontalOverflow": true,
+    "touchTargets44": true
+  },
+  {
+    "width": 390,
+    "height": 844,
+    "chapter": "welcome",
+    "contained16by9": true,
+    "noHorizontalOverflow": true,
+    "touchTargets44": true
+  },
+  {
+    "width": 390,
+    "height": 844,
+    "chapter": "hallway",
+    "contained16by9": true,
+    "noHorizontalOverflow": true,
+    "touchTargets44": true
+  },
+  {
+    "width": 390,
+    "height": 844,
+    "chapter": "room",
+    "contained16by9": true,
+    "noHorizontalOverflow": true,
+    "touchTargets44": true
+  },
+  {
+    "width": 390,
+    "height": 844,
+    "chapter": "finale",
+    "contained16by9": true,
+    "noHorizontalOverflow": true,
+    "touchTargets44": true
+  },
+  {
+    "width": 844,
+    "height": 390,
+    "chapter": "invitation",
+    "contained16by9": true,
+    "noHorizontalOverflow": true,
+    "touchTargets44": true
+  },
+  {
+    "width": 844,
+    "height": 390,
+    "chapter": "welcome",
+    "contained16by9": true,
+    "noHorizontalOverflow": true,
+    "touchTargets44": true
+  },
+  {
+    "width": 844,
+    "height": 390,
+    "chapter": "hallway",
+    "contained16by9": true,
+    "noHorizontalOverflow": true,
+    "touchTargets44": true
+  },
+  {
+    "width": 844,
+    "height": 390,
+    "chapter": "room",
+    "contained16by9": true,
+    "noHorizontalOverflow": true,
+    "touchTargets44": true
+  },
+  {
+    "width": 844,
+    "height": 390,
+    "chapter": "finale",
+    "contained16by9": true,
+    "noHorizontalOverflow": true,
+    "touchTargets44": true
+  },
+  {
+    "width": 720,
+    "height": 450,
+    "chapter": "invitation",
+    "contained16by9": true,
+    "noHorizontalOverflow": true,
+    "touchTargets44": true
+  },
+  {
+    "width": 720,
+    "height": 450,
+    "chapter": "welcome",
+    "contained16by9": true,
+    "noHorizontalOverflow": true,
+    "touchTargets44": true
+  },
+  {
+    "width": 720,
+    "height": 450,
+    "chapter": "hallway",
+    "contained16by9": true,
+    "noHorizontalOverflow": true,
+    "touchTargets44": true
+  },
+  {
+    "width": 720,
+    "height": 450,
+    "chapter": "room",
+    "contained16by9": true,
+    "noHorizontalOverflow": true,
+    "touchTargets44": true
+  },
+  {
+    "width": 720,
+    "height": 450,
+    "chapter": "finale",
+    "contained16by9": true,
+    "noHorizontalOverflow": true,
+    "touchTargets44": true
+  },
+  {
+    "width": 1024,
+    "height": 600,
+    "chapter": "invitation",
+    "contained16by9": true,
+    "noHorizontalOverflow": true,
+    "touchTargets44": true
+  },
+  {
+    "width": 1024,
+    "height": 600,
+    "chapter": "welcome",
+    "contained16by9": true,
+    "noHorizontalOverflow": true,
+    "touchTargets44": true
+  },
+  {
+    "width": 1024,
+    "height": 600,
+    "chapter": "hallway",
+    "contained16by9": true,
+    "noHorizontalOverflow": true,
+    "touchTargets44": true
+  },
+  {
+    "width": 1024,
+    "height": 600,
+    "chapter": "room",
+    "contained16by9": true,
+    "noHorizontalOverflow": true,
+    "touchTargets44": true
+  },
+  {
+    "width": 1024,
+    "height": 600,
+    "chapter": "finale",
+    "contained16by9": true,
+    "noHorizontalOverflow": true,
+    "touchTargets44": true
+  }
+]
