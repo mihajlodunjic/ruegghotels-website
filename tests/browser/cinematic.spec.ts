@@ -13,6 +13,7 @@ test('approved master → room V3 → reverse → hallway → genuine finale', a
   const errors: string[] = []
   const media: string[] = []
   page.on('pageerror', (error) => errors.push(error.message))
+  page.on('console', (message) => { if (message.type() === 'warning' && message.text().includes('GSAP target')) errors.push(message.text()) })
   page.on('request', (request) => { if (request.url().includes('.mp4')) media.push(request.url()) })
   await page.goto('/')
   await expect(page.getByRole('button', { name: 'Step inside' })).toBeVisible()

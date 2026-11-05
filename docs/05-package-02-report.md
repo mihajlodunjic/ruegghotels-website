@@ -20,6 +20,7 @@
 - `npm test`: PASS, all 29 existing reducer/controller tests.
 - `npm run build`: PASS; local fonts and hashed official logo included.
 - Focused Chromium: desktop/mobile core journey and error recovery passed; desktop/mobile static/accessibility and playing-menu pause/resume passed (4 tests). An obsolete case-sensitive Explore Room locator was updated for the approved action capitalization.
+- Follow-up desktop smoke: PASS, with GSAP target warnings now treated as failures; animation cleanup skips empty target lists.
 - Final core journey capture: PASS, 4/4 required viewports (2.0 min), including the expanded-panel-close → reverse sequencing assertion. 28 final checkpoint/menu screenshots.
 - Additional responsive checks: 30 static chapter/layout checks at 320×700, 375×812, 390×844, 844×390, 720×450 and 1024×600. No horizontal overflow; 16:9 media geometry and 44px controls pass. [Recorded checks](evidence/package-02/responsive-qa.json).
 - Active mobile/landscape playback: four checks confirm no page scroll at 390×844, 375×812, 844×390 and 720×450. [Recorded checks](evidence/package-02/active-mobile-qa.json).

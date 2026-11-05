@@ -62,7 +62,10 @@ export function useEditorialMotion({ stage, frame, panel, exits, mode, chapter, 
         control.removeEventListener('focus', enter); control.removeEventListener('blur', leave)
       }
     })
-    return () => { handlers.forEach((cleanup) => cleanup()); gsap.killTweensOf(arrows); gsap.set(arrows, { clearProps: 'transform' }) }
+    return () => {
+      handlers.forEach((cleanup) => cleanup())
+      if (arrows.length) { gsap.killTweensOf(arrows); gsap.set(arrows, { clearProps: 'transform' }) }
+    }
   }, [stage, mode, chapter, reducedMotion])
   const withdraw = () => {
     if (reducedMotion || !panel.current || !stage.current || !exits.current) return
