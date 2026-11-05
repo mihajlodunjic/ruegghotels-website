@@ -1,0 +1,81 @@
+.home { min-height: 100svh; }
+.stage { position: relative; min-height: 100svh; height: 100svh; overflow: hidden; background: var(--ink); color: var(--ivory); }
+.mediaFrame { position: absolute; width: min(100vw, 177.777778svh); height: min(100svh, 56.25vw); top: 50%; left: 50%; transform: translate(-50%, -50%); }
+.still, .video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
+.still { display: block; }
+.video { opacity: 0; pointer-events: none; }
+.visibleVideo { opacity: 1; }
+.editorial { position: absolute; z-index: 2; }
+.editorial h2 { font: italic 400 clamp(36px, 3.4vw, 66px)/1.18 var(--display); letter-spacing: -.025em; margin-bottom: 26px; }
+.editorial h2:focus { outline: none; }
+.invitation { right: 3.4%; top: 17%; bottom: 7%; width: 31.5%; max-width: 610px; padding: clamp(25px, 3.2vw, 62px); background: var(--ivory); color: var(--burgundy); display: flex; flex-direction: column; justify-content: space-between; }
+.invitation :global(.eyebrow) { margin-bottom: 25px; }
+.invitation h2 { font-size: clamp(34px, 3.15vw, 61px); }
+.introCopy { color: var(--brown); border-top: 1px solid var(--burgundy); padding-top: 18px; font-size: clamp(15px, 1.3vw, 22px); line-height: 1.65; }
+.actions { display: flex; gap: 16px 24px; align-items: center; flex-wrap: wrap; }
+.invitation .actions { flex-direction: column; align-items: stretch; gap: 8px; }
+.welcome, .hallway, .room { left: 4%; bottom: 95px; max-width: 55%; }
+.welcome::before, .hallway::before, .room:not(.infoOpen .room)::before { content: ''; position: absolute; inset: -40px -55px -30px -60px; background: linear-gradient(90deg, #211510e8, #21151085 70%, transparent); z-index: -1; pointer-events: none; }
+.welcome h2, .hallway h2, .room h2 { margin-bottom: 22px; }
+.hotspot { position: absolute; z-index: 1; left: 82.3%; top: 12.5%; width: 12.3%; height: 76.5%; background: #f7f2e807; color: var(--ivory); border: 1px solid #f7f2e899; clip-path: polygon(0 2%, 100% 0, 100% 100%, 0 98%); }
+.hotspot span { display: inline-grid; place-items: center; width: 44px; height: 44px; border: 1px solid var(--ivory); border-radius: 50%; background: var(--burgundy); font-size: 24px; }
+.hotspot:hover { background: #f7f2e81c; }
+.hotspot:focus-visible { clip-path: none; outline-offset: 3px; }
+.infoOpen .mediaFrame { left: 0; transform: translateY(-50%); width: 64vw; height: 36vw; }
+.infoOpen .room { inset: 0 0 0 auto; width: 36%; max-width: none; padding: 160px 4% 95px; color: var(--burgundy); background: var(--ivory); display: flex; flex-direction: column; justify-content: center; }
+.infoOpen .room h2 { font-size: clamp(34px, 3vw, 58px); }
+.infoOpen .room .actions { flex-direction: column; align-items: stretch; }
+.disclosure { font-size: 12px; line-height: 1.65; color: var(--brown); margin-bottom: 30px; }
+.finale { inset: 0 0 0 auto; width: 38%; padding: 145px 3.7% 85px; background: var(--burgundy); overflow-y: auto; }
+.finale h2 { font-size: clamp(32px, 3.05vw, 58px); margin-top: 32px; margin-bottom: 35px; }
+.selectorLabel { border-top: 1px solid #f7f2e888; padding-top: 18px; margin-bottom: 10px; text-transform: uppercase; letter-spacing: .16em; font-size: 11px; }
+.hotelList a { display: flex; align-items: center; justify-content: space-between; padding: clamp(15px, 2.1vh, 26px) 0; border-bottom: 1px solid #f7f2e866; text-decoration: none; font: clamp(27px, 2.5vw, 46px) var(--display); }
+.hotelList a:hover { padding-left: 10px; }
+.hotelList small { display: block; margin-top: 10px; font: 10px var(--sans); letter-spacing: .09em; text-transform: uppercase; }
+.finaleLinks { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-top: 30px; }
+.finaleLinks a, .finaleLinks button { font-size: 10px; }
+.toolbar { position: absolute; z-index: 3; bottom: max(12px, env(safe-area-inset-bottom)); left: 4%; right: 4%; display: flex; align-items: center; justify-content: space-between; gap: 15px; }
+.chapterLabel { background: #261a15ed; padding: 10px 14px; font-size: 10px; letter-spacing: .15em; text-transform: uppercase; }
+.transport { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+.transport button, .transport a { display: inline-flex; align-items: center; background: #261a15ed; color: var(--ivory); border: 1px solid #f7f2e84d; padding: 12px 14px; min-height: 44px; font-size: 10px; letter-spacing: .05em; text-transform: uppercase; text-decoration: none; }
+.atFinale .toolbar { right: 40%; }
+.atFinale .transport { display: none; }
+.loading { position: absolute; left: 4%; bottom: 100px; padding: 20px 26px; background: var(--ivory); color: var(--burgundy); display: flex; align-items: center; flex-wrap: wrap; gap: 20px; }
+.recovery { position: absolute; left: 4%; bottom: 100px; max-width: 570px; padding: 35px; background: var(--ivory); color: var(--burgundy); z-index: 4; }
+.recovery h2 { font: italic 36px var(--display); }
+.recovery p { font-size: 14px; line-height: 1.6; }
+@media (min-width: 768px) and (max-height: 750px) {
+  .invitation { top: 120px; bottom: 80px; padding: 24px 30px; }
+  .invitation h2 { font-size: 32px; margin-bottom: 15px; }
+  .introCopy { font-size: 14px; padding-top: 12px; margin-bottom: 12px; }
+  .finale { padding-top: 120px; } .finale h2 { margin: 10px 0 20px; font-size: 34px; }
+  .hotelList a { padding: 12px 0; } .finaleLinks { margin-top: 12px; }
+  .infoOpen .room { padding-top: 120px; padding-bottom: 80px; }
+}
+@media (max-width: 767px) {
+  .stage { height: auto; min-height: calc(100svh - 76px); overflow: visible; background: var(--ivory); color: var(--burgundy); }
+  .mediaFrame, .infoOpen .mediaFrame { position: relative; inset: auto; transform: none; width: 100%; height: auto; aspect-ratio: 16 / 9; }
+  .editorial, .infoOpen .room { position: relative; inset: auto; width: 100%; max-width: none; padding: 30px 26px 20px; background: var(--ivory); color: var(--burgundy); }
+  .editorial::before { display: none; }
+  .editorial h2, .invitation h2, .infoOpen .room h2 { font-size: clamp(36px, 10vw, 58px); line-height: 1.18; margin: 22px 0 28px; }
+  .invitation h2 br { display: none; }
+  .introCopy { padding-top: 18px; font-size: 16px; margin-bottom: 30px; }
+  .actions { flex-direction: column; align-items: stretch; gap: 14px; }
+  .actions :global(.button) { width: 100%; min-height: 58px; padding: 18px 20px; }
+  .actions :global(.text-link) { min-height: 44px; }
+  .hotspot { min-width: 44px; border-color: #f7f2e8b3; min-height: 44px; }
+  .hotspot span { width: 30px; height: 30px; font-size: 18px; }
+  .finale { background: var(--burgundy); color: var(--ivory); padding-top: 32px; padding-bottom: 30px; }
+  .finale h2 { font-size: clamp(34px, 9.3vw, 50px); }
+  .hotelList a { font-size: 33px; padding: 22px 0; }
+  .hotelList small { font-size: 11px; margin-top: 8px; }
+  .finaleLinks { margin-top: 22px; }
+  .toolbar, .atFinale .toolbar { position: relative; inset: auto; padding: 22px 26px max(24px, env(safe-area-inset-bottom)); display: flex; align-items: stretch; flex-direction: column; gap: 15px; }
+  .chapterLabel { background: transparent; color: var(--brown); padding: 0; line-height: 1.6; }
+  .transport { justify-content: flex-start; gap: 8px; }
+  .transport button, .transport a { background: transparent; border-color: #6a0f2b55; color: var(--burgundy); font-size: 10px; padding: 12px 10px; }
+  .loading, .recovery { position: relative; inset: auto; padding: 26px; margin: 0; max-width: none; }
+  .loading { min-height: 160px; }
+  .atFinale .toolbar { background: var(--burgundy); } .atFinale .chapterLabel { color: var(--ivory); }
+  .disclosure { margin-bottom: 25px; }
+}

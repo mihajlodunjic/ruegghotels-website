@@ -1,0 +1,31 @@
+{
+  "checks": [
+    "media/source/master-original.mp4: SHA-256 verified",
+    "media/source/room-v3-original.mp4: SHA-256 verified",
+    "media/source/b0-reconstructed-original.png: SHA-256 verified",
+    "public/media/master-1080.v1.mp4: SHA-256 verified",
+    "public/media/master-1080.v1.mp4: H.264 / 24 fps / yuv420p / 562 frames / no audio / faststart",
+    "public/media/room-forward-1080.v1.mp4: SHA-256 verified",
+    "public/media/room-forward-1080.v1.mp4: H.264 / 24 fps / yuv420p / 125 frames / no audio / faststart",
+    "public/media/room-reverse-1080.v1.mp4: SHA-256 verified",
+    "public/media/room-reverse-1080.v1.mp4: H.264 / 24 fps / yuv420p / 125 frames / no audio / faststart",
+    "public/media/master-720.v1.mp4: SHA-256 verified",
+    "public/media/master-720.v1.mp4: H.264 / 24 fps / yuv420p / 562 frames / no audio / faststart",
+    "public/media/room-forward-720.v1.mp4: SHA-256 verified",
+    "public/media/room-forward-720.v1.mp4: H.264 / 24 fps / yuv420p / 125 frames / no audio / faststart",
+    "public/media/room-reverse-720.v1.mp4: SHA-256 verified",
+    "public/media/room-reverse-720.v1.mp4: H.264 / 24 fps / yuv420p / 125 frames / no audio / faststart",
+    "public/posters/hero.v1.webp: SHA-256 verified",
+    "public/posters/reception.v1.webp: SHA-256 verified",
+    "public/posters/hallway.v1.webp: SHA-256 verified",
+    "public/posters/room.v1.webp: SHA-256 verified",
+    "public/posters/finale.v1.webp: SHA-256 verified"
+  ],
+  "comparisons": {
+    "1080-reverse-start-vs-B3-ssim": 0.989129,
+    "1080-reverse-end-vs-B0-ssim": 0.975178,
+    "720-reverse-start-vs-B3-ssim": 0.987574,
+    "720-reverse-end-vs-B0-ssim": 0.97112,
+    "1080-master-vs-source-average-ssim": 0.963828
+  }
+}

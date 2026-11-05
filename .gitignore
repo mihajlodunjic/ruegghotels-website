@@ -1,0 +1,12 @@
+node_modules/
+dist/
+media/source/
+media/qa/
+.tools/
+test-results/
+playwright-report/
+*.local
+*.log
+
+*.tsbuildinfo
+public/media/*.building.mp4

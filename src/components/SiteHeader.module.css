@@ -1,0 +1,21 @@
+.header { position: absolute; z-index: 10; top: 0; left: 0; width: 100%; display: flex; justify-content: space-between; align-items: center; padding: 26px 4%; color: var(--ivory); background: linear-gradient(#241813a8, transparent); }
+.brand { min-height: 44px; min-width: 44px; font-family: var(--display); font-size: clamp(28px, 2.8vw, 44px); letter-spacing: .08em; line-height: 1; text-decoration: none; }
+.brand span { display: block; font-family: var(--sans); font-size: 9px; letter-spacing: .36em; margin: 13px 0 0 3px; }
+.actions { display: flex; align-items: center; gap: 25px; }
+.menu { color: inherit; border: 0; background: #281c16aa; padding: 12px; display: flex; gap: 16px; align-items: center; }
+.menu span { font-size: 22px; }
+.book { background: var(--burgundy); padding: 22px 24px; text-decoration: none; text-transform: uppercase; letter-spacing: .07em; }
+.dialog { position: fixed; inset: 0; width: min(720px, 100%); height: 100dvh; max-height: 100dvh; max-width: 100%; margin: 0 0 0 auto; border: 0; background: var(--ivory); color: var(--burgundy); padding: 35px clamp(24px, 5vw, 70px); }
+.dialog::backdrop { background: #211610bb; }
+.menuTop { display: flex; justify-content: space-between; align-items: center; margin-bottom: 60px; }
+.menuTop button { color: inherit; border: 1px solid currentColor; background: transparent; padding: 12px 18px; }
+.dialog nav { display: grid; }
+.dialog nav a { display: flex; align-items: center; gap: 20px; border-top: 1px solid #6a0f2b55; padding: 20px 0; font: clamp(24px, 3vw, 40px) var(--display); text-decoration: none; }
+.dialog nav a > :last-child { margin-left: auto; }
+.note { margin-top: 50px; color: var(--brown); }
+@media (max-width: 767px) {
+  .header { position: relative; background: var(--ink); padding: 18px 22px; min-height: 76px; padding-top: max(18px, env(safe-area-inset-top)); }
+  .actions { gap: 10px; } .book { padding: 14px; } .menu { background: transparent; padding: 10px 4px; } .menu span { display: none; }
+  .brand { font-size: 27px; } .brand span { margin-top: 7px; font-size: 8px; }
+  .menuTop { margin-bottom: 30px; }
+}
