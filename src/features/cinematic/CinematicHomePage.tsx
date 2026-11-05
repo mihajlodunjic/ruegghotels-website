@@ -1,11 +1,12 @@
-import { useEffect, useLayoutEffect, useReducer, useRef } from 'react'
+import { useEffect, useReducer, useRef } from 'react'
 import { Link } from 'react-router-dom'
-import gsap from 'gsap'
 import { SiteHeader } from '../../components/SiteHeader'
+import { BrandSeal } from '../../components/BrandSeal'
 import { hotels } from '../../data/hotels'
-import { chapterOf, cinematicReducer, initialState, isPlaying, underlyingView, type CinematicEvent, type StaticChapter } from './cinematicMachine'
+import { chapterOf, cinematicReducer, initialState, isPlaying, underlyingView, type HotelId, type StaticChapter } from './cinematicMachine'
 import { poster } from './chapterConfig'
 import { useCinematicController } from './useCinematicController'
+import { useEditorialMotion } from './useEditorialMotion'
 import styles from './CinematicHomePage.module.css'
 
 const descriptions: Record<StaticChapter, string> = {
@@ -16,15 +17,18 @@ const descriptions: Record<StaticChapter, string> = {
   finale: 'A communal table on the left, with candlelight, flowers and an alpine lounge beyond.',
 }
 const labels: Record<StaticChapter, string> = { invitation: 'The invitation', welcome: 'The welcome', hallway: 'The choice', room: 'The room', finale: 'The table' }
+const numbers: Record<StaticChapter, string> = { invitation: '00', welcome: '01', hallway: '02', room: '02', finale: '03' }
+const destinations: Record<HotelId, string> = { agnes: 'Kandersteg, Switzerland', spalloni: 'Splügen, Switzerland', schiebel: 'Oberstdorf, Germany' }
 const staticPreference = () => matchMedia('(prefers-reduced-motion: reduce)').matches || Boolean((navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData)
 
 export function CinematicHomePage() {
   const [state, dispatch] = useReducer(cinematicReducer, undefined, () => initialState(staticPreference()))
   const master = useRef<HTMLVideoElement>(null)
   const branch = useRef<HTMLVideoElement>(null)
+  const stage = useRef<HTMLElement>(null)
+  const frame = useRef<HTMLDivElement>(null)
   const panel = useRef<HTMLElement>(null)
-  const heading = useRef<HTMLHeadingElement>(null)
-  const firstRender = useRef(true)
+  const exits = useRef<HTMLDivElement>(null)
   const presentation = useCinematicController(master, branch, state.view, dispatch)
   const view = underlyingView(state.view)
   const chapter = chapterOf(state.view)
@@ -34,49 +38,39 @@ export function CinematicHomePage() {
   const showVideo = (playing || view.mode === 'USER_PAUSED') && presentation.phase === 'ready'
   const info = view.mode === 'ROOM_INFO_OPEN' || (staticMode && chapter === 'room')
   const showEditorial = staticMode || ['INVITATION', 'WELCOME_PAUSED', 'HALLWAY_PAUSED', 'ROOM_AT_B3', 'ROOM_INFO_OPEN', 'FINALE'].includes(view.mode)
-  const send = (type: Extract<CinematicEvent, { type: string }>['type']) => dispatch({ type } as CinematicEvent)
-
-  useEffect(() => {
-    for (const name of ['welcome', 'hallway', 'room', 'finale'] as const) { const image = new Image(); image.src = poster(name) }
-  }, [])
-  useLayoutEffect(() => {
-    if (!showEditorial || !panel.current || state.reducedMotion) return
-    const context = gsap.context(() => { gsap.fromTo(panel.current, { opacity: 0, y: 12 }, { opacity: 1, y: 0, duration: .45, ease: 'power2.out' }) })
-    return () => context.revert()
-  }, [view.mode, chapter, showEditorial, state.reducedMotion])
-  useEffect(() => {
-    if (firstRender.current) { firstRender.current = false; return }
-    if (showEditorial && state.userHasInteracted) heading.current?.focus({ preventScroll: true })
-  }, [view.mode, chapter, showEditorial, state.userHasInteracted])
-
-  const action = (text: string, type: Parameters<typeof send>[0], outline = false) => <button className={`button ${outline ? 'button-outline' : ''}`} onClick={() => send(type)}>{text}<span aria-hidden="true">{text.startsWith('Back') ? '←' : '→'}</span></button>
+  const send = useEditorialMotion({ stage, frame, panel, exits, mode: view.mode, chapter, info, showEditorial, reducedMotion: state.reducedMotion, dispatch })
+  useEffect(() => { for (const name of ['welcome', 'hallway', 'room', 'finale'] as const) { const image = new Image(); image.src = poster(name) } }, [])
+  const action = (text: string, type: Parameters<typeof send>[0], secondary = false) => <button data-motion-link className={`${styles.action} ${secondary ? styles.secondary : ''}`} onClick={() => send(type)}><span>{text}</span><span data-motion-arrow className={styles.actionArrow} aria-hidden="true">{text.startsWith('Back') ? '←' : '↗'}</span></button>
   return <div className={styles.home}>
-    <SiteHeader open={state.view.mode === 'MENU_OPEN'} onOpen={() => send('OPEN_MENU')} onClose={() => send('CLOSE_MENU')} />
-    <main id="main-content" className={`${styles.stage} ${info ? styles.infoOpen : ''} ${chapter === 'finale' ? styles.atFinale : ''}`} data-state={state.view.mode} data-chapter={chapter} tabIndex={-1}>
+    <SiteHeader open={state.view.mode === 'MENU_OPEN'} onOpen={() => dispatch({ type: 'OPEN_MENU' })} onClose={() => dispatch({ type: 'CLOSE_MENU' })} />
+    <main ref={stage} id="main-content" className={`${styles.stage} ${info ? styles.infoOpen : ''} ${chapter === 'finale' ? styles.atFinale : ''}`} data-state={state.view.mode} data-chapter={chapter} data-playing={playing} data-ui-ready="true" tabIndex={-1}>
       <h1 className="sr-only">RÜEGG HOTELS — An invitation to belong</h1>
-      <div className={styles.mediaFrame} data-testid="media-frame">
+      <div ref={frame} className={styles.mediaFrame} data-testid="media-frame">
         <img className={styles.still} src={poster(chapter)} alt={descriptions[chapter]} fetchPriority="high" width="1920" height="1080" />
         <video ref={master} className={`${styles.video} ${showVideo && presentation.video === 'master' ? styles.visibleVideo : ''}`} data-testid="master-video" playsInline muted preload="none" aria-hidden="true" tabIndex={-1} />
         <video ref={branch} className={`${styles.video} ${showVideo && presentation.video === 'branch' ? styles.visibleVideo : ''}`} data-testid="branch-video" playsInline muted preload="none" aria-hidden="true" tabIndex={-1} />
-        {showEditorial && chapter === 'hallway' && <button className={styles.hotspot} onClick={() => send('ENTER_ROOM')} aria-label="Explore room through the right door"><span aria-hidden="true">+</span></button>}
+        {showEditorial && chapter === 'hallway' && <button className={styles.hotspot} onClick={() => send('ENTER_ROOM')} aria-label="Explore room through the right door"><span className={styles.doorMark} aria-hidden="true">↗</span><span className={styles.doorLabel} aria-hidden="true">Come in</span></button>}
       </div>
-      {showEditorial && <section ref={panel} aria-label={labels[chapter]} className={`${styles.editorial} ${styles[chapter]}`}>
-        <p className="eyebrow">{chapter === 'invitation' ? 'RÜEGG HOTELS / The invitation' : chapter === 'finale' ? 'RÜEGG HOTELS / The table' : `${chapter === 'welcome' ? '01' : chapter === 'hallway' ? '02' : '03'} / ${labels[chapter]}`}</p>
-        <h2 ref={heading} tabIndex={-1}>{chapter === 'invitation' ? <>We show you{' '}<br />the warmth{' '}<br />of the mountains.</> : chapter === 'welcome' ? <>A welcome that<br />feels like home.</> : chapter === 'hallway' ? <>Where would you<br />like to go?</> : chapter === 'room' ? <>Make yourself<br />at home.</> : <>Pull up a chair.<br />Share your story.</>}</h2>
-        {chapter === 'invitation' && <><p className={styles.introCopy}>Three alpine homes.<br />One invitation to belong.</p><div className={styles.actions}>{action('Step inside', 'START')}<Link className="text-link" to="/book">Book a stay ↗</Link></div></>}
-        {chapter === 'welcome' && <div className={styles.actions}>{action('Continue the journey', 'CONTINUE')}<Link className="text-link" to="/our-story">Our story ↗</Link></div>}
-        {chapter === 'hallway' && <div className={styles.actions}>{action('Explore room', 'ENTER_ROOM')}{action('Continue to the table', 'CONTINUE', true)}</div>}
+      {showEditorial && <section ref={panel} aria-label={labels[chapter]} className={`${styles.editorial} ${styles[chapter]} ${chapter === 'room' ? info ? styles.roomInfo : styles.roomDock : ''}`}>
+        <div className={styles.panelMasthead} data-reveal><p className="eyebrow">{chapter === 'invitation' ? 'AN INVITATION TO BELONG' : chapter === 'finale' ? 'RÜEGG HOTELS / OUR ALPINE HOMES' : `${chapter === 'welcome' ? '01 / A WARM WELCOME' : chapter === 'hallway' ? '02 / A MOMENT OF DISCOVERY' : 'YOUR OWN QUIET CORNER'}`}</p>{chapter === 'invitation' && <BrandSeal className={styles.invitationSeal} />}</div>
+        <h2 tabIndex={-1}>{chapter === 'invitation' ? <><span data-line>We show you</span>{' '}<em data-line>the warmth of</em>{' '}<em data-line>the mountains.</em></> : chapter === 'welcome' ? <><span data-line>A welcome that</span>{' '}<em data-line>feels like home.</em></> : chapter === 'hallway' ? <><span data-line>Where would you</span>{' '}<em data-line>like to go?</em></> : chapter === 'room' ? info ? <><span data-line>Make yourself</span>{' '}<em data-line>at home.</em></> : <span data-line>Stay a little longer.</span> : <><span data-line>Pull up a chair.</span>{' '}<em data-line>Share your story.</em></>}</h2>
+        {chapter === 'invitation' && <><p className={styles.introCopy} data-reveal>Three alpine homes.<br />One invitation to belong.</p><div className={styles.actions} data-reveal>{action('Step Inside', 'START')}<Link className={styles.quietLink} to="/book">Book a Stay <span aria-hidden="true">↗</span></Link></div><p className={styles.invitationNote} data-reveal>A little closer to the mountains.<br />A little closer to home.</p></>}
+        {chapter === 'welcome' && <div className={styles.actions} data-reveal>{action('Continue the Journey', 'CONTINUE')}<Link className={styles.quietLink} to="/our-story">Our Story <span aria-hidden="true">↗</span></Link></div>}
+        {chapter === 'hallway' && <div className={styles.actions} data-reveal>{action('Explore Room', 'ENTER_ROOM')}{action('Continue to the Table', 'CONTINUE', true)}</div>}
         {chapter === 'room' && <>
-          {info && <><p className={styles.introCopy}>A quieter moment<br />in the mountains.</p><p className={styles.disclosure}>An imagined brand space, not bookable room inventory.</p></>}
-          <div className={styles.actions}>{info ? <Link className="button" to="/book">Explore our stays <span aria-hidden="true">↗</span></Link> : action('About this room', 'OPEN_ROOM_INFO')}{action('Back to hallway', 'BACK_TO_HALLWAY', true)}{info && !staticMode && <button className="text-link" onClick={() => send('CLOSE_ROOM_INFO')}>Close room information</button>}</div>
+          {info && <><p className={styles.introCopy} data-reveal>A quieter moment in the mountains.<br />Let the outside world wait a while.</p><p className={styles.disclosure} data-reveal>An imagined brand space.<br />Not verified bookable room inventory.</p></>}
+          {info && !staticMode && <button className={styles.closeInfo} onClick={() => send('CLOSE_ROOM_INFO')} aria-label="Close room information"><span aria-hidden="true">×</span></button>}
+          <div className={styles.actions} data-reveal>{info ? <Link data-motion-link className={styles.action} to="/book"><span>Explore Our Stays</span><span data-motion-arrow className={styles.actionArrow} aria-hidden="true">↗</span></Link> : action('About this Room', 'OPEN_ROOM_INFO')}{action('Back to Hallway', 'BACK_TO_HALLWAY', true)}</div>
         </>}
-        {chapter === 'finale' && <><p className={styles.selectorLabel}>Choose your home</p><div className={styles.hotelList}>{hotels.map((hotel) => <Link onClick={() => dispatch({ type: 'SELECT_HOTEL', hotel: hotel.id })} key={hotel.id} to={`/book?hotel=${hotel.id}`}><span>{hotel.name}<small>{hotel.destination}</small></span><span aria-hidden="true">↗</span></Link>)}</div><div className={styles.finaleLinks}><Link className="text-link" to="/partners">Our local circle ↗</Link><button className="text-link" onClick={() => send('REPLAY')}>Replay journey ↻</button></div></>}
+        {chapter === 'finale' && <><p className={styles.selectorLabel} data-reveal>Find your home in the mountains</p><div className={styles.hotelList}>{hotels.map((hotel, index) => <Link data-reveal data-motion-link onClick={() => dispatch({ type: 'SELECT_HOTEL', hotel: hotel.id })} key={hotel.id} to={`/book?hotel=${hotel.id}`}><span className={styles.hotelNumber}>0{index + 1}</span><span className={styles.hotelName}>{hotel.name}<small>{destinations[hotel.id]}</small></span><span data-motion-arrow className={styles.hotelArrow} aria-hidden="true">↗</span></Link>)}</div><div className={styles.finaleLinks} data-reveal><Link className={styles.quietLink} to="/partners">Our Local Circle <span aria-hidden="true">↗</span></Link><button className={styles.quietLink} onClick={() => send('REPLAY')}>Replay Journey <span aria-hidden="true">↻</span></button></div></>}
       </section>}
-      {playing && presentation.phase !== 'ready' && <div className={styles.loading} role="status">Preparing the next moment… <button className="text-link" onClick={() => send('ENTER_STATIC_MODE')}>Use still images</button></div>}
-      {interrupted && <section className={styles.recovery} aria-label="Playback controls"><h2>{view.mode === 'USER_PAUSED' ? 'Take your time.' : 'The journey is still here.'}</h2><p>{view.mode === 'MEDIA_ERROR' ? view.errorCode : 'The film is paused. Resume whenever you are ready.'}</p><div className={styles.actions}>{action(view.mode === 'USER_PAUSED' ? 'Resume journey' : 'Retry film', view.mode === 'USER_PAUSED' ? 'RESUME' : 'RETRY')}{action('Use still images', 'ENTER_STATIC_MODE', true)}</div></section>}
+      <div ref={exits} className={styles.exitLayer} aria-hidden="true" />
+      {playing && <div className={styles.playingCaption} aria-hidden="true"><span className="eyebrow">THE JOURNEY / RÜEGG HOTELS</span><p>{view.mode === 'ROOM_ENTERING' ? 'A quiet corner awaits.' : view.mode === 'ROOM_EXITING' ? 'The journey continues.' : 'A little closer to home.'}</p></div>}
+      {playing && presentation.phase !== 'ready' && <div className={styles.loading} role="status"><span className={styles.loadingDot} />Preparing the next moment… <button className={styles.quietLink} onClick={() => send('ENTER_STATIC_MODE')}>Use still images</button></div>}
+      {interrupted && <section className={styles.recovery} aria-label="Playback controls"><p className="eyebrow">AT YOUR OWN PACE</p><h2>{view.mode === 'USER_PAUSED' ? 'Take your time.' : 'The journey is still here.'}</h2><p>{view.mode === 'MEDIA_ERROR' ? view.errorCode : 'The film is paused. Resume whenever you are ready.'}</p><div className={styles.actions}>{action(view.mode === 'USER_PAUSED' ? 'Resume Journey' : 'Retry Film', view.mode === 'USER_PAUSED' ? 'RESUME' : 'RETRY')}{action('Use still images', 'ENTER_STATIC_MODE', true)}</div></section>}
       <footer className={styles.toolbar}>
-        <span className={styles.chapterLabel}>{labels[chapter]}{staticMode ? ' · Still-image journey' : chapter === 'hallway' ? ' · 17.125 s' : ''}</span>
-        <div className={styles.transport}>{playing && <button onClick={() => send('PAUSE')}>Pause film Ⅱ</button>}{chapter !== 'finale' && <><button onClick={() => send('SKIP')}>Skip to overview</button><Link to="/book">Go to booking ↗</Link></>}{!staticMode && <button onClick={() => send('ENTER_STATIC_MODE')}>Still images</button>}</div>
+        <div className={styles.chapterLabel}><span>{numbers[chapter]} <i>/ 03</i></span><span className={styles.chapterLine} /><span>{labels[chapter]}{staticMode ? ' · Stills' : ''}</span></div>
+        <div className={styles.transport}>{playing && <button onClick={() => send('PAUSE')}>Pause film <span aria-hidden="true">Ⅱ</span></button>}{chapter !== 'finale' && <button onClick={() => send('SKIP')}>Skip to overview <span aria-hidden="true">↗</span></button>}{!staticMode && <button onClick={() => send('ENTER_STATIC_MODE')}>Still images</button>}</div>
       </footer>
       <p className="sr-only" role="status" aria-live="polite">{interrupted ? view.mode === 'MEDIA_ERROR' ? 'Playback unavailable. Retry and still-image controls are available.' : 'Journey paused.' : playing ? 'Film playing.' : `${labels[chapter]}. ${descriptions[chapter]}`}</p>
     </main>

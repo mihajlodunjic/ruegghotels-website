@@ -3,15 +3,17 @@ import AxeBuilder from '@axe-core/playwright'
 import { mkdir } from 'node:fs/promises'
 const state = (page: Page, mode: string) => expect(page.locator('main')).toHaveAttribute('data-state', mode)
 const shot = async (page: Page, info: TestInfo, name: string) => {
-  await expect.poll(() => page.locator('section[aria-label]').first().evaluate((element) => getComputedStyle(element).opacity)).toBe('1')
-  await mkdir('docs/evidence/package-01', { recursive: true })
-  await page.screenshot({ path: `docs/evidence/package-01/${info.project.name}-${name}.png`, fullPage: true, animations: 'disabled' })
+  await expect(page.locator('main')).toHaveAttribute('data-ui-ready', 'true')
+  await page.evaluate(() => document.fonts.ready)
+  await mkdir('docs/evidence/package-02', { recursive: true })
+  await page.screenshot({ path: `docs/evidence/package-02/${info.project.name}-${name}.png`, fullPage: true, animations: 'disabled' })
 }
 
 test('approved master → room V3 → reverse → hallway → genuine finale', async ({ page }, info) => {
   const errors: string[] = []
   const media: string[] = []
   page.on('pageerror', (error) => errors.push(error.message))
+  page.on('console', (message) => { if (message.type() === 'warning' && message.text().includes('GSAP target')) errors.push(message.text()) })
   page.on('request', (request) => { if (request.url().includes('.mp4')) media.push(request.url()) })
   await page.goto('/')
   await expect(page.getByRole('button', { name: 'Step inside' })).toBeVisible()
@@ -21,6 +23,11 @@ test('approved master → room V3 → reverse → hallway → genuine finale', a
   await state(page, 'WELCOME_PAUSED')
   expect(await page.getByTestId('master-video').evaluate((v: HTMLVideoElement) => v.currentTime)).toBe(10)
   await shot(page, info, 'welcome')
+  await page.getByRole('button', { name: 'Menu', exact: false }).click()
+  await expect(page.getByRole('dialog')).toHaveAttribute('data-menu-ready', 'true')
+  await shot(page, info, 'menu')
+  await page.keyboard.press('Escape')
+  await expect(page.getByRole('dialog')).not.toBeVisible()
   await page.getByRole('button', { name: 'Continue the journey' }).click()
   await state(page, 'HALLWAY_PAUSED')
   expect(await page.getByTestId('master-video').evaluate((v: HTMLVideoElement) => v.currentTime)).toBe(17.125)
@@ -35,6 +42,10 @@ test('approved master → room V3 → reverse → hallway → genuine finale', a
   await state(page, 'ROOM_INFO_OPEN')
   await shot(page, info, 'room-info')
   await page.getByRole('button', { name: 'Back to hallway' }).click()
+  await state(page, 'ROOM_AT_B3')
+  await expect(page.getByTestId('branch-video')).toHaveJSProperty('paused', true)
+  await state(page, 'ROOM_EXITING')
+  await expect(page.getByRole('button', { name: 'Close room information' })).toHaveCount(0)
   await state(page, 'HALLWAY_PAUSED')
   expect(media.some((url) => url.includes('room-reverse'))).toBe(true)
   expect(await page.locator('video').evaluateAll((videos) => videos.filter((video) => !(video as HTMLVideoElement).paused).length)).toBe(0)
@@ -67,7 +78,7 @@ test('skip, menu, keyboard focus, route shell and static accessible branch', asy
   await expect(page.getByRole('button', { name: 'Menu', exact: false })).toBeFocused()
   await page.getByRole('button', { name: 'Step inside' }).click()
   await page.getByRole('button', { name: 'Continue the journey' }).click()
-  await page.getByRole('button', { name: 'Explore room', exact: true }).click()
+  await page.getByRole('button', { name: /^Explore Room$/i }).click()
   await page.getByRole('button', { name: 'Back to hallway' }).click()
   await page.getByRole('button', { name: 'Continue to the table' }).click()
   const undersized = await page.locator('a,button,select').evaluateAll((elements) => elements.map((element) => ({ name: element.textContent?.trim(), rect: element.getBoundingClientRect() })).filter(({ rect }) => rect.width > 0 && rect.height > 0 && (rect.width < 44 || rect.height < 44)).map(({ name, rect }) => ({ name, width: rect.width, height: rect.height })))
@@ -97,7 +108,7 @@ test('rejected play and failed media retain a poster and static recovery', async
   await page.goto('/')
   await page.getByRole('button', { name: 'Step inside' }).click()
   await state(page, 'MEDIA_ERROR')
-  await expect(page.locator('img')).toBeVisible()
+  await expect(page.getByTestId('media-frame').locator('img')).toBeVisible()
   await expect(page.getByRole('button', { name: 'Retry film' })).toBeVisible()
   await page.getByRole('button', { name: 'Use still images' }).click()
   await state(page, 'STATIC_FALLBACK')
