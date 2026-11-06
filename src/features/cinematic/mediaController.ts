@@ -132,6 +132,8 @@ export class CinematicPlayerController {
       signal.throwIfAborted()
       listeners.forEach(([event, handler]) => video.addEventListener(event, handler))
       if (config.stop !== undefined && video.currentTime >= config.stop - .0001) { await finish(); return }
+      // Compress only the opening entrance journey; normal speed resumes after the reception pause.
+      video.playbackRate = config.playbackRate ?? 1
       if (callbacks) frameRequest = video.requestVideoFrameCallback(tick)
       await video.play()
       if (signal.aborted && this.activeVideo !== video) video.pause()

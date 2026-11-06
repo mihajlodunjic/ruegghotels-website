@@ -4,6 +4,7 @@ import { CinematicPlayerController, seekTo, waitForMedia } from './mediaControll
 
 class FakeVideo extends EventTarget {
   paused = true
+  playbackRate = 1
   readyState = 2
   duration = 23.416667
   seeking = false
@@ -64,6 +65,32 @@ describe('native media controller', () => {
     expect(master.seeks).toHaveLength(seeks)
     await settle()
     expect(dispatch).toHaveBeenCalledWith({ type: 'HALLWAY_REACHED' })
+    controller.dispose()
+  })
+  it('shortens the opening entrance with 1.4x playback but keeps later chapters at normal speed', async () => {
+    const { controller, master, branch, dispatch } = setup()
+    controller.sync({ mode: 'MASTER_TO_WELCOME' }); await settle()
+    expect(master.playbackRate).toBe(1.4)
+    expect(master.currentTime).toBe(0)
+    master.frame(10); await settle()
+    expect(dispatch).toHaveBeenCalledWith({ type: 'WELCOME_REACHED' })
+    controller.sync({ mode: 'WELCOME_PAUSED' })
+    controller.sync({ mode: 'MASTER_TO_HALLWAY' }); await settle()
+    expect(master.playbackRate).toBe(1)
+    expect(master.currentTime).toBe(10)
+    controller.sync({ mode: 'ROOM_ENTERING' }); await settle()
+    expect(branch.playbackRate).toBe(1)
+    controller.dispose()
+  })
+  it('retains entrance playback speed when the visitor pauses and resumes mid-scene', async () => {
+    const { controller, master } = setup()
+    controller.sync({ mode: 'MASTER_TO_WELCOME' }); await settle()
+    master.frame(3)
+    controller.sync({ mode: 'USER_PAUSED', resumeState: 'MASTER_TO_WELCOME' })
+    controller.sync({ mode: 'MASTER_TO_WELCOME' }); await settle()
+    expect(master.currentTime).toBe(3)
+    expect(master.playbackRate).toBe(1.4)
+    expect(master.paused).toBe(false)
     controller.dispose()
   })
   it('reuses the branch element for reverse and keeps the master paused', async () => {
