@@ -11,7 +11,7 @@ npm ci
 npm run dev
 ```
 
-Open `http://127.0.0.1:5173/`. **Step inside** starts the native video journey: reception at **10.000 s**, hallway at **17.125 s**, Room V3 forward → B3 → reverse → hallway, then the genuine final Master frame at **23.375 s**. Reduced motion and Save-Data start a complete still-image alternative. **Back to Beginning** returns to the invitation from playback, pauses, room information, recovery and the menu, without autoplay.
+Open `http://127.0.0.1:5173/`. **Step inside** starts the native video journey: reception at **10.000 s**, hallway at **17.125 s**, Room V3 forward → B3 → reverse → hallway, then the genuine final Master frame at **23.375 s**. Reduced motion and Save-Data start a complete still-image alternative. **Back to Beginning** visibly rewinds at a target 5× from the current Master position, exiting the room first when necessary. Reverse media loads only on demand. Mobile uses an encoded 5× edition at ordinary 1× playback; desktop uses native 5× with the same encoded fallback if the browser rejects, clamps or under-delivers the rate. **Finish rewind** or Escape returns immediately. Reduced motion, unavailable media and recovery retain a safe instant reset. The invitation always requires a fresh **Step Inside** gesture.
 
 On phones the shared 16:9 source plane covers the usable viewport, with chapter-aware framing shared by both media layers and the door hotspot. Desktop retains its full-frame compositions. Checkpoint stills remain the editorial pause mechanism: the outgoing video is held until the replacement image is decoded and painted; playback is revealed only after a valid video frame arrives.
 
@@ -79,3 +79,15 @@ The scripts preserve originals and record hashes/probes in `public/media/manifes
 ## Working policy
 
 Read `AGENTS.md`, `docs/*.md`, the current `codex/` package prompt and reference mockups before changes. The latest owner prompt supersedes older concept-only content rules and authorizes the local simulation above. Work from accepted main on a focused feature branch, run checks, capture evidence, commit/push and open a PR. Never force-push, merge or deploy without authorization.
+
+## Cinematic rewind
+
+The tracked forward media, 24 FPS, checkpoints and room navigation are unchanged. The new reverse editions are derived only from tracked optimized 1080p videos; original source files are not required. Rebuild/verify them from the repository root with FFmpeg/FFprobe on PATH (or `FFMPEG`/`FFPROBE`):
+
+```sh
+node media/scripts/build-rewind.mjs
+node media/scripts/verify-rewind.mjs
+npm run test:e2e -- tests/browser/rewind.spec.ts --project=desktop --project=mobile
+```
+
+The builder preserves 1920×1080 and 24 FPS, includes both genuine endpoint frames in the short 5× editions, and records hashes in `public/media/rewind-manifest.v1.json`. Verification checks hashes, media structure and SSIM against the existing footage. Browser evidence defaults to ignored `test-results/rewind-evidence`; override `RUEGG_REWIND_EVIDENCE` if needed. See [rewind validation and device limitations](docs/09-cinematic-rewind.md).

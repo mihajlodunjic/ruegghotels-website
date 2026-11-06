@@ -29,19 +29,22 @@ export function CinematicHomePage() {
   const chapter = chapterOf(state.view)
   const staticMode = view.mode === 'STATIC_FALLBACK'
   const playing = isPlaying(view.mode)
+  const rewinding = view.mode === 'REWINDING'
   const interrupted = view.mode === 'USER_PAUSED' || view.mode === 'MEDIA_ERROR' || presentation.phase === 'error'
   const beginning = view.mode === 'INVITATION' || (staticMode && chapter === 'invitation')
   const showVideo = presentation.video !== null && ['ready', 'holding', 'error'].includes(presentation.phase)
   const info = view.mode === 'ROOM_INFO_OPEN' || (staticMode && chapter === 'room')
   const wantsEditorial = staticMode || ['INVITATION', 'WELCOME_PAUSED', 'HALLWAY_PAUSED', 'ROOM_AT_B3', 'ROOM_INFO_OPEN', 'FINALE'].includes(view.mode)
-  const visualReady = wantsEditorial ? presentation.still === chapter && presentation.phase === 'idle' : ['ready', 'holding'].includes(presentation.phase)
+  // Rewind retains the outgoing painted still/frame while the inactive video prepares.
+  const visualReady = rewinding || (wantsEditorial ? presentation.still === chapter && presentation.phase === 'idle' : ['ready', 'holding'].includes(presentation.phase))
   const showEditorial = wantsEditorial && visualReady
   const send = useEditorialMotion({ stage, frame, panel, exits, mode: view.mode, chapter, info, showEditorial, visualReady, reducedMotion: state.reducedMotion, dispatch })
-  const restart = () => { cancel(); send('REPLAY') }
+  const restart = () => { if (!rewinding) { cancel(); send('REWIND') } }
+  const finishRewind = () => { cancel(); send('REPLAY') }
   const action = (text: string, type: Parameters<typeof send>[0], secondary = false) => <button data-motion-link className={`${styles.action} ${secondary ? styles.secondary : ''}`} onClick={() => send(type)}><span>{text}</span><span data-motion-arrow className={styles.actionArrow} aria-hidden="true">{text.startsWith('Back') ? '←' : '↗'}</span></button>
   return <div className={styles.home}>
     <SiteHeader open={state.view.mode === 'MENU_OPEN'} onOpen={() => dispatch({ type: 'OPEN_MENU' })} onClose={() => dispatch({ type: 'CLOSE_MENU' })} onBeginning={!beginning ? restart : undefined} />
-    <main ref={stage} id="main-content" className={`${styles.stage} ${info ? styles.infoOpen : ''} ${chapter === 'finale' ? styles.atFinale : ''}`} data-state={state.view.mode} data-chapter={chapter} data-playing={playing} data-ui-ready="true" data-visual-ready={visualReady} data-media-phase={presentation.phase} data-still={presentation.still} tabIndex={-1}>
+    <main ref={stage} id="main-content" className={`${styles.stage} ${info ? styles.infoOpen : ''} ${chapter === 'finale' ? styles.atFinale : ''}`} data-state={state.view.mode} data-chapter={chapter} data-playing={playing} data-rewinding={rewinding} data-ui-ready="true" data-visual-ready={visualReady} data-media-phase={presentation.phase} data-still={presentation.still} tabIndex={-1} onKeyDown={(event) => { if (rewinding && event.key === 'Escape') { event.preventDefault(); finishRewind() } }}>
       <h1 className="sr-only">RÜEGG HOTELS — An invitation to belong</h1>
       <div ref={frame} className={styles.mediaFrame} data-testid="media-frame">
         <div ref={plane} className={styles.sourcePlane} data-testid="source-plane">
@@ -72,10 +75,10 @@ export function CinematicHomePage() {
       {interrupted && <section className={styles.recovery} aria-label="Playback controls"><p className="eyebrow">AT YOUR OWN PACE</p><h2>{view.mode === 'USER_PAUSED' ? 'Take your time.' : 'The journey is still here.'}</h2><p>{presentation.error || (view.mode === 'MEDIA_ERROR' ? view.errorCode : 'The film is paused. Resume whenever you are ready.')}</p><div className={styles.actions}>{presentation.phase === 'error' ? <button className={styles.action} onClick={retry}>Retry scene</button> : action(view.mode === 'USER_PAUSED' ? 'Resume Journey' : 'Retry Film', view.mode === 'USER_PAUSED' ? 'RESUME' : 'RETRY')}{action('Use still images', 'ENTER_STATIC_MODE', true)}</div></section>}
       <footer className={styles.toolbar}>
         <div className={styles.chapterLabel}><span>{numbers[chapter]} <i>/ 03</i></span><span className={styles.chapterLine} /><span>{labels[chapter]}{staticMode ? ' · Stills' : ''}</span></div>
-        {!beginning && <button className={styles.beginning} onClick={restart}>Back to Beginning <span aria-hidden="true">↶</span></button>}
-        <div className={styles.transport}>{playing && <button onClick={() => send('PAUSE')}>Pause film <span aria-hidden="true">Ⅱ</span></button>}{chapter !== 'finale' && <button onClick={() => send('SKIP')}>Skip to overview <span aria-hidden="true">↗</span></button>}{!staticMode && <button onClick={() => send('ENTER_STATIC_MODE')}>Still images</button>}</div>
+        {!beginning && <button className={styles.beginning} onClick={rewinding ? finishRewind : restart}>{rewinding ? 'Finish rewind' : 'Back to Beginning'} <span aria-hidden="true">↶</span></button>}
+        {!rewinding && <div className={styles.transport}>{playing && <button onClick={() => send('PAUSE')}>Pause film <span aria-hidden="true">Ⅱ</span></button>}{chapter !== 'finale' && <button onClick={() => send('SKIP')}>Skip to overview <span aria-hidden="true">↗</span></button>}{!staticMode && <button onClick={() => send('ENTER_STATIC_MODE')}>Still images</button>}</div>}
       </footer>
-      <p className="sr-only" role="status" aria-live="polite">{interrupted ? view.mode === 'MEDIA_ERROR' ? 'Playback unavailable. Retry and still-image controls are available.' : 'Journey paused.' : playing ? 'Film playing.' : `${labels[chapter]}. ${descriptions[chapter]}`}</p>
+      <p className="sr-only" role="status" aria-live="polite">{rewinding ? 'Returning to the beginning. Press Escape or Finish rewind to return immediately.' : interrupted ? view.mode === 'MEDIA_ERROR' ? 'Playback unavailable. Retry and still-image controls are available.' : 'Journey paused.' : playing ? 'Film playing.' : `${labels[chapter]}. ${descriptions[chapter]}`}</p>
     </main>
   </div>
 }

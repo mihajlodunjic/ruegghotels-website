@@ -6,7 +6,7 @@ export const poster = (chapter: StaticChapter) => `${base}/posters/${({ invitati
 // Serve the existing 1080p video editions on both desktop and mobile.
 // Mobile cropping/framing is controlled separately by the cinematic layout.
 const mediaResolution = { mobile: '1080', desktop: '1080' } as const
-export const mediaUrl = (kind: 'master' | 'room-forward' | 'room-reverse', mobile: boolean) => `${base}/media/${kind}-${mediaResolution[mobile ? 'mobile' : 'desktop']}.v1.mp4`
+export const mediaUrl = (kind: 'master' | 'room-forward' | 'room-reverse' | 'master-reverse' | 'master-reverse-5x' | 'room-reverse-5x', mobile: boolean) => `${base}/media/${kind}-${mediaResolution[mobile ? 'mobile' : 'desktop']}.v1.mp4`
 export const playback: Record<PlayingScene, { video: 'master' | 'branch'; source: 'master' | 'room-forward' | 'room-reverse'; start: number; stop?: number; playbackRate?: number; event: 'WELCOME_REACHED' | 'HALLWAY_REACHED' | 'ROOM_FINISHED' | 'REVERSE_FINISHED' | 'MASTER_FINISHED' }> = {
   MASTER_TO_WELCOME: { video: 'master', source: 'master', start: 0, stop: CHECKPOINTS.reception, playbackRate: 2, event: 'WELCOME_REACHED' },
   MASTER_TO_HALLWAY: { video: 'master', source: 'master', start: CHECKPOINTS.reception, stop: CHECKPOINTS.hallway, event: 'HALLWAY_REACHED' },

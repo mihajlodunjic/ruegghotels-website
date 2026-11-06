@@ -1,0 +1,217 @@
+[
+  {
+    "scenario": "desktop-active-native-events",
+    "samples": 50,
+    "missingDecodedLayers": 0,
+    "maximumPlayingVideos": 1,
+    "states": [
+      "INVITATION",
+      "REWINDING"
+    ],
+    "observedCameraRates": {
+      "master-reverse-1080.v1.mp4": 5.18
+    }
+  },
+  {
+    "scenario": "desktop-finale",
+    "samples": 286,
+    "missingDecodedLayers": 0,
+    "maximumPlayingVideos": 1,
+    "states": [
+      "INVITATION",
+      "REWINDING"
+    ],
+    "observedCameraRates": {
+      "master-reverse-1080.v1.mp4": 4.96
+    }
+  },
+  {
+    "scenario": "desktop-hallway",
+    "samples": 214,
+    "missingDecodedLayers": 0,
+    "maximumPlayingVideos": 1,
+    "states": [
+      "INVITATION",
+      "REWINDING"
+    ],
+    "observedCameraRates": {
+      "master-reverse-1080.v1.mp4": 5.0
+    }
+  },
+  {
+    "scenario": "desktop-paused-menu",
+    "samples": 63,
+    "missingDecodedLayers": 0,
+    "maximumPlayingVideos": 1,
+    "states": [
+      "INVITATION",
+      "REWINDING"
+    ],
+    "observedCameraRates": {
+      "master-reverse-1080.v1.mp4": 5.17
+    }
+  },
+  {
+    "scenario": "desktop-reception",
+    "samples": 133,
+    "missingDecodedLayers": 0,
+    "maximumPlayingVideos": 1,
+    "states": [
+      "INVITATION",
+      "REWINDING"
+    ],
+    "observedCameraRates": {
+      "master-reverse-1080.v1.mp4": 4.98
+    }
+  },
+  {
+    "scenario": "desktop-room-entry",
+    "samples": 242,
+    "missingDecodedLayers": 0,
+    "maximumPlayingVideos": 1,
+    "states": [
+      "INVITATION",
+      "REWINDING"
+    ],
+    "observedCameraRates": {
+      "room-reverse-1080.v1.mp4": 3.33,
+      "master-reverse-1080.v1.mp4": 4.92
+    }
+  },
+  {
+    "scenario": "desktop-room-exit",
+    "samples": 285,
+    "missingDecodedLayers": 0,
+    "maximumPlayingVideos": 1,
+    "states": [
+      "INVITATION",
+      "REWINDING"
+    ],
+    "observedCameraRates": {
+      "room-reverse-1080.v1.mp4": 2.74,
+      "master-reverse-1080.v1.mp4": 4.92
+    }
+  },
+  {
+    "scenario": "desktop-room-info",
+    "samples": 270,
+    "missingDecodedLayers": 0,
+    "maximumPlayingVideos": 1,
+    "states": [
+      "INVITATION",
+      "REWINDING"
+    ],
+    "observedCameraRates": {
+      "room-reverse-1080.v1.mp4": 4.31,
+      "master-reverse-1080.v1.mp4": 4.96
+    }
+  },
+  {
+    "scenario": "mobile-active-native-events",
+    "samples": 23,
+    "missingDecodedLayers": 0,
+    "maximumPlayingVideos": 1,
+    "states": [
+      "INVITATION",
+      "REWINDING"
+    ],
+    "observedCameraRates": {
+      "master-reverse-5x-1080.v1.mp4": 5.0
+    }
+  },
+  {
+    "scenario": "mobile-finale",
+    "samples": 276,
+    "missingDecodedLayers": 0,
+    "maximumPlayingVideos": 1,
+    "states": [
+      "INVITATION",
+      "REWINDING"
+    ],
+    "observedCameraRates": {
+      "master-reverse-5x-1080.v1.mp4": 4.96
+    }
+  },
+  {
+    "scenario": "mobile-hallway",
+    "samples": 219,
+    "missingDecodedLayers": 0,
+    "maximumPlayingVideos": 1,
+    "states": [
+      "INVITATION",
+      "REWINDING"
+    ],
+    "observedCameraRates": {
+      "master-reverse-5x-1080.v1.mp4": 4.95
+    }
+  },
+  {
+    "scenario": "mobile-paused-menu",
+    "samples": 57,
+    "missingDecodedLayers": 0,
+    "maximumPlayingVideos": 1,
+    "states": [
+      "INVITATION",
+      "REWINDING"
+    ],
+    "observedCameraRates": {
+      "master-reverse-5x-1080.v1.mp4": 5.0
+    }
+  },
+  {
+    "scenario": "mobile-reception",
+    "samples": 140,
+    "missingDecodedLayers": 0,
+    "maximumPlayingVideos": 1,
+    "states": [
+      "INVITATION",
+      "REWINDING"
+    ],
+    "observedCameraRates": {
+      "master-reverse-5x-1080.v1.mp4": 4.92
+    }
+  },
+  {
+    "scenario": "mobile-room-entry",
+    "samples": 264,
+    "missingDecodedLayers": 0,
+    "maximumPlayingVideos": 1,
+    "states": [
+      "INVITATION",
+      "REWINDING"
+    ],
+    "observedCameraRates": {
+      "room-reverse-5x-1080.v1.mp4": 2.13,
+      "master-reverse-5x-1080.v1.mp4": 4.95
+    }
+  },
+  {
+    "scenario": "mobile-room-exit",
+    "samples": 300,
+    "missingDecodedLayers": 0,
+    "maximumPlayingVideos": 1,
+    "states": [
+      "INVITATION",
+      "REWINDING"
+    ],
+    "observedCameraRates": {
+      "room-reverse-1080.v1.mp4": 0.0,
+      "room-reverse-5x-1080.v1.mp4": 3.14,
+      "master-reverse-5x-1080.v1.mp4": 4.95
+    }
+  },
+  {
+    "scenario": "mobile-room-info",
+    "samples": 288,
+    "missingDecodedLayers": 0,
+    "maximumPlayingVideos": 1,
+    "states": [
+      "INVITATION",
+      "REWINDING"
+    ],
+    "observedCameraRates": {
+      "room-reverse-5x-1080.v1.mp4": 3.4,
+      "master-reverse-5x-1080.v1.mp4": 4.95
+    }
+  }
+]
