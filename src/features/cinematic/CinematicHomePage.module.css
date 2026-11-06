@@ -126,6 +126,21 @@
   .finale { padding-top: 110px; padding-bottom: 60px; }
   .roomInfo { padding-top: 110px; }
 }
+/* Desktop welcome/hallway vignette spans the full viewport rather than ending
+   at the bottom of the editorial text block. Keep the mobile vignette untouched. */
+@media (min-width: 768px) and (min-height: 501px) {
+  .stage[data-chapter='welcome']:not([data-playing='true']):not([data-rewinding='true'])::before,
+  .stage[data-chapter='hallway']:not([data-playing='true']):not([data-rewinding='true'])::before {
+    content: '';
+    position: absolute;
+    z-index: 1;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(ellipse 78% 115% at 8% 61%, #24180fba 0%, #24180f85 36%, #24180f00 72%);
+  }
+  .welcome::before, .hallway::before { display: none; }
+}
+
 /* Keep the complete 16:9 source plane, but crop it to cover the entire desktop stage.
    The previous min() sizing letterboxed wide (and tall) viewports. The room-info
    64/36 split and the existing mobile source framing are intentionally excluded. */
