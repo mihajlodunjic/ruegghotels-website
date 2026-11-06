@@ -269,9 +269,9 @@ describe('native media controller', () => {
   })
   it('allows more than 12 seconds for a slow but valid media response', async () => {
     vi.useFakeTimers()
-    const video = new FakeVideo() as unknown as HTMLVideoElement
+    const video = new FakeVideo()
     video.readyState = 0
-    const waiting = waitForMedia(video, () => video.readyState >= 2, ['loadeddata'], new AbortController().signal)
+    const waiting = waitForMedia(video as unknown as HTMLVideoElement, () => video.readyState >= 2, ['loadeddata'], new AbortController().signal)
     const completion = expect(waiting).resolves.toBeUndefined()
     await vi.advanceTimersByTimeAsync(20000)
     video.readyState = 2
