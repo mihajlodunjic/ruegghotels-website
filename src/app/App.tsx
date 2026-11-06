@@ -5,10 +5,14 @@ import { PartnersPage } from '../pages/PartnersPage'
 import { ReservationsPage } from '../pages/ReservationsPage'
 import { OurStoryPage } from '../pages/OurStoryPage'
 import { ContactPage } from '../pages/ContactPage'
+import { ExperiencesPage } from '../pages/ExperiencesPage'
+import { PassportPage } from '../pages/PassportPage'
 import { NotFoundPage } from '../pages/NotFoundPage'
 
 const metadata: Record<string, { title: string; description: string }> = {
   '/': { title: 'An invitation to belong', description: 'We show you the warmth of the mountains. Discover the RÜEGG HOTELS cinematic journey.' },
+  '/experiences': { title: 'Your Mountains, Your Way', description: 'Shape a mountain day around your interests, pace and alpine home. Discover personal itineraries with RÜEGG HOTELS.' },
+  '/passport': { title: 'RÜEGG Passport', description: 'Three alpine homes. One story. Collect destination chapters and discover a little more of the RÜEGG mountains.' },
   '/partners': { title: 'Our Local Circle', description: 'Find your own alpine rhythm with walks, cycling, winter days and local discoveries in Kandersteg, Splügen and Oberstdorf.' },
   '/book': { title: 'Your Next Mountain Chapter', description: 'Choose your RÜEGG alpine home, explore room options and plan your stay in Kandersteg, Splügen or Oberstdorf.' },
   '/our-story': { title: 'Our Story', description: 'Three alpine homes, one spirit of family hospitality. Pull up a chair and discover the RÜEGG story.' },
@@ -22,5 +26,5 @@ export function App() {
     document.querySelector('meta[name="description"]')?.setAttribute('content', page.description)
     window.scrollTo(0, 0)
   }, [location.pathname])
-  return <Routes><Route path="/" element={<CinematicHomePage />} /><Route path="/partners" element={<PartnersPage />} /><Route path="/book" element={<ReservationsPage />} /><Route path="/our-story" element={<OurStoryPage />} /><Route path="/contact" element={<ContactPage key={location.search} />} /><Route path="*" element={<NotFoundPage />} /></Routes>
+  return <Routes><Route path="/" element={<CinematicHomePage />} /><Route path="/experiences" element={<ExperiencesPage key={location.search} />} /><Route path="/passport" element={<PassportPage />} /><Route path="/partners" element={<PartnersPage />} /><Route path="/book" element={<ReservationsPage />} /><Route path="/our-story" element={<OurStoryPage />} /><Route path="/contact" element={<ContactPage key={location.search} />} /><Route path="*" element={<NotFoundPage />} /></Routes>
 }

@@ -1,10 +1,10 @@
 import { useLayoutEffect, useRef } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 import gsap from 'gsap'
 import { BrandSeal } from './BrandSeal'
 import styles from './SiteHeader.module.css'
 
-const links = [['/', 'The journey'], ['/our-story', 'Our story'], ['/partners', 'Our local circle'], ['/book', 'Our alpine homes'], ['/contact', 'Get in touch']] as const
+const links = [['/', 'The journey'], ['/our-story', 'Our story'], ['/partners', 'Our local circle'], ['/experiences', 'Your mountain experiences'], ['/passport', 'RÜEGG Passport'], ['/book', 'Our alpine homes'], ['/contact', 'Get in touch']] as const
 export function SiteHeader({ open, onOpen, onClose, variant = 'cinematic' }: { open: boolean; onOpen: () => void; onClose: () => void; variant?: 'cinematic' | 'page' }) {
   const dialog = useRef<HTMLDialogElement>(null)
   const menu = useRef<HTMLButtonElement>(null)
@@ -45,7 +45,7 @@ export function SiteHeader({ open, onOpen, onClose, variant = 'cinematic' }: { o
       <div className={styles.menuTop}><BrandSeal /><button onClick={close} autoFocus aria-label="Close menu"><span aria-hidden="true">×</span></button></div>
       <p id="menu-title" className="eyebrow" data-menu-item>AN INVITATION TO BELONG</p>
       <p className={styles.menuHeading} data-menu-item>Make yourself<br /><em>at home.</em></p>
-      <nav aria-label="Main navigation">{links.map(([to, label], index) => <Link onClick={onClose} data-menu-item key={to} to={to}><span className={styles.menuNumber}>0{index + 1}</span><span>{label}</span><span className={styles.menuArrow} aria-hidden="true">↗</span></Link>)}</nav>
+      <nav aria-label="Main navigation">{links.map(([to, label], index) => <NavLink end onClick={onClose} data-menu-item key={to} to={to}><span className={styles.menuNumber}>0{index + 1}</span><span>{label}</span><span className={styles.menuArrow} aria-hidden="true">↗</span></NavLink>)}</nav>
       <div className={styles.menuFoot} data-menu-item><span>Agnes · Spalloni · Schiebel</span><p>Three alpine homes.<br />One invitation to belong.</p></div>
     </dialog>
   </>

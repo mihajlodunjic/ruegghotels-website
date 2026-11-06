@@ -1,0 +1,134 @@
+.hero { display: grid; grid-template-columns: 1.25fr 1fr; gap: 12%; align-items: center; padding-top: 25px; padding-bottom: 48px; }
+.hero h1 { font-size: clamp(62px, 6.4vw, 105px); margin-bottom: 24px; }
+.hero .lead { max-width: 430px; }
+.hero > div > a { margin-top: 14px; }
+.hero figure { margin: 0 0 0 auto; position: relative; width: 100%; max-width: 450px; }
+.hero img { display: block; width: 100%; height: 265px; object-fit: cover; object-position: 16% center; border-radius: 110px 3px 3px 3px; }
+.hero figcaption { font: 400 20px/1.3 var(--display); color: var(--olive); margin-top: 16px; }
+.hero figcaption em { display: inline-block; margin-left: 7px; }
+.planner { scroll-margin-top: 28px; }
+.progress { display: flex; align-items: center; gap: 28px; padding: 0 0 22px; border-bottom: 1px solid var(--hairline); margin-bottom: 42px; }
+.progress button { display: flex; align-items: center; gap: 10px; padding: 0; border: 0; background: none; color: var(--muted); font: 400 10px var(--sans); text-transform: none; letter-spacing: 0; }
+.progress button > span { display: grid; place-items: center; width: 27px; height: 27px; border: 1px solid var(--hairline); border-radius: 50%; font-size: 8px; }
+.progress button[aria-current='step'] { color: var(--burgundy); }
+.progress button[aria-current='step'] > span { background: var(--burgundy); border-color: var(--burgundy); color: var(--paper); }
+.progress button:disabled { opacity: .65; cursor: default; }
+.progressEnd { margin-left: auto; text-align: right; font: italic 400 18px/1.2 var(--display); color: var(--olive); max-width: 170px; }
+.planningGrid { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 9%; padding-bottom: 65px; }
+.panel { min-width: 0; scroll-margin-top: 30px; }
+.panel h2:focus { outline: 0; }
+.stepIntro { font-size: 13px; line-height: 1.9; color: var(--brown); max-width: 580px; margin-bottom: 25px; }
+.destinations { margin: 25px 0 0; padding: 0; border: 0; border-top: 1px solid var(--hairline); }
+.destinations label { position: relative; display: flex; gap: 22px; align-items: center; padding: 17px 18px 17px 0; min-height: 88px; border-bottom: 1px solid var(--hairline); color: var(--burgundy); cursor: pointer; transition: background .25s; }
+.destinations input, .interests input, .optionGroup input { position: absolute; inset: 0; opacity: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; z-index: 1; }
+.destinations label:has(input:focus-visible), .interests label:has(input:focus-visible), .optionGroup label:has(input:focus-visible) { outline: 2px solid var(--olive); outline-offset: 4px; border-radius: 3px; }
+.destinations label:hover, .destinations .selectedDestination { background: var(--paper); }
+.number { color: var(--muted); font-size: 9px; padding-left: 12px; }
+.destinations strong { display: block; font: 400 36px/1 var(--display); }
+.destinations small { display: block; color: var(--brown); font-size: 10px; margin-top: 9px; }
+.destinations i { margin-left: auto; font-size: 17px; font-style: normal; }
+.activityDate { margin-top: 29px; max-width: 390px; }
+.activityDate > span { line-height: 1.8; }
+.stayDates { margin-top: 15px; }
+.stayDates summary { display: flex; align-items: center; gap: 25px; list-style: none; cursor: pointer; min-height: 44px; color: var(--olive); font-size: 11px; }
+.stayDates summary::-webkit-details-marker { display: none; }
+.stayDates[open] summary { margin-bottom: 15px; }
+.interests { display: grid; grid-template-columns: 1fr 1fr; gap: 0 25px; border: 0; padding: 0; margin: 0; }
+.interests label { position: relative; min-height: 145px; border-top: 1px solid var(--hairline); padding: 18px 30px 19px 12px; display: flex; flex-direction: column; align-items: flex-start; cursor: pointer; transition: background .25s; }
+.interests label:last-child { border-bottom: 1px solid var(--hairline); }
+.interests .selectedInterest, .interests label:hover { background: var(--paper); }
+.interestIndex { font-size: 8px; color: var(--muted); margin-bottom: 13px; }
+.interests strong { color: var(--burgundy); font: 400 27px/1.05 var(--display); margin-bottom: 9px; max-width: 220px; }
+.interests label > span:last-of-type { color: var(--brown); font-size: 10px; line-height: 1.8; max-width: 240px; }
+.interests i { position: absolute; right: 11px; top: 17px; color: var(--burgundy); font-style: normal; font-size: 14px; }
+.counter { display: flex; justify-content: space-between; align-items: center; gap: 20px; border-bottom: 1px solid var(--hairline); padding: 18px 0; }
+.counter strong { color: var(--brown); font-size: 12px; font-weight: 400; }
+.counter > div:first-child > span { display: block; margin-top: 6px; color: var(--muted); font-size: 10px; }
+.counter > div:last-child { display: flex; align-items: center; gap: 14px; }
+.counter button { width: 44px; height: 44px; border: 1px solid var(--hairline); border-radius: 50%; background: none; color: var(--burgundy); font-size: 19px; }
+.counter button:disabled { opacity: .3; cursor: default; }
+.counter output { color: var(--burgundy); font-size: 14px; min-width: 20px; text-align: center; }
+.optionGroup { border: 0; padding: 0; margin: 30px 0; min-width: 0; }
+.optionGroup legend, .considerations legend { font: 400 27px/1.1 var(--display); color: var(--burgundy); margin-bottom: 18px; }
+.optionGroup > div { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; }
+.optionGroup label { position: relative; min-height: 118px; padding: 19px 26px 18px 17px; border: 1px solid var(--hairline); border-radius: 4px; cursor: pointer; }
+.optionGroup .selectedOption { border-color: var(--olive); background: var(--paper); }
+.optionGroup strong { display: block; font: 400 25px/1 var(--display); color: var(--burgundy); }
+.optionGroup label > span { display: block; color: var(--brown); font-size: 10px; line-height: 1.8; margin-top: 10px; }
+.optionGroup i { position: absolute; top: 14px; right: 11px; font-size: 11px; color: var(--olive); font-style: normal; }
+.considerations { padding: 0; border: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 4px 20px; margin: 32px 0 12px; }
+.considerations label, .acknowledgement { display: flex; gap: 11px; align-items: center; min-height: 44px; color: var(--brown); font-size: 11px; line-height: 1.7; cursor: pointer; }
+.considerations input, .acknowledgement input { width: 17px; height: 17px; accent-color: var(--burgundy); flex-shrink: 0; margin: 0; }
+.detailsFields { margin-top: 25px; }
+.detailsFields textarea { min-height: 110px; }
+.summary { position: sticky; top: 30px; align-self: start; border-left: 1px solid var(--hairline); padding: 8px 0 0 30px; min-width: 0; }
+.summary > p:first-child { font-size: 8px; margin-bottom: 25px; }
+.summary h2 { font: 400 45px/.98 var(--display); letter-spacing: -.025em; color: var(--burgundy); margin-bottom: 18px; }
+.summaryHotel { font-size: 10px; color: var(--brown); line-height: 1.7; }
+.summary dl { border-top: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline); padding: 22px 0 5px; margin: 24px 0 20px; }
+.summary dl > div { margin-bottom: 18px; }
+.summary dt { color: var(--muted); font-size: 9px; margin-bottom: 7px; }
+.summary dd { margin: 0; color: var(--brown); font-size: 11px; line-height: 1.7; text-transform: capitalize; }
+.summaryInterests, .specialRequest { font-size: 10px; color: var(--olive); line-height: 1.85; overflow-wrap: anywhere; }
+.summaryQuote { font: 400 25px/1.15 var(--display); color: var(--olive); margin: 28px 0 15px; }
+.summary > a { font-size: 10px; gap: 15px; }
+.summary > a:last-child { display: flex; }
+.sampleNote { font-size: 10px; line-height: 1.8; color: var(--muted); margin-bottom: 30px; }
+.recommendations { border-top: 1px solid var(--hairline); }
+.recommendations article { display: grid; grid-template-columns: 35px minmax(0, 1fr); gap: 23px; padding: 30px 0 24px; border-bottom: 1px solid var(--hairline); }
+.recommendationNumber { font: 400 31px/1 var(--display); color: var(--olive); }
+.recommendations article .sectionLabel { margin-bottom: 15px; }
+.recommendations h3 { font: 400 41px/1 var(--display); letter-spacing: -.025em; color: var(--burgundy); margin-bottom: 16px; }
+.recommendations article > div > p:not(:first-child) { font-size: 12px; line-height: 1.85; color: var(--brown); }
+.facts { display: flex; flex-wrap: wrap; gap: 8px 16px; font-size: 10px; color: var(--olive); margin: 21px 0; text-transform: capitalize; }
+.facts > span + span::before { content: '·'; padding-right: 13px; }
+.recommendations h4 { color: var(--olive); font-size: 10px; font-weight: 500; margin: 18px 0 10px; }
+.recommendations ul { padding: 0 0 0 14px; color: var(--brown); font-size: 11px; line-height: 1.8; }
+.recommendations article .alternative { font-size: 10px; padding: 13px 16px; background: var(--paper-deep); border-radius: 3px; }
+.recommendationAction { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px 25px; margin-top: 22px; }
+.recommendationAction p { margin: 0; }
+.recommendationAction strong { font: 400 31px/1.1 var(--display); color: var(--burgundy); }
+.recommendationAction p > span { display: block; margin-top: 8px; color: var(--muted); font-size: 9px; }
+.itineraryExperience { font: italic 400 27px/1.15 var(--display); color: var(--olive); margin-bottom: 22px; }
+.itineraryDate { display: flex; flex-wrap: wrap; gap: 8px 25px; border-block: 1px solid var(--hairline); padding: 18px 0; font-size: 11px; color: var(--brown); text-transform: capitalize; }
+.timeline { list-style: none; padding: 10px 0 0; margin: 25px 0; }
+.timeline li { position: relative; display: grid; grid-template-columns: 62px minmax(0, 1fr); gap: 22px; padding: 7px 0 28px; }
+.timeline li:not(:last-child)::before { content: ''; position: absolute; left: 72px; top: 15px; bottom: 0; width: 1px; background: var(--hairline); }
+.timeline time { color: var(--olive); font-size: 11px; padding-top: 5px; font-variant-numeric: tabular-nums; }
+.timeline h3 { font: 400 29px/1.1 var(--display); color: var(--burgundy); margin-bottom: 10px; }
+.timeline p { color: var(--brown); font-size: 12px; line-height: 1.85; margin-bottom: 0; }
+.preparation { padding: 25px 28px; background: var(--paper); border-radius: 2px 18px 2px 2px; }
+.preparation h3, .request h3 { font: 400 32px/1.1 var(--display); color: var(--burgundy); margin-bottom: 18px; }
+.preparation p { font-size: 11px; color: var(--brown); line-height: 1.85; }
+.preparation p:last-child { margin-bottom: 0; }
+.quote { margin: 34px 0; border-top: 1px solid var(--hairline); padding-top: 25px; }
+.quote dl { margin: 0; }
+.quote dl > div { display: flex; justify-content: space-between; gap: 20px; font-size: 11px; color: var(--brown); padding-bottom: 14px; line-height: 1.8; }
+.quote dd { margin: 0; white-space: nowrap; }
+.quote .quoteTotal { border-top: 1px solid var(--hairline); padding-top: 20px; color: var(--burgundy); margin-top: 8px; align-items: baseline; }
+.quoteTotal dd { font: 400 36px/1 var(--display); }
+.quote > p:last-child { font-size: 10px; line-height: 1.85; color: var(--muted); }
+.request { padding-top: 27px; border-top: 1px solid var(--hairline); }
+.request > p:not(:first-child) { font-size: 12px; line-height: 1.85; color: var(--brown); }
+.acknowledgement { margin: 25px 0 15px; }
+.itineraryTools { display: flex; flex-wrap: wrap; gap: 6px 30px; align-items: start; margin-top: 20px; }
+.itineraryTools > div { flex: 1 1 180px; }
+.completion { text-align: center; padding-top: 5px; }
+.completion > img { width: 78px; height: 78px; margin-bottom: 24px; }
+.completion h2 { font: 400 clamp(42px, 4.8vw, 72px)/.96 var(--display); color: var(--burgundy); letter-spacing: -.035em; margin-bottom: 28px; }
+.transactionNotice { font-size: 12px; line-height: 1.9; color: var(--olive); max-width: 510px; margin: 0 auto 22px; }
+.reference { display: inline-block; padding: 12px 18px; font-size: 10px; letter-spacing: .1em; border: 1px solid var(--hairline); border-radius: 3px; color: var(--muted); }
+.completedDetails { padding: 28px 0; margin-top: 25px; border-block: 1px solid var(--hairline); }
+.completedDetails h3 { font: 400 37px/1 var(--display); color: var(--burgundy); }
+.completedDetails p { color: var(--brown); font-size: 12px; line-height: 1.9; }
+.completedDetails strong { color: var(--burgundy); font: 400 35px/1.1 var(--display); }
+.completedDetails small { font: 400 10px var(--sans); color: var(--muted); margin-left: 12px; }
+.completion > div:last-of-type { justify-content: center; }
+.completedItinerary { text-align: left; }
+.completedItinerary summary { cursor: pointer; min-height: 44px; display: flex; justify-content: center; align-items: center; gap: 20px; color: var(--burgundy); font-size: 11px; list-style: none; }
+.completedItinerary summary::-webkit-details-marker { display: none; }
+.closing { text-align: center; padding: 60px 0 75px; border-top: 1px solid var(--hairline); }
+.closing h2 { font: 400 clamp(44px, 4.5vw, 72px)/.98 var(--display); color: var(--burgundy); letter-spacing: -.03em; margin-bottom: 24px; }
+@media (max-width: 1100px) { .planningGrid { grid-template-columns: minmax(0, 1fr) 240px; gap: 6%; } .summary { padding-left: 24px; } .summary h2 { font-size: 39px; } .progress { gap: 18px; } .progressEnd { display: none; } .hero { gap: 8%; } }
+@media (max-width: 800px) { .planningGrid { grid-template-columns: 1fr; gap: 40px; } .summary { position: static; border-left: 0; border-top: 1px solid var(--hairline); padding: 28px 0 0; } .summary dl { display: grid; grid-template-columns: 1fr 1fr; gap: 0 25px; } .summaryQuote { font-size: 27px; } .hero { gap: 6%; } .hero img { height: 230px; } }
+@media (max-width: 600px) { .hero { grid-template-columns: 1fr; gap: 20px; padding-top: 32px; padding-bottom: 30px; } .hero h1 { font-size: 56px; } .hero figure { max-width: none; width: 100%; } .hero img { height: 175px; border-radius: 70px 3px 3px 3px; object-position: 10% 45%; } .hero figcaption { font-size: 19px; margin-top: 12px; } .hero > div > a { margin-top: 12px; } .progress { justify-content: space-between; gap: 8px; padding-bottom: 18px; margin-bottom: 30px; } .progress button { display: grid; align-content: start; justify-items: start; gap: 10px; max-width: 76px; font-size: 9px; line-height: 1.6; } .progress button > span { width: 24px; height: 24px; } .planningGrid { padding-bottom: 42px; } .destinations label { min-height: 87px; gap: 18px; padding-right: 12px; } .destinations strong { font-size: 34px; } .destinations small { font-size: 10px; } .number { font-size: 8px; } .stepIntro { font-size: 12px; } .interests { gap: 0 14px; } .interests label { padding: 16px 22px 18px 9px; min-height: 168px; } .interests strong { font-size: 25px; } .interests label > span:last-of-type { font-size: 10px; line-height: 1.75; } .interests i { right: 8px; top: 14px; } .optionGroup > div { grid-template-columns: 1fr; gap: 10px; } .optionGroup label { min-height: 83px; padding: 18px 30px 18px 17px; } .optionGroup label > span { margin-top: 8px; } .optionGroup strong { font-size: 28px; } .optionGroup legend, .considerations legend { font-size: 27px; } .considerations { grid-template-columns: 1fr; gap: 0; } .detailsFields { grid-template-columns: 1fr; } .sampleNote { font-size: 10px; } .recommendations article { grid-template-columns: 23px minmax(0, 1fr); gap: 13px; padding-top: 25px; } .recommendationNumber { font-size: 27px; } .recommendations h3 { font-size: 35px; } .recommendations article > div > p:not(:first-child) { font-size: 12px; } .recommendations ul { font-size: 11px; } .facts { font-size: 9px; gap: 8px 12px; } .facts > span + span::before { padding-right: 9px; } .recommendationAction { gap: 10px; } .recommendationAction strong { font-size: 30px; } .recommendationAction > button { font-size: 10px; gap: 15px; } .itineraryExperience { font-size: 26px; } .timeline li { grid-template-columns: 44px minmax(0, 1fr); gap: 15px; } .timeline li:not(:last-child)::before { left: 49px; } .timeline h3 { font-size: 27px; } .timeline p { font-size: 11px; } .timeline time { font-size: 10px; } .preparation { padding: 22px; } .preparation p { font-size: 11px; } .quote dl > div { font-size: 10px; } .quoteTotal dd { font-size: 32px; } .request > p:not(:first-child) { font-size: 11px; } .completion h2 { font-size: 48px; } .completedDetails h3 { font-size: 35px; } .completedDetails strong { display: block; } .completedDetails small { display: block; margin: 12px 0 0; } .completedDetails p { font-size: 11px; } .transactionNotice { font-size: 11px; } .summary { padding-top: 25px; } .summary h2 { font-size: 44px; } .summary > p:first-child { font-size: 8px; } .closing { padding: 40px 0 55px; } .closing h2 { font-size: 45px; } }
