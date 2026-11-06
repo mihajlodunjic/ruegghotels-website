@@ -46,7 +46,7 @@ export function SiteHeader({ open, onOpen, onClose, variant = 'cinematic', onBeg
       <p id="menu-title" className="eyebrow" data-menu-item>AN INVITATION TO BELONG</p>
       <p className={styles.menuHeading} data-menu-item>Make yourself<br /><em>at home.</em></p>
       <nav aria-label="Main navigation">{links.map(([to, label], index) => <NavLink end onClick={onClose} data-menu-item key={to} to={to}><span className={styles.menuNumber}>0{index + 1}</span><span>{label}</span><span className={styles.menuArrow} aria-hidden="true">↗</span></NavLink>)}</nav>
-      <div className={styles.menuFoot} data-menu-item>{onBeginning && <button className={styles.menuBeginning} onClick={onBeginning}>Back to Beginning <span aria-hidden="true">↶</span></button>}<span>Agnes · Spalloni · Schiebel</span><p>Three alpine homes.<br />One invitation to belong.</p></div>
+      <div className={styles.menuFoot} data-menu-item>{onBeginning && <button className={styles.menuBeginning} onClick={onBeginning}>Back to Beginning <span aria-hidden="true">↶</span></button>}<span>Agnes · Spalloni · Johann</span><p>Three alpine homes.<br />One invitation to belong.</p></div>
     </dialog>
   </>
 }

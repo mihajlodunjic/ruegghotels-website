@@ -32,7 +32,7 @@ The owner-authorized sample model lives in `src/data/roomTypes.ts` and the pure 
 | --- | --- | ---: | ---: | ---: |
 | Agnes · Kandersteg | CHF | 146 | 178 | 214 |
 | Spalloni · Splügen | CHF | 138 | 164 | 198 |
-| Schiebel · Oberstdorf | EUR | 124 | 152 | 186 |
+| Johann · Oberstdorf | EUR | 124 | 152 | 186 |
 
 Sample rules: one room, 1–4 adults, 0–2 children, at most 4 guests; room capacities 2/3/4; 1–21 nights within the next 365 days; Mountain View minimum 2 nights. Nights of December 24–25 are unavailable, providing a deterministic empty-result path. These are demonstration rules and prices, not live property information. Results, checkout and the final status carry contextual disclosures. No cards, payments, personal-data transmission or browser persistence are implemented. Optional checkout details are cleared when the preview completes.
 

@@ -20,7 +20,7 @@ The latest owner prompt authorizes realistic mock room/rate/availability data an
 | --- | --- | ---: | ---: | ---: |
 | Agnes | CHF | 146 | 178 | 214 |
 | Spalloni | CHF | 138 | 164 | 198 |
-| Schiebel | EUR | 124 | 152 | 186 |
+| Johann | EUR | 124 | 152 | 186 |
 
 Amounts are sample nightly rates. Totals use integer cents × nights, with no modeled local taxes/fees. Rules: 1–21 nights within 365 days; one room; 1–4 adults, 0–2 children, total ≤4; category capacities 2/3/4; Mountain View minimum two nights. December 24–25 nights are closed in the sample calendar. Results are stable across renders.
 

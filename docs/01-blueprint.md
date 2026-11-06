@@ -6,7 +6,7 @@
 
 - `/`: `CinematicHomePage`, full-height cinematic stage with five visible beats. No separate experience route.
 - `/partners`: `PartnersPage` structured as editorial local ecosystem, with category and hotel/destination filters; unless verified, show clearly labelled illustrative partners/category examples, never assert active real commercial relationships.
-- `/book`: `ReservationsPage` single hotel selection (Agnes Kandersteg CH, Spalloni Splügen CH, Schiebel Oberstdorf DE), travel dates, guests, stay/contact info. Demo mode must visibly say “Preview only — no request is sent” (or equivalent); no fake booking IDs, prices or success confirmations. When a real provider/endpoint is supplied, integrate separately.
+- `/book`: `ReservationsPage` single hotel selection (Agnes Kandersteg CH, Spalloni Splügen CH, Johann Oberstdorf DE), travel dates, guests, stay/contact info. Demo mode must visibly say “Preview only — no request is sent” (or equivalent); no fake booking IDs, prices or success confirmations. When a real provider/endpoint is supplied, integrate separately.
 - `/our-story`: family tradition, Anna/Markus/Lena narratives if sourced from brand strategy; avoid historically verifiable claims that have not been checked. Official promise and positioning slogan are permitted. No false archival AI imagery.
 - `/contact`: useful contact channels and enquiry types; do not invent mailbox/telephone. Until endpoint/contact verified, avoid a fake submit flow; allow preview-only or known channel.
 - 404 with route back to home, sitemap/robots, metadata, and route-level alt text.
@@ -21,7 +21,7 @@ Verified source: Master 23.416667s, 1920×1080, H.264 24 fps; Room Branch 5.1833
 - `MASTER_PLAYING_TO_WELCOME`: play until reception checkpoint approx 10.000s; freeze on QA-selected frame; show lower-left Welcome editorial with Continue and Our Story.
 - `MASTER_PLAYING_TO_HALLWAY`: continue until exact media 17.125s (frame index 411 at 24fps); pause; reveal accepted B0 Reconstructed, synchronized door hotspot; options Explore Room or Continue to Table.
 - `ROOM_ENTERING`: branch forward ~5.183s; end shows frame B3 held. `ROOM_AT_B3`: optional editorial info split, Back to Hallway, Explore Our Stays -> /book. Returning: close info panel, play separately derived reverse branch; at finish restore B0 and the hallway decision, then the user selects Continue. No auto-skip hallway choice.
-- `MASTER_PLAYING_TO_FINALE`: main master resumes 17.125s toward end. Hold actual final decodable frame (do not seek past duration), then reveal burgundy finale on the RIGHT (~38%), leaving communal table left. List Agnes / Spalloni / Schiebel, each selects unified `/book?hotel=agnes|spalloni|schiebel`; Our Local Circle and Replay Journey.
+- `MASTER_PLAYING_TO_FINALE`: main master resumes 17.125s toward end. Hold actual final decodable frame (do not seek past duration), then reveal burgundy finale on the RIGHT (~38%), leaving communal table left. List Agnes / Spalloni / Johann, each selects unified `/book?hotel=agnes|spalloni|schiebel`; Our Local Circle and Replay Journey.
 - Opening global menu pauses current playback; close resumes only if it had been playing (not when user was in a pause). Route navigation may preserve a session-scoped chapter context, but must not autoplay when user returns without gesture.
 - Skip experience leads directly to finale/static overview OR booking (two explicit choices). It must not force video downloads for alternate pages.
 
@@ -96,7 +96,7 @@ references/mockups/      approved directional PNG references
 
 ## H. Commercial/content constraints
 
-- Confirmed names/places: Agnes — Kandersteg CH; Spalloni — Splügen CH; Schiebel — Oberstdorf DE. Main imaginary hotel is not any single bookable property.
+- Confirmed names/places: Agnes — Kandersteg CH; Spalloni — Splügen CH; Johann — Oberstdorf DE. Main imaginary hotel is not any single bookable property.
 - Partners page may use labelled demo categories/partner examples but no invented actual signed relationships or fabricated ratings/reviews.
 - Reservations should use `Demo mode` flag until provider is integrated. It may implement date/guest/hotel choices, validation and a **non-submitting preview** of request. It must not collect and silently send personal information or display fake availability/payment confirmation. Use an explicit real backend/inbox only after details are supplied.
 - Contact similarly requires a verified delivery endpoint; otherwise clear demonstrative state.

@@ -51,7 +51,7 @@ test('hotel preselection and deterministic reservation complete without transact
   const year = Number(today.slice(0, 4))
   const closedDate = [`${year}-12-24`, `${year}-12-25`, `${year + 1}-12-24`].find((day) => day >= today)!
   await page.goto('/book?hotel=schiebel')
-  await expect(page.getByRole('radio', { name: /Schiebel/ })).toBeChecked()
+  await expect(page.getByRole('radio', { name: /Johann/ })).toBeChecked()
   await page.getByRole('button', { name: 'Clear dates', exact: true }).click()
   await expect(page.getByLabel('Arrival', { exact: true })).toHaveValue('')
   await page.getByLabel('Arrival', { exact: true }).fill(arrival)
@@ -101,7 +101,7 @@ test('hotel preselection and deterministic reservation complete without transact
 })
 
 test('all hotel URLs, invalid identifiers and back navigation are coherent', async ({ page }) => {
-  for (const [id, name] of [['agnes', 'Agnes'], ['spalloni', 'Spalloni'], ['schiebel', 'Schiebel']]) {
+  for (const [id, name] of [['agnes', 'Agnes'], ['spalloni', 'Spalloni'], ['schiebel', 'Johann']]) {
     await page.goto(`/book?hotel=${id}`)
     await expect(page.getByRole('radio', { name: new RegExp(name) })).toBeChecked()
   }
