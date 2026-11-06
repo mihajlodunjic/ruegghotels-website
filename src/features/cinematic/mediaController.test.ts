@@ -67,10 +67,10 @@ describe('native media controller', () => {
     expect(dispatch).toHaveBeenCalledWith({ type: 'HALLWAY_REACHED' })
     controller.dispose()
   })
-  it('shortens the opening entrance with 1.4x playback but keeps later chapters at normal speed', async () => {
+  it('shortens the opening entrance with 2x playback but keeps later chapters at normal speed', async () => {
     const { controller, master, branch, dispatch } = setup()
     controller.sync({ mode: 'MASTER_TO_WELCOME' }); await settle()
-    expect(master.playbackRate).toBe(1.4)
+    expect(master.playbackRate).toBe(2)
     expect(master.currentTime).toBe(0)
     master.frame(10); await settle()
     expect(dispatch).toHaveBeenCalledWith({ type: 'WELCOME_REACHED' })
@@ -89,7 +89,7 @@ describe('native media controller', () => {
     controller.sync({ mode: 'USER_PAUSED', resumeState: 'MASTER_TO_WELCOME' })
     controller.sync({ mode: 'MASTER_TO_WELCOME' }); await settle()
     expect(master.currentTime).toBe(3)
-    expect(master.playbackRate).toBe(1.4)
+    expect(master.playbackRate).toBe(2)
     expect(master.paused).toBe(false)
     controller.dispose()
   })
