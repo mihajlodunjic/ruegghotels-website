@@ -1,4 +1,4 @@
-.home { min-height: 100svh; background: var(--ivory); }
+.home { height: 100svh; overflow: hidden; overscroll-behavior: none; min-height: 100svh; background: var(--ivory); }
 .stage { position: relative; min-height: 100svh; height: 100svh; overflow: hidden; background: #ebe5da; color: var(--paper); }
 .mediaFrame { position: absolute; width: min(100vw, 177.777778svh); height: min(100svh, 56.25vw); top: 50%; left: 50%; transform: translate(-50%, -50%); }
 .still, .video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; }
@@ -102,7 +102,7 @@
 .recovery .actions { margin-top: 25px; }
 .playingCaption { display: none; }
 @media (min-width: 768px) and (max-height: 750px) {
-  .stage:not([data-playing='true']) { min-height: 650px; }
+  .stage:not([data-playing='true']) { min-height: 100svh; }
   .invitation { top: 118px; bottom: 82px; padding: 24px 32px; }
   .invitation .panelMasthead { margin-bottom: 12px; } .invitation h2 { font-size: 44px; margin-bottom: 16px; }
   .invitation .introCopy { margin-bottom: 18px; } .invitationNote { display: none; }
@@ -112,90 +112,167 @@
   .finale { padding: 125px 40px 70px; justify-content: flex-start; } .finale .panelMasthead { margin-bottom: 20px; } .finale h2 { font-size: 50px; margin-bottom: 24px; }
   .hotelList a { min-height: 75px; padding: 12px 0; } .finaleLinks { margin-top: 18px; }
 }
-@media (max-width: 767px), (max-width: 1024px) and (max-height: 550px) {
-  .stage { display: flex; flex-direction: column; height: auto; min-height: calc(100svh - 72px - env(safe-area-inset-top)); overflow: visible; color: var(--burgundy); background: var(--ivory); }
-  .mediaFrame, .infoOpen .mediaFrame { position: relative; inset: auto; transform: none; flex: 0 0 auto; width: 100%; height: auto; aspect-ratio: 16 / 9; }
-  .editorial, .roomInfo { position: relative; inset: auto; width: 100%; max-width: none; padding: 27px 27px 24px; background: var(--ivory); color: var(--burgundy); border-radius: 0; box-shadow: none; }
-  .panelMasthead, .invitation .panelMasthead { margin-bottom: 24px; }
-  .panelMasthead :global(.eyebrow) { font-size: 9px; line-height: 1.6; letter-spacing: .13em; color: var(--olive); }
-  .invitation .panelMasthead { min-height: 19px; padding-right: 45px; position: relative; }
-  .invitationSeal { width: 46px; height: 46px; margin: 0; position: absolute; right: -8px; top: -13px; }
-  .invitation::before { display: none; }
-  .editorial h2, .invitation h2, .roomInfo h2 { font-size: clamp(43px, 12.5vw, 54px); line-height: .94; margin: 0 0 24px; letter-spacing: -.035em; }
-  .introCopy { font-size: 13px; line-height: 1.75; margin-bottom: 23px; }
-  .invitationNote { display: none; }
-  .actions { gap: 11px 20px; }
-  .action { min-height: 50px; font-size: 11px; padding-left: 21px; }
-  .actionArrow { width: 34px; height: 34px; flex-basis: 34px; }
-  .invitation .actions { flex-direction: row; align-items: center; gap: 14px; }
-  .invitation .action { width: auto; flex: 1 1 auto; }
-  .invitation .quietLink { font-size: 10px; gap: 10px; padding: 8px 5px; }
-  .welcome::before, .hallway::before { display: none; }
-  .welcome h2, .hallway h2 { text-shadow: none; }
-  .welcome .action, .hallway .action { background: var(--burgundy); color: var(--paper); box-shadow: none; }
-  .welcome .actionArrow, .hallway .actionArrow { border-color: #fff4; }
-  .welcome .action:hover, .hallway .action:hover { background: var(--burgundy-deep); }
-  .welcome .quietLink { color: var(--burgundy); font-size: 10px; gap: 8px; }
-  .welcome .actions { flex-wrap: nowrap; gap: 18px; }
-  .welcome .action { flex: 1 1 auto; }
-  .hallway .actions { flex-direction: column; align-items: stretch; gap: 8px; }
-  .hallway .secondary { background: none; color: var(--burgundy); padding: 5px 8px 5px 21px; border: 1px solid var(--hairline); border-radius: var(--radius-pill); }
-  .hallway .secondary:hover { background: var(--paper-deep); }
-  .hallway .secondary .actionArrow { border-color: var(--hairline); }
-  .doorMark { width: 28px; height: 28px; font-size: 15px; }
-  .doorLabel { display: none; }
-  .hotspot::before, .hotspot::after { width: 9px; height: 9px; }
-  .roomDock { padding-bottom: 20px; }
-  .roomDock h2 { font-size: 38px; }
-  .roomDock .actions { gap: 22px; }
-  .roomDock .action { font-size: 11px; }
-  .roomInfo .panelMasthead { margin-bottom: 25px; }
-  .roomInfo .introCopy { margin-bottom: 24px; }
-  .roomInfo .actions { flex-direction: column; align-items: stretch; }
-  .roomInfo .secondary { align-self: stretch; padding-left: 21px; }
-  .roomInfo .secondary .actionArrow { width: 34px; height: 34px; flex-basis: 34px; }
-  .disclosure { margin-bottom: 24px; font-size: 9px; line-height: 1.6; }
-  .closeInfo { top: 12px; right: 16px; font-size: 23px; }
-  .finale { background: var(--burgundy); color: var(--paper); padding: 32px 28px 30px; }
-  .finale .panelMasthead { margin-bottom: 27px; }
-  .finale .panelMasthead :global(.eyebrow) { color: var(--paper); font-size: 9px; }
-  .finale h2 { font-size: clamp(44px, 12.4vw, 54px); line-height: .98; margin-bottom: 30px; }
-  .selectorLabel { font-size: 10px; margin-bottom: 17px; }
-  .hotelList a { min-height: 86px; padding: 17px 0; gap: 15px; }
-  .hotelNumber { font-size: 8px; margin-top: 8px; }
-  .hotelName { font-size: 35px; }
-  .hotelName small { font-size: 11px; margin-top: 8px; }
-  .hotelArrow { font-size: 18px; }
-  .finaleLinks { margin-top: 23px; gap: 10px; }
-  .finaleLinks .quietLink { font-size: 10px; gap: 8px; }
-  .toolbar, .atFinale .toolbar { position: relative; inset: auto; margin-top: auto; padding: 10px 27px max(20px, env(safe-area-inset-bottom)); display: flex; flex-wrap: wrap; gap: 4px 14px; justify-content: space-between; color: var(--olive); }
-  .chapterLabel { background: none; padding: 0; gap: 9px; font-size: 9px; min-height: 34px; }
-  .chapterLine { width: 18px; }
-  .chapterLabel i { margin-left: 2px; font-size: 7px; }
-  .transport { background: none; padding: 0; gap: 15px; }
-  .transport button { font-size: 9px; padding: 0; gap: 7px; }
-  .atFinale .toolbar { background: var(--burgundy); color: #e3d5c8; padding-top: 0; }
-  .atFinale .chapterLabel i { color: #e3d5c8; } .atFinale .chapterLine { background: #f7f3e94a; }
-  .loading, .recovery { position: relative; inset: auto; margin: 0 27px 22px; border-radius: 0; padding: 20px 0; max-width: none; }
-  .loading { background: none; font-size: 10px; gap: 10px; }
-  .loading .quietLink { font-size: 10px; }
-  .recovery h2 { font-size: 42px; }
-  .recovery .actions { gap: 12px; }
-  .stage[data-playing='true'] { height: calc(100svh - 72px - env(safe-area-inset-top)); min-height: 0; overflow: hidden; display: flex; flex-direction: column; }
-  .stage[data-playing='true'] .mediaFrame { flex: 0 0 auto; }
-  .stage[data-playing='true'] .toolbar { margin-top: auto; flex-shrink: 0; }
-  .playingCaption { display: block; padding: 35px 27px 16px; color: var(--olive); }
-  .playingCaption :global(.eyebrow) { font-size: 8px; }
-  .playingCaption p { color: var(--burgundy); font: italic 400 37px/1.1 var(--display); margin: 15px 0 0; }
-  .stage[data-playing='true'] .loading { padding-top: 0; }
+
+.finaleDiscovery { margin-top: 18px; display: flex; flex-direction: column; } .finaleDiscovery > .quietLink { font: 400 21px/1.2 var(--display); min-height: 44px; } .finaleDiscovery > .quietLink > span { font: 14px var(--sans); } .finaleDiscovery .finaleLinks { padding-top: 8px; margin-top: 8px; border-top: 1px solid #f7f3e933; } @media (min-width: 768px) and (max-height: 750px) { .finaleDiscovery { margin-top: 10px; } .finaleDiscovery > .quietLink { font-size: 20px; } .finaleDiscovery .finaleLinks { padding-top: 4px; margin-top: 4px; } }
+
+.sourcePlane { position: absolute; inset: 0; }
+.still[data-active='false'] { opacity: 0; }
+.beginning { display: inline-flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 44px; min-width: 44px; padding: 0 15px; background: var(--paper); color: var(--burgundy); border: 0; border-radius: var(--radius-pill); font: 400 10px var(--sans); text-transform: none; letter-spacing: .015em; }
+.beginning:hover { text-decoration: underline; text-underline-offset: 5px; }
+.beginning > span { font-size: 15px; }
+@media (min-width: 768px) and (max-height: 750px) {
+  .stage { height: 100svh; min-height: 100svh; }
+  .invitation { top: 110px; bottom: 75px; overflow-y: auto; }
+  .finale { padding-top: 110px; padding-bottom: 60px; }
+  .roomInfo { padding-top: 110px; }
 }
-@media (max-width: 767px) and (max-height: 550px) { .playingCaption { display: none; } .stage[data-playing='true'] .toolbar { padding-bottom: 8px; } }
-
-
-@media (max-width: 1024px) and (max-height: 550px) {
-  .mediaFrame, .infoOpen .mediaFrame { width: min(100%, calc((100svh - 150px) * 16 / 9)); margin-inline: auto; }
+@media (max-width: 767px) and (orientation: portrait), (max-width: 950px) and (max-height: 500px) {
+  .home, .stage { height: 100vh; height: 100svh; min-height: 100vh; min-height: 100svh; overflow: hidden; }
+  .stage { background: #30271f; }
+  .mediaFrame, .infoOpen .mediaFrame { position: absolute; inset: 0; width: 100%; height: 100%; transform: none; overflow: hidden; }
+  .sourcePlane { inset: auto; top: 50%; left: 0; width: max(100vw, 177.777778svh); height: max(100svh, 56.25vw); transform: translate3d(calc((100vw - 100%) * var(--portrait-focal, .55)), -50%, 0); }
+  .stage::after { content: ''; position: absolute; z-index: 1; inset: 0; pointer-events: none; background: linear-gradient(180deg, #17100c25, transparent 22%, transparent 70%, #17100ce6); }
+  .editorial { z-index: 3; }
+  .toolbar, .atFinale .toolbar { z-index: 8; left: 22px; right: 22px; bottom: max(10px, env(safe-area-inset-bottom)); color: var(--paper); }
+  .toolbar :focus-visible, .editorial:not(.roomInfo):not(.roomDock) :focus-visible { outline-color: var(--paper); }
+  .chapterLabel, .transport { color: inherit; background: none; padding: 0; border-radius: 0; }
+  .chapterLabel { font-size: 8px; gap: 10px; min-height: 30px; }
+  .chapterLabel i { color: #e3d5c8; font-size: 7px; }
+  .chapterLine { background: #f7f3e966; width: 22px; }
+  .beginning { background: none; color: var(--paper); padding: 0; font-size: 10px; gap: 12px; }
+  .transport { gap: 20px; }
+  .transport button { font-size: 10px; }
+  .atFinale .transport { display: none; }
   .playingCaption { display: none; }
-  .stage[data-playing='true'] .toolbar { padding-bottom: 8px; }
+  .loading { z-index: 7; left: 22px; right: 22px; bottom: 112px; background: var(--paper); max-width: 400px; padding: 10px 17px; font-size: 10px; border-radius: 4px; gap: 8px 15px; }
+  .loading .quietLink { font-size: 10px; }
+  .recovery { z-index: 9; left: 22px; right: 22px; bottom: 120px; padding: 26px; max-height: calc(100svh - 220px); overflow-y: auto; }
+  .recovery h2 { font-size: 39px; }
+  .recovery > p:not(:global(.eyebrow)) { font-size: 11px; }
+  .recovery .actions { gap: 12px; }
+}
+@media (max-width: 767px) and (orientation: portrait) {
+  .toolbar { display: grid; grid-template-columns: 1fr auto; gap: 0 12px; align-items: center; }
+  .beginning { grid-column: 2; }
+  .transport { grid-column: 1 / -1; justify-content: space-between; }
+  .editorial { max-width: none; }
+  .panelMasthead { margin-bottom: 19px; }
+  .panelMasthead :global(.eyebrow) { font-size: 9px; letter-spacing: .14em; }
+  .invitation { inset: auto 26px 137px; width: auto; padding: 0; border-radius: 0; background: none; box-shadow: none; color: var(--paper); }
+  .invitation::before, .invitationSeal { display: none; }
+  .invitation .panelMasthead { margin-bottom: 22px; color: var(--paper); }
+  .invitation h2 { font-size: clamp(43px, 13.1vw, 57px); line-height: .96; margin-bottom: 22px; }
+  .introCopy { font-size: 12px; line-height: 1.75; }
+  .invitation .introCopy { color: var(--paper); margin-bottom: 22px; }
+  .invitationNote { display: none; }
+  .invitation .actions { flex-direction: row; align-items: center; gap: 17px; }
+  .invitation .action { width: auto; flex: 1 1 auto; background: var(--paper); color: var(--burgundy); min-height: 51px; font-size: 11px; padding-left: 22px; }
+  .invitation .actionArrow { border-color: var(--hairline); }
+  .invitation .quietLink { color: var(--paper); font-size: 10px; gap: 10px; }
+  .welcome, .hallway { left: 26px; right: 26px; bottom: 134px; width: auto; color: var(--paper); }
+  .welcome::before, .hallway::before { inset: -35px -35px -35px; background: radial-gradient(ellipse at 30% 65%, #20130da6, transparent 75%); }
+  .welcome h2, .hallway h2 { font-size: clamp(39px, 11.4vw, 49px); line-height: .97; margin-bottom: 24px; }
+  .welcome .actions { gap: 18px; flex-wrap: nowrap; }
+  .welcome .action, .hallway .action { min-height: 51px; font-size: 11px; background: var(--paper); color: var(--burgundy); box-shadow: none; padding-left: 21px; }
+  .welcome .actionArrow, .hallway .actionArrow { border-color: var(--hairline); }
+  .welcome .quietLink { font-size: 10px; gap: 8px; white-space: nowrap; }
+  .hallway .actions { flex-direction: column; align-items: stretch; gap: 8px; }
+  .hallway .secondary { background: #25180e70; color: var(--paper); border: 1px solid #f7f3e970; border-radius: var(--radius-pill); padding: 7px 8px 7px 21px; }
+  .hallway .secondary .actionArrow { border-color: #f7f3e970; }
+  .doorMark { width: 32px; height: 32px; font-size: 17px; }
+  .doorLabel { font-size: 8px; }
+  .roomDock { left: 22px; right: 22px; bottom: 134px; width: auto; max-width: none; padding: 20px 23px 17px; border-radius: 3px 18px 3px 3px; }
+  .roomDock .panelMasthead { margin-bottom: 12px; }
+  .roomDock h2 { font-size: 34px; margin-bottom: 10px; }
+  .roomDock .actions { gap: 4px 20px; }
+  .roomDock .action { min-height: 44px; font-size: 10px; gap: 12px; }
+  .roomDock .actionArrow { width: 27px; height: 27px; flex-basis: 27px; }
+  .roomInfo { inset: auto 18px 115px; width: auto; padding: 25px 25px 23px; max-height: 53svh; overflow-y: auto; justify-content: flex-start; border-radius: 3px 18px 3px 3px; }
+  .roomInfo .panelMasthead { margin-bottom: 17px; padding-right: 25px; }
+  .roomInfo h2 { font-size: 40px; margin-bottom: 20px; }
+  .roomInfo .introCopy { margin-bottom: 20px; font-size: 12px; }
+  .roomInfo .disclosure { display: none; }
+  .roomInfo .actions { flex-direction: column; align-items: stretch; gap: 5px; }
+  .roomInfo .action { font-size: 11px; min-height: 48px; }
+  .roomInfo .secondary { padding-left: 21px; }
+  .closeInfo { top: 9px; right: 10px; font-size: 23px; }
+  .finale { inset: calc(88px + env(safe-area-inset-top)) 18px auto; width: auto; height: auto; max-height: 46svh; padding: 22px; border-radius: 3px 3px 18px 3px; justify-content: flex-start; overscroll-behavior: contain; scroll-padding-block: 20px; scrollbar-width: thin; scrollbar-color: #e3d5c8 #761b34; box-shadow: 0 12px 32px #24150e22; }
+  .finale .panelMasthead { margin-bottom: 13px; }
+  .finale .panelMasthead :global(.eyebrow) { font-size: 8px; letter-spacing: .1em; }
+  .finale h2 { font-size: 37px; line-height: .98; margin-bottom: 17px; }
+  .selectorLabel { display: flex; align-items: center; justify-content: space-between; font-size: 9px; margin-bottom: 10px; }
+  .selectorLabel::after { content: '↓'; font-size: 14px; margin-left: 12px; }
+  .hotelList a { min-height: 62px; padding: 11px 0; gap: 13px; }
+  .hotelName { font-size: 30px; }
+  .hotelName small { font-size: 9px; margin-top: 5px; line-height: 1.4; }
+  .hotelNumber { font-size: 7px; margin-top: 6px; }
+  .hotelArrow { font-size: 17px; }
+  .finaleDiscovery { margin-top: 12px; }
+  .finaleDiscovery > .quietLink { font-size: 19px; min-height: 44px; gap: 12px; }
+  .finaleDiscovery .finaleLinks { margin-top: 8px; padding-top: 8px; gap: 12px; }
+  .finaleLinks .quietLink { font-size: 9px; gap: 8px; }
+  .atFinale .toolbar { display: grid; }
+}
+@media (max-width: 950px) and (max-height: 500px) and (orientation: landscape) {
+  .invitation { inset: 84px 24px 64px auto; width: 40%; padding: 17px 24px; overflow-y: auto; justify-content: flex-start; }
+  .invitation .panelMasthead { margin-bottom: 11px; }
+  .invitation .panelMasthead :global(.eyebrow) { font-size: 8px; }
+  .invitationSeal, .invitationNote, .invitation .introCopy { display: none; }
+  .invitation h2 { font-size: 33px; margin-bottom: 12px; }
+  .invitation .actions { flex-direction: row; align-items: center; gap: 12px; }
+  .invitation .action { width: auto; min-height: 44px; font-size: 10px; padding-left: 17px; }
+  .invitation .actionArrow { width: 28px; height: 28px; flex-basis: 28px; }
+  .invitation .quietLink { font-size: 10px; gap: 8px; }
+  .welcome, .hallway { bottom: 78px; max-width: 57%; }
+  .welcome h2, .hallway h2 { font-size: 37px; margin-bottom: 17px; }
+  .welcome .panelMasthead, .hallway .panelMasthead { margin-bottom: 13px; }
+  .welcome .action, .hallway .action { min-height: 44px; font-size: 10px; }
+  .actions { gap: 10px 18px; }
+  .actionArrow { width: 29px; height: 29px; flex-basis: 29px; }
+  .roomDock { bottom: 76px; padding: 17px 25px 14px; }
+  .roomDock h2 { font-size: 29px; }
+  .roomInfo { inset: 0 0 0 auto; width: 44%; padding: 85px 30px 65px; overflow-y: auto; justify-content: flex-start; }
+  .roomInfo h2 { font-size: 39px; margin-bottom: 20px; }
+  .roomInfo .introCopy { font-size: 11px; }
+  .roomInfo .disclosure { display: none; }
+  .closeInfo { top: 63px; right: 12px; }
+  .finale { width: 44%; padding: 85px 28px 60px; justify-content: flex-start; }
+  .finale .panelMasthead { margin-bottom: 16px; }
+  .finale h2 { font-size: 38px; margin-bottom: 20px; }
+  .hotelList a { padding: 11px 0; min-height: 65px; }
+  .hotelName { font-size: 31px; }
+  .hotelName small { font-size: 10px; margin-top: 6px; }
+  .finaleDiscovery { margin-top: 12px; }
+  .finaleDiscovery > .quietLink { font-size: 19px; }
+  .finaleDiscovery .finaleLinks { gap: 15px; }
+  .finaleLinks .quietLink { font-size: 9px; }
+  .atFinale .toolbar { right: 47%; }
+  .toolbar { bottom: 7px; }
+  .chapterLabel { min-height: 44px; }
+  .transport { gap: 16px; }
+  .loading { left: 28px; right: auto; bottom: 73px; padding-block: 4px; }
+  .recovery { bottom: 73px; left: 28px; max-width: 470px; max-height: calc(100svh - 160px); }
+}
+@media (max-width: 360px) and (orientation: portrait) {
+  .invitation, .welcome, .hallway { left: 22px; right: 22px; }
+  .welcome .actions { gap: 12px; }
+  .welcome .action { padding-left: 16px; gap: 13px; font-size: 10px; }
+  .toolbar { left: 19px; right: 19px; }
+  .beginning, .transport button { font-size: 9px; }
+  .roomDock { padding-inline: 19px; }
+  .roomDock .actions { gap: 4px 14px; }
+  .finale { padding: 19px; max-height: 48svh; }
+  .finale h2 { font-size: 33px; }
 }
 
-.finaleDiscovery { margin-top: 18px; display: flex; flex-direction: column; } .finaleDiscovery > .quietLink { font: 400 21px/1.2 var(--display); min-height: 44px; } .finaleDiscovery > .quietLink > span { font: 14px var(--sans); } .finaleDiscovery .finaleLinks { padding-top: 8px; margin-top: 8px; border-top: 1px solid #f7f3e933; } @media (min-width: 768px) and (max-height: 750px) { .finaleDiscovery { margin-top: 10px; } .finaleDiscovery > .quietLink { font-size: 20px; } .finaleDiscovery .finaleLinks { padding-top: 4px; margin-top: 4px; } } @media (max-width: 767px), (max-width: 1024px) and (max-height: 550px) { .finaleDiscovery { margin-top: 19px; } .finaleDiscovery > .quietLink { font-size: 21px; } .finaleDiscovery .finaleLinks { margin-top: 11px; padding-top: 11px; } }
+/* Brief decode handoffs should read as a pause, not flash a loading notice. */
+.loading { visibility: hidden; animation: showLoading 0s .65s forwards; }
+@keyframes showLoading { to { visibility: visible; } }
+
+@media (prefers-reduced-motion: reduce) { .loading { visibility: visible; } }
+/* In the optional landscape information layout, bring both the bed and window
+   into the uncovered visual area; restore this crop before reverse playback. */
+@media (max-width: 950px) and (max-height: 500px) and (orientation: landscape) {
+  .stage[data-chapter='room']:not([data-playing='true']) .sourcePlane { transition: transform .5s var(--ease-editorial); }
+  .infoOpen .sourcePlane { transform: translate3d(calc((100vw - 100%) * var(--portrait-focal, .7) - 24vw), -50%, 0); }
+}

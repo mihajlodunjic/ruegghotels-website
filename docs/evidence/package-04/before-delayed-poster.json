@@ -1,0 +1,12 @@
+{
+  "state": "WELCOME_PAUSED",
+  "image": {
+    "complete": false,
+    "width": 0
+  },
+  "video": {
+    "time": 10,
+    "opacity": "0",
+    "paused": true
+  }
+}

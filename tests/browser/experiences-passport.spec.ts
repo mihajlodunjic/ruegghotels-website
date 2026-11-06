@@ -3,7 +3,7 @@ import AxeBuilder from '@axe-core/playwright'
 import { mkdir } from 'node:fs/promises'
 import { addDays, todayISO } from '../../src/features/booking/bookingModel'
 import { PASSPORT_KEY } from '../../src/features/passport/passportModel'
-const root = 'docs/evidence/package-03-5'
+const root = process.env.RUEGG_EVIDENCE_ROOT || 'docs/evidence/package-03-5'
 function summerDate() { let day = addDays(todayISO(), 30); while (![6, 7, 8].includes(Number(day.slice(5, 7)))) day = addDays(day, 1); return day }
 const phase = (page: Page, step: string) => expect(page.locator('[data-planner-step]')).toHaveAttribute('data-planner-step', step)
 async function ready(page: Page) {

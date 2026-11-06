@@ -2,7 +2,7 @@ import { test, expect, type Page, type TestInfo } from '@playwright/test'
 import AxeBuilder from '@axe-core/playwright'
 import { mkdir } from 'node:fs/promises'
 import { addDays, todayISO } from '../../src/features/booking/bookingModel'
-const root = 'docs/evidence/package-03'
+const root = process.env.RUEGG_EVIDENCE_ROOT || 'docs/evidence/package-03'
 async function shot(page: Page, info: TestInfo, name: string, fullPage = true) {
   await expect(page.locator('[data-page-ready]')).toHaveAttribute('data-page-ready', 'true')
   const panel = page.locator('[data-step-ready]')

@@ -33,13 +33,13 @@ export function chapterOf(view: View): StaticChapter {
 }
 export function cinematicReducer(state: CinematicState, event: CinematicEvent): CinematicState {
   const v = state.view
+  if (event.type === 'REPLAY') return initialState(state.reducedMotion)
   const go = (view: View, interacted = state.userHasInteracted): CinematicState => ({ ...state, view, userHasInteracted: interacted, videoReady: false })
   if (event.type === 'ENTER_STATIC_MODE') return { ...go({ mode: 'STATIC_FALLBACK', chapter: chapterOf(v) }), reducedMotion: true }
   if (event.type === 'OPEN_MENU' && v.mode !== 'MENU_OPEN') return go({ mode: 'MENU_OPEN', resumeState: v, wasPlayingBeforeMenu: isPlaying(v.mode) })
   if (event.type === 'CLOSE_MENU' && v.mode === 'MENU_OPEN') return go(v.resumeState)
   if (v.mode === 'MENU_OPEN') return state
   if (event.type === 'SKIP') return go(state.reducedMotion ? { mode: 'STATIC_FALLBACK', chapter: 'finale' } : { mode: 'FINALE' }, true)
-  if (event.type === 'REPLAY') return go(state.reducedMotion ? { mode: 'STATIC_FALLBACK', chapter: 'invitation' } : { mode: 'INVITATION' }, true)
   if (event.type === 'SELECT_HOTEL') return { ...state, activeHotel: event.hotel }
   if (event.type === 'FRAME_READY' && isPlaying(v.mode)) return { ...state, videoReady: true }
   if ((event.type === 'PLAY_FAILED' || event.type === 'MEDIA_STALLED') && isPlaying(v.mode)) return go({ mode: 'MEDIA_ERROR', resumeState: v.mode, errorCode: event.errorCode })

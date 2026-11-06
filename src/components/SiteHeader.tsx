@@ -5,7 +5,7 @@ import { BrandSeal } from './BrandSeal'
 import styles from './SiteHeader.module.css'
 
 const links = [['/', 'The journey'], ['/our-story', 'Our story'], ['/partners', 'Our local circle'], ['/experiences', 'Your mountain experiences'], ['/passport', 'RÜEGG Passport'], ['/book', 'Our alpine homes'], ['/contact', 'Get in touch']] as const
-export function SiteHeader({ open, onOpen, onClose, variant = 'cinematic' }: { open: boolean; onOpen: () => void; onClose: () => void; variant?: 'cinematic' | 'page' }) {
+export function SiteHeader({ open, onOpen, onClose, variant = 'cinematic', onBeginning }: { open: boolean; onOpen: () => void; onClose: () => void; variant?: 'cinematic' | 'page'; onBeginning?: () => void }) {
   const dialog = useRef<HTMLDialogElement>(null)
   const menu = useRef<HTMLButtonElement>(null)
   const closing = useRef(false)
@@ -33,7 +33,7 @@ export function SiteHeader({ open, onOpen, onClose, variant = 'cinematic' }: { o
   }
   return <>
     <a className="skip-link" href="#main-content">Skip to content</a>
-    <header className={`${styles.header} ${variant === 'page' ? styles.pageHeader : ''}`}>
+    <header className={`${styles.header} ${variant === 'page' ? styles.pageHeader : styles.cinematicHeader}`}>
       <Link className={styles.brand} to="/" aria-label="RÜEGG HOTELS home"><BrandSeal /></Link>
       <div className={styles.actions}>
         <button ref={menu} className={styles.menu} onClick={onOpen} aria-haspopup="dialog" aria-expanded={open}>Menu <span className={styles.menuLines} aria-hidden="true"><i /><i /></span></button>
@@ -46,7 +46,7 @@ export function SiteHeader({ open, onOpen, onClose, variant = 'cinematic' }: { o
       <p id="menu-title" className="eyebrow" data-menu-item>AN INVITATION TO BELONG</p>
       <p className={styles.menuHeading} data-menu-item>Make yourself<br /><em>at home.</em></p>
       <nav aria-label="Main navigation">{links.map(([to, label], index) => <NavLink end onClick={onClose} data-menu-item key={to} to={to}><span className={styles.menuNumber}>0{index + 1}</span><span>{label}</span><span className={styles.menuArrow} aria-hidden="true">↗</span></NavLink>)}</nav>
-      <div className={styles.menuFoot} data-menu-item><span>Agnes · Spalloni · Schiebel</span><p>Three alpine homes.<br />One invitation to belong.</p></div>
+      <div className={styles.menuFoot} data-menu-item>{onBeginning && <button className={styles.menuBeginning} onClick={onBeginning}>Back to Beginning <span aria-hidden="true">↶</span></button>}<span>Agnes · Spalloni · Schiebel</span><p>Three alpine homes.<br />One invitation to belong.</p></div>
     </dialog>
   </>
 }

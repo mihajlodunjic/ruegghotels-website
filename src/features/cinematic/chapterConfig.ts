@@ -11,3 +11,11 @@ export const playback: Record<PlayingScene, { video: 'master' | 'branch'; source
   ROOM_ENTERING: { video: 'branch', source: 'room-forward', start: 0, event: 'ROOM_FINISHED' },
   ROOM_EXITING: { video: 'branch', source: 'room-reverse', start: 0, event: 'REVERSE_FINISHED' },
 }
+
+export const chapterDescriptions: Record<StaticChapter, string> = {
+  invitation: 'An alpine timber house at dusk, with mountains to the left and a warmly lit entrance.',
+  welcome: 'A timber reception with a central portrait and open book, green armchair and carved counter.',
+  hallway: 'A warm walnut hallway. The near door on the right opens into the optional room journey.',
+  room: 'An alpine bedroom, with a timber bed and a window looking towards the mountains.',
+  finale: 'A communal table on the left, with candlelight, flowers and an alpine lounge beyond.',
+}

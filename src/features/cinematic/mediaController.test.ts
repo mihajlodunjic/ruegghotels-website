@@ -1,4 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest'
+import type { StillFrames } from './stillFrames'
 import { CinematicPlayerController, seekTo, waitForMedia } from './mediaController'
 
 class FakeVideo extends EventTarget {
@@ -8,6 +9,7 @@ class FakeVideo extends EventTarget {
   seeking = false
   error: unknown = null
   src = ''
+  seeks: number[] = []
   private time = 0
   private callbacks = new Map<number, VideoFrameRequestCallback>()
   private frameId = 0
@@ -22,7 +24,7 @@ class FakeVideo extends EventTarget {
     })
   }
   get currentTime() { return this.time }
-  set currentTime(value: number) { this.time = value; this.seeking = true; queueMicrotask(() => { this.seeking = false; this.dispatchEvent(new Event('seeked')) }) }
+  set currentTime(value: number) { this.seeks.push(value); this.time = value; this.seeking = true; queueMicrotask(() => { this.seeking = false; this.dispatchEvent(new Event('seeked')) }) }
   getAttribute(name: string) { return name === 'src' ? this.src : null }
   removeAttribute() { this.src = '' }
   frame(time: number) {
@@ -34,12 +36,12 @@ class FakeVideo extends EventTarget {
   }
 }
 const settle = async () => { for (let i = 0; i < 8; i++) await Promise.resolve() }
-function setup(frames = true) {
+function setup(frames = true, stills?: StillFrames) {
   const master = new FakeVideo(frames)
   const branch = new FakeVideo(frames)
   const dispatch = vi.fn()
   const present = vi.fn()
-  const controller = new CinematicPlayerController({ master: master as unknown as HTMLVideoElement, branch: branch as unknown as HTMLVideoElement }, false, dispatch, present)
+  const controller = new CinematicPlayerController({ master: master as unknown as HTMLVideoElement, branch: branch as unknown as HTMLVideoElement }, false, dispatch, present, stills)
   return { master, branch, dispatch, present, controller }
 }
 afterEach(() => vi.useRealTimers())
@@ -51,14 +53,16 @@ describe('native media controller', () => {
     expect(branch.load).not.toHaveBeenCalled()
     controller.dispose()
   })
-  it.each([true, false])('holds exact checkpoints with frame callbacks=%s', async (frames) => {
+  it.each([true, false])('hands off at the checkpoint without a new seek, frame callbacks=%s', async (frames) => {
     const { controller, master, dispatch } = setup(frames)
     controller.sync({ mode: 'MASTER_TO_HALLWAY' })
     await settle()
     expect(master.currentTime).toBe(10)
-    master.frame(17.2)
+    const seeks = master.seeks.length
+    master.frame(frames ? 17.125 : 17.2)
     expect(master.paused).toBe(true)
-    expect(master.currentTime).toBe(17.125)
+    expect(master.seeks).toHaveLength(seeks)
+    await settle()
     expect(dispatch).toHaveBeenCalledWith({ type: 'HALLWAY_REACHED' })
     controller.dispose()
   })
@@ -67,16 +71,16 @@ describe('native media controller', () => {
     controller.sync({ mode: 'ROOM_ENTERING' }); await settle()
     expect(master.paused).toBe(true)
     expect(branch.src).toContain('room-forward-1080')
-    expect(present).toHaveBeenLastCalledWith({ video: 'branch', phase: 'loading' })
+    expect(present).toHaveBeenLastCalledWith(expect.objectContaining({ video: 'branch', phase: 'loading' }))
     branch.frame(.05)
-    expect(present).toHaveBeenLastCalledWith({ video: 'branch', phase: 'ready' })
-    branch.dispatchEvent(new Event('ended'))
+    expect(present).toHaveBeenLastCalledWith(expect.objectContaining({ video: 'branch', phase: 'ready' }))
+    branch.dispatchEvent(new Event('ended')); await settle()
     expect(dispatch).toHaveBeenCalledWith({ type: 'ROOM_FINISHED' })
     controller.sync({ mode: 'ROOM_AT_B3' })
     controller.sync({ mode: 'ROOM_EXITING' }); await settle()
     expect(branch.src).toContain('room-reverse-1080')
     expect(master.paused).toBe(true)
-    branch.dispatchEvent(new Event('ended'))
+    branch.dispatchEvent(new Event('ended')); await settle()
     expect(dispatch).toHaveBeenCalledWith({ type: 'REVERSE_FINISHED' })
     controller.dispose()
   })
@@ -85,7 +89,7 @@ describe('native media controller', () => {
     master.play.mockRejectedValueOnce(new Error('Autoplay denied'))
     controller.sync({ mode: 'MASTER_TO_WELCOME' }); await settle()
     expect(dispatch).toHaveBeenCalledWith({ type: 'PLAY_FAILED', errorCode: 'Autoplay denied' })
-    expect(present).toHaveBeenLastCalledWith({ video: 'master', phase: 'loading' })
+    expect(present).toHaveBeenLastCalledWith(expect.objectContaining({ video: 'master', phase: 'loading' }))
     expect(master.paused).toBe(true)
     controller.dispose()
   })
@@ -98,6 +102,15 @@ describe('native media controller', () => {
     master.readyState = 2
     master.dispatchEvent(new Event('loadeddata'))
     await settle()
+    expect(master.play).not.toHaveBeenCalled()
+    expect(dispatch).not.toHaveBeenCalled()
+    controller.dispose()
+  })
+  it('aborts a pending native seek on reset before it can play or dispatch', async () => {
+    const { controller, master, dispatch } = setup()
+    controller.sync({ mode: 'MASTER_TO_HALLWAY' }); await Promise.resolve()
+    expect(master.seeks).toEqual([10])
+    controller.sync({ mode: 'INVITATION' }); await settle(); master.frame(17.125)
     expect(master.play).not.toHaveBeenCalled()
     expect(dispatch).not.toHaveBeenCalled()
     controller.dispose()
@@ -133,6 +146,56 @@ describe('native media controller', () => {
     resolveOld(); await settle()
     expect(master.paused).toBe(true)
     expect(branch.paused).toBe(false)
+    controller.dispose()
+  })
+  it('holds the valid paused frame until the destination still has painted', async () => {
+    let painted!: () => void
+    const stills = { prepare: vi.fn(async () => undefined), show: vi.fn(() => new Promise<void>((resolve) => { painted = resolve })) }
+    const { controller, master, present, dispatch } = setup(true, stills)
+    controller.sync({ mode: 'MASTER_TO_WELCOME' }); await settle()
+    master.frame(10)
+    expect(master.paused).toBe(true)
+    expect(master.seeks).toEqual([])
+    expect(present).toHaveBeenLastCalledWith(expect.objectContaining({ video: 'master', phase: 'holding' }))
+    expect(dispatch).not.toHaveBeenCalledWith({ type: 'WELCOME_REACHED' })
+    painted(); await settle()
+    expect(present).toHaveBeenLastCalledWith(expect.objectContaining({ video: null, phase: 'idle', still: 'welcome' }))
+    expect(dispatch).toHaveBeenCalledWith({ type: 'WELCOME_REACHED' })
+    controller.dispose()
+  })
+  it('discards a late checkpoint image after restart, including repeated resets', async () => {
+    let obsolete!: () => void
+    const stills: StillFrames = { prepare: async () => undefined, show: (chapter) => chapter === 'welcome' ? new Promise((resolve) => { obsolete = resolve }) : Promise.resolve() }
+    const { controller, master, present, dispatch } = setup(true, stills)
+    controller.sync({ mode: 'MASTER_TO_WELCOME' }); await settle(); master.frame(10)
+    controller.sync({ mode: 'INVITATION' }); controller.sync({ mode: 'INVITATION' }); await settle()
+    obsolete(); await settle(); master.dispatchEvent(new Event('ended'))
+    expect(dispatch).not.toHaveBeenCalledWith({ type: 'WELCOME_REACHED' })
+    expect(present).toHaveBeenLastCalledWith(expect.objectContaining({ video: null, phase: 'idle', still: 'invitation' }))
+    expect(master.paused).toBe(true)
+    controller.dispose()
+  })
+  it('finishes a branch on its last decoded frame without an ended event', async () => {
+    const { controller, branch, dispatch } = setup()
+    branch.duration = 5.208333
+    controller.sync({ mode: 'ROOM_ENTERING' }); await settle()
+    branch.frame(5.166667); await settle()
+    expect(dispatch).toHaveBeenCalledWith({ type: 'ROOM_FINISHED' })
+    expect(branch.paused).toBe(true)
+    controller.dispose()
+  })
+  it('never mutates media time for an already aborted seek', async () => {
+    const video = new FakeVideo(); const task = new AbortController(); task.abort()
+    await expect(seekTo(video as unknown as HTMLVideoElement, 17.125, task.signal)).rejects.toMatchObject({ name: 'AbortError' })
+    expect(video.seeks).toEqual([])
+  })
+  it('stops a pending play promise that resolves after restart', async () => {
+    const { controller, master } = setup()
+    let late!: () => void
+    master.play.mockImplementationOnce(() => new Promise<void>((resolve) => { late = () => { master.paused = false; resolve() } }))
+    controller.sync({ mode: 'MASTER_TO_WELCOME' }); await settle()
+    controller.sync({ mode: 'INVITATION' }); await settle(); late(); await settle()
+    expect(master.paused).toBe(true)
     controller.dispose()
   })
   it('bounds stalls and cancels their timeout after dispose', async () => {
