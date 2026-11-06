@@ -3,7 +3,10 @@ import type { PlayingScene, StaticChapter } from './cinematicMachine'
 export const CHECKPOINTS = { reception: 10, hallway: 17.125, finale: 23.375 } as const
 const base = (import.meta.env.VITE_MEDIA_BASE_URL || '').replace(/\/$/, '')
 export const poster = (chapter: StaticChapter) => `${base}/posters/${({ invitation: 'hero', welcome: 'reception', hallway: 'hallway', room: 'room', finale: 'finale' })[chapter]}.v1.webp`
-export const mediaUrl = (kind: 'master' | 'room-forward' | 'room-reverse', mobile: boolean) => `${base}/media/${kind}-${mobile ? '720' : '1080'}.v1.mp4`
+// Serve the existing 1080p video editions on both desktop and mobile.
+// Mobile cropping/framing is controlled separately by the cinematic layout.
+const mediaResolution = { mobile: '1080', desktop: '1080' } as const
+export const mediaUrl = (kind: 'master' | 'room-forward' | 'room-reverse', mobile: boolean) => `${base}/media/${kind}-${mediaResolution[mobile ? 'mobile' : 'desktop']}.v1.mp4`
 export const playback: Record<PlayingScene, { video: 'master' | 'branch'; source: 'master' | 'room-forward' | 'room-reverse'; start: number; stop?: number; event: 'WELCOME_REACHED' | 'HALLWAY_REACHED' | 'ROOM_FINISHED' | 'REVERSE_FINISHED' | 'MASTER_FINISHED' }> = {
   MASTER_TO_WELCOME: { video: 'master', source: 'master', start: 0, stop: CHECKPOINTS.reception, event: 'WELCOME_REACHED' },
   MASTER_TO_HALLWAY: { video: 'master', source: 'master', start: CHECKPOINTS.reception, stop: CHECKPOINTS.hallway, event: 'HALLWAY_REACHED' },
