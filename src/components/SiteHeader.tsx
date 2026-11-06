@@ -5,7 +5,7 @@ import { BrandSeal } from './BrandSeal'
 import styles from './SiteHeader.module.css'
 
 const links = [['/', 'The journey'], ['/our-story', 'Our story'], ['/partners', 'Our local circle'], ['/book', 'Our alpine homes'], ['/contact', 'Get in touch']] as const
-export function SiteHeader({ open, onOpen, onClose }: { open: boolean; onOpen: () => void; onClose: () => void }) {
+export function SiteHeader({ open, onOpen, onClose, variant = 'cinematic' }: { open: boolean; onOpen: () => void; onClose: () => void; variant?: 'cinematic' | 'page' }) {
   const dialog = useRef<HTMLDialogElement>(null)
   const menu = useRef<HTMLButtonElement>(null)
   const closing = useRef(false)
@@ -33,7 +33,7 @@ export function SiteHeader({ open, onOpen, onClose }: { open: boolean; onOpen: (
   }
   return <>
     <a className="skip-link" href="#main-content">Skip to content</a>
-    <header className={styles.header}>
+    <header className={`${styles.header} ${variant === 'page' ? styles.pageHeader : ''}`}>
       <Link className={styles.brand} to="/" aria-label="RÜEGG HOTELS home"><BrandSeal /></Link>
       <div className={styles.actions}>
         <button ref={menu} className={styles.menu} onClick={onOpen} aria-haspopup="dialog" aria-expanded={open}>Menu <span className={styles.menuLines} aria-hidden="true"><i /><i /></span></button>

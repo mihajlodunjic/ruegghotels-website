@@ -1,15 +1,38 @@
-## Package 01 — run locally
+# RÜEGG HOTELS
 
-The cinematic foundation is implemented on the Package 01 feature branch. The homepage `/` is the experience. The other four routes are intentionally honest, accessible previews; no bookings or enquiries are submitted.
+A cinematic boutique hospitality website built with React, strict TypeScript, Vite, React Router and GSAP. Packages 01–02 established the homepage; Package 03 completes `/partners`, `/book`, `/our-story` and `/contact`.
 
-Requires Node **22.12+** (validated with Node 24.13.0) and npm. Derived web videos and posters are committed; FFmpeg is **not** needed to run the site.
+## Run locally
+
+Requires Node **22.12+** and npm (validated with Node 24.13.0 / npm 11.6.2). Derived web media, the official logo and licensed fonts are tracked; original source videos and FFmpeg are not needed to run the site.
 
 ```powershell
 npm ci
 npm run dev
 ```
 
-Open the printed local URL, normally `http://127.0.0.1:5173/`. Start with **Step inside**; the film stops at reception (10.000 s), then at the hallway (17.125 s). Explore the right-hand room, open its optional information, return via reverse video, and choose Continue to the table. Skip to overview, booking, pause, menu and the still-image journey are also available. Reduced-motion and Save-Data preferences start the still-image journey without loading video.
+Open `http://127.0.0.1:5173/`. **Step inside** starts the native video journey: reception at **10.000 s**, hallway at **17.125 s**, Room V3 forward → B3 → reverse → hallway, then the genuine final Master frame at **23.375 s**. Reduced motion and Save-Data start a complete still-image alternative.
+
+## Explore Package 03
+
+- `/partners`: nine curated example experiences; combine destination and category filters, expand details, or follow hotel-specific booking/contact links. Filter state survives browser navigation.
+- `/book?hotel=agnes` (also `spalloni`, `schiebel`): choose dates and guests, select a room, review the sample total, optionally use example guest details, acknowledge the simulation and complete the reservation preview. The final reference has a `DEMO-RG-` prefix. Start another stay without refreshing.
+- `/our-story`: a warm family-hospitality narrative, the extra chair and three destinations, with booking links.
+- `/contact`: validate an enquiry, review it locally, copy the formatted message, edit or start again. No recipient/backend is configured; the review and copy status explicitly say it has not been delivered.
+
+### Reservation simulation
+
+The owner-authorized sample model lives in `src/data/roomTypes.ts` and the pure `BookingProvider` adapter in `src/features/booking/bookingModel.ts`. It never calls external inventory or payment APIs. Rates use integer cents; stay total is nightly rate × nights, with no invented local taxes or fees.
+
+| Hotel | Currency | Classic Double | Alpine Comfort | Mountain View |
+| --- | --- | ---: | ---: | ---: |
+| Agnes · Kandersteg | CHF | 146 | 178 | 214 |
+| Spalloni · Splügen | CHF | 138 | 164 | 198 |
+| Schiebel · Oberstdorf | EUR | 124 | 152 | 186 |
+
+Sample rules: one room, 1–4 adults, 0–2 children, at most 4 guests; room capacities 2/3/4; 1–21 nights within the next 365 days; Mountain View minimum 2 nights. Nights of December 24–25 are unavailable, providing a deterministic empty-result path. These are demonstration rules and prices, not live property information. Results, checkout and the final status carry contextual disclosures. No cards, payments, personal-data transmission or browser persistence are implemented. Optional checkout details are cleared when the preview completes.
+
+## Checks and visual evidence
 
 ```powershell
 npm run lint
@@ -17,60 +40,34 @@ npm run typecheck
 npm test
 npm run build
 npx playwright install chromium
-npm run test:e2e
+npm run test:e2e -- tests/browser/pages.spec.ts
+npm run test:e2e -- tests/browser/cinematic.spec.ts --project=desktop --project=mobile --grep 'approved master|skip, menu'
 npm run preview
 ```
 
-Playwright uses actual H.264 playback at native speed. It captures six checkpoint screenshots at each configured desktop/mobile size in `docs/evidence/package-01/`. Its server starts automatically when port 5173 is free. HTML reports and failure traces stay ignored locally.
+Playwright starts its own server when port 5173 is free. It uses Chromium and real native H.264 playback. Supporting-page tests cover 1440×900, 1920×1080, 390×844 and 375×812, including navigation, accessibility scans, filters, reservation completion and local enquiry copying. Evidence is in `docs/evidence/package-03/`; ignored HTML reports/traces are local only.
 
-### Rebuild media only when originals or the encoding recipe change
+See [Package 03 report](docs/06-package-03-report.md), [Package 02 report](docs/05-package-02-report.md), and [Package 01 report](docs/04-package-01-report.md). The reports record scope and review boundaries; later packages and production deployment require separate approval.
 
-Preserve the originals at the aliases below. They are ignored by Git. Install FFmpeg/FFprobe with H.264 and WebP support on `PATH`, or set `FFMPEG` and `FFPROBE` to full binary paths. This checkout also recognizes local ignored `.tools/ffmpeg.exe` and `.tools/ffprobe.exe`.
+## Static hosting and deep links
+
+`npm run build` produces `dist/`. A Render Static Site must publish that directory and configure the rewrite **`/*` → `/index.html` (Rewrite, not Redirect)** after any explicit asset rules. This serves direct requests to `/partners`, `/book?hotel=agnes`, `/our-story` and `/contact` through React Router while existing assets remain static. MP4 delivery must support byte ranges. No production deployment or hosting account changes are performed by this package.
+
+`VITE_MEDIA_BASE_URL` optionally sets an external media root at build time; it must contain `media/` and `posters/`. Local derived assets are the default. Fonts are self-hosted under OFL 1.1; their provenance and licenses are in `public/fonts/`.
+
+## Original media (optional rebuild)
+
+Preserve the originals in ignored `media/source/`: `master-original.mp4`, `room-v3-original.mp4`, `b0-reconstructed-original.png` and `Bordo.png`. Never add source videos to Git. The exact official seal is already tracked at `src/assets/ruegg-burgundy.png`.
+
+Only rebuild when source media or encoding recipes change. FFmpeg/FFprobe must be on PATH, set through `FFMPEG` / `FFPROBE`, or present in ignored `.tools/`.
 
 ```powershell
 npm run media:build
 npm run media:verify
 ```
 
-`media/scripts/build-media.sh` is the Git Bash/WSL/POSIX wrapper; the Node implementation also runs directly in PowerShell. The build records complete probes, byte counts and original/output SHA-256 hashes in `public/media/manifest.v1.json`. It never writes to `media/source/`. The optional `--branches-only` / `--reverse-only` script flags reuse unchanged upstream editions when tuning branch encodes. Verification checks hashes, frame counts, codec, faststart and reverse endpoints. Original files are needed for this optional verification command.
+The scripts preserve originals and record hashes/probes in `public/media/manifest.v1.json`. See `docs/02-media.md` for source metadata and the accepted normalization/reverse recipe. Package 03 does not change videos, posters, recipes or cinematic timing.
 
-Master: 24 fps, H.264 High 4.1, CRF 28. Forward branch: center-crop 4 px at top/bottom, CRF 26. Reverse: encoded from normalized forward, CRF 22 with endpoint keyframes. `fps=24:eof_action=pass` retains the genuine final V3 source frame, giving 125 frames / 5.208333 s. Stills use exact frame indices; B0 uses the approved reconstruction, center-cropped without stretching.
+## Working policy
 
-`VITE_MEDIA_BASE_URL` can set a single external media origin/path at build time; its root must contain `media/` and `posters/`. By default all derived assets are served locally. A production SPA host needs an `index.html` fallback for deep links and byte-range support for MP4s. No host, domain, provider or analytics is configured in this package.
-
-See [Package 01 implementation report](docs/04-package-01-report.md) and [media QA evidence](docs/evidence/package-01/media-qa.json). Package 02 requires owner review first.
-
----
-# RÜEGG HOTELS — Codex implementation handoff v1.0
-
-**Prepared:** 2026-11-05. **Status:** approved visual direction, NOT implemented. **Language:** UI copy currently English drafts; user communication Serbian Latin; Codex prompts English.
-
-This package contains the complete implementation blueprint and staged Codex prompts. It includes the 10 accepted-for-design-reference static mockups, but **not the large original videos**. The videos should be copied locally into `media/source/` as instructed below, or downloaded as the separate original-media pack. Notion is the durable source for approvals; docs in this package are the Codex-ready technical baseline.
-
-## Read order
-
-1. `AGENTS.md` — implementation policy and constraints.
-2. `docs/01-blueprint.md` — architecture, UX state specification, routing, content, deployment.
-3. `docs/02-media.md` — verified source metadata, poster and transcoding requirements.
-4. `docs/03-qa.md` — acceptance tests, responsive / browser matrix, performance.
-5. `references/mockups/` — desktop + mobile approved directional UI references, **not pixel-perfect implementation mandates**.
-6. `codex/01-foundation-and-player.md` through `codex/05-release-readiness.md` — implementation packages, in order.
-
-## Source asset naming
-
-Copy these existing originals to `media/source/` in the repo before running the media step:
-
-- `RUEGG_Cinematic_Master_1080p(1).mp4` — cinematic master, original; put under alias `master-original.mp4` for the implementation workflow (preserve an unchanged archival copy).
-- `hallway to room.mp4` — accepted Room Branch V3, original; alias `room-v3-original.mp4`.
-- `B0 Reconstructed(1).png` — accepted B0 pause reference; alias `b0-reconstructed-original.png`.
-
-These are *local source files*, **not** remote Notion attachments and not invented assets. A reverse branch source was not supplied in the current chat. Codex should derive a reverse MP4 from the accepted forward branch using FFmpeg; no Dreamina regenerations.
-
-## Git policy
-
-Inspect the actual repo before changing anything. If none exists, bootstrap a **local** repository, but DO NOT create a remote or push without an explicitly authorized URL/account. Once the remote is provided: sync main, feature branch, changes, tests, one coherent commit, push, PR, stop for owner approval. Never auto-merge, force-push, or work directly on main unless the user explicitly changes the policy.
-
-## Open decisions (do not fabricate)
-
-Booking provider/real availability, contact destination, actual local partner identities and contractual relationships, final full copy/translations, final licensed font, remote repository/hosting and domain. Build visually complete honest demos or present disabled/inquiry flows where required; never claim real bookings or partnerships without data.
-# ruegghotels-website
+Read `AGENTS.md`, `docs/*.md`, the current `codex/` package prompt and reference mockups before changes. The latest owner prompt supersedes older concept-only content rules and authorizes the local simulation above. Work from accepted main on a focused feature branch, run checks, capture evidence, commit/push and open a PR. Never force-push, merge or deploy without authorization.

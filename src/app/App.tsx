@@ -1,36 +1,26 @@
-import { useEffect, useState } from 'react'
-import { Link, Route, Routes, useLocation, useSearchParams } from 'react-router-dom'
+import { useEffect } from 'react'
+import { Route, Routes, useLocation } from 'react-router-dom'
 import { CinematicHomePage } from '../features/cinematic/CinematicHomePage'
-import { SiteHeader } from '../components/SiteHeader'
-import { hotels } from '../data/hotels'
+import { PartnersPage } from '../pages/PartnersPage'
+import { ReservationsPage } from '../pages/ReservationsPage'
+import { OurStoryPage } from '../pages/OurStoryPage'
+import { ContactPage } from '../pages/ContactPage'
+import { NotFoundPage } from '../pages/NotFoundPage'
 
-const pages: Record<string, { title: string; text: string }> = {
-  '/partners': { title: 'Our local circle.', text: 'A place for the people, craft and landscapes around our homes. Local stories and partnerships will appear here once verified.' },
-  '/our-story': { title: 'An invitation to belong.', text: 'We show you the warmth of the mountains. This is the beginning of the RÜEGG story; our full story is being prepared.' },
-  '/contact': { title: 'Let’s begin a conversation.', text: 'Our contact channels are being prepared. No enquiry is sent or collected from this preview.' },
-}
-function PreviewPage() {
-  const location = useLocation()
-  const [params] = useSearchParams()
-  const [menu, setMenu] = useState(false)
-  const booking = location.pathname === '/book'
-  const page = pages[location.pathname]
-  const hotel = hotels.find((item) => item.id === params.get('hotel'))
-  return <div className="preview-shell"><SiteHeader open={menu} onOpen={() => setMenu(true)} onClose={() => setMenu(false)} />
-    <main id="main-content" className="preview-page" tabIndex={-1}>
-      <p className="eyebrow">RÜEGG HOTELS / {booking ? 'Our stays' : 'Discover'}</p>
-      <h1>{booking ? 'Find your alpine home.' : page?.title || 'A path still to discover.'}</h1>
-      <p>{booking ? 'Preview only — no request is sent. Booking and live availability are not connected.' : page?.text || 'This page could not be found. Your invitation is still waiting.'}</p>
-      {booking && <><label htmlFor="hotel">Your home</label><select id="hotel" key={hotel?.id} defaultValue={hotel?.id || ''}><option value="" disabled>Choose a home</option>{hotels.map((item) => <option key={item.id} value={item.id}>{item.name} — {item.destination}</option>)}</select><p className="preview-note">The cinematic spaces are an imaginary brand setting and do not represent bookable room inventory.</p></>}
-      <Link className="button" to="/">Return to the journey <span aria-hidden="true">↗</span></Link>
-    </main>
-  </div>
+const metadata: Record<string, { title: string; description: string }> = {
+  '/': { title: 'An invitation to belong', description: 'We show you the warmth of the mountains. Discover the RÜEGG HOTELS cinematic journey.' },
+  '/partners': { title: 'Our Local Circle', description: 'Find your own alpine rhythm with walks, cycling, winter days and local discoveries in Kandersteg, Splügen and Oberstdorf.' },
+  '/book': { title: 'Your Next Mountain Chapter', description: 'Choose your RÜEGG alpine home, explore room options and plan your stay in Kandersteg, Splügen or Oberstdorf.' },
+  '/our-story': { title: 'Our Story', description: 'Three alpine homes, one spirit of family hospitality. Pull up a chair and discover the RÜEGG story.' },
+  '/contact': { title: 'A Conversation with RÜEGG', description: 'Every stay begins with a conversation. Prepare your questions about an alpine escape, a group stay or a new adventure.' },
 }
 export function App() {
   const location = useLocation()
   useEffect(() => {
-    document.title = `${location.pathname === '/' ? 'An invitation to belong' : location.pathname === '/book' ? 'Our stays' : pages[location.pathname]?.title || 'Page not found'} — RÜEGG HOTELS`
+    const page = metadata[location.pathname] || { title: 'Page Not Found', description: 'A path still to discover. Return to the RÜEGG HOTELS journey.' }
+    document.title = `${page.title} — RÜEGG HOTELS`
+    document.querySelector('meta[name="description"]')?.setAttribute('content', page.description)
     window.scrollTo(0, 0)
   }, [location.pathname])
-  return <Routes><Route path="/" element={<CinematicHomePage />} />{['/partners', '/book', '/our-story', '/contact'].map((path) => <Route key={path} path={path} element={<PreviewPage />} />)}<Route path="*" element={<PreviewPage />} /></Routes>
+  return <Routes><Route path="/" element={<CinematicHomePage />} /><Route path="/partners" element={<PartnersPage />} /><Route path="/book" element={<ReservationsPage />} /><Route path="/our-story" element={<OurStoryPage />} /><Route path="/contact" element={<ContactPage key={location.search} />} /><Route path="*" element={<NotFoundPage />} /></Routes>
 }

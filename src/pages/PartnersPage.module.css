@@ -1,0 +1,38 @@
+.hero { display: grid; grid-template-columns: 1.8fr 1fr; gap: 8%; align-items: end; }
+.hero h1 { font-size: clamp(58px, 5.6vw, 95px); }
+.hero > p { margin-bottom: 7px; }
+.landscape { position: relative; margin: 0 0 80px; height: clamp(240px, 28vw, 430px); overflow: hidden; border-radius: 3px 28px 3px 3px; }
+.landscape img { width: 100%; height: 100%; display: block; object-fit: cover; object-position: 30% 48%; }
+.landscape figcaption { position: absolute; bottom: 20px; left: 25px; padding: 10px 13px; font-size: 8px; letter-spacing: .16em; color: var(--paper); background: #30201499; }
+.guideHeading { display: flex; justify-content: space-between; align-items: end; gap: 25px; }
+.guideHeading h2 { margin-bottom: 0; }
+.filters { display: flex; justify-content: space-between; gap: 30px; align-items: end; margin-top: 38px; border-bottom: 1px solid var(--hairline); padding-bottom: 20px; }
+.destinations { display: flex; flex-wrap: wrap; gap: 12px 28px; }
+.destinations button { padding: 11px 0; min-width: 44px; color: var(--muted); background: none; border: 0; border-bottom: 1px solid transparent; font: 400 12px var(--sans); letter-spacing: 0; text-transform: none; }
+.destinations button[aria-pressed='true'] { color: var(--burgundy); border-bottom-color: var(--burgundy); }
+.category { display: grid; gap: 6px; min-width: 190px; }
+.category label { font-size: 9px; color: var(--muted); }
+.category select { padding: 8px 22px 8px 0; border: 0; border-bottom: 1px solid var(--hairline); background: none; color: var(--burgundy); font: 400 11px var(--sans); }
+.resultCount { font-size: 9px; color: var(--muted); margin: 22px 0; }
+.experience { display: grid; grid-template-columns: 65px minmax(0, 1fr) 225px; gap: 25px; border-bottom: 1px solid var(--hairline); padding: 38px 0; }
+.number { font: 400 51px/1 var(--display); color: var(--muted); }
+.experienceBody { max-width: 680px; }
+.experienceBody > p:first-child { font-size: 8px; margin: 0 0 18px; }
+.experienceBody h3 { font: 400 clamp(32px, 2.9vw, 47px)/1.03 var(--display); color: var(--burgundy); letter-spacing: -.02em; margin-bottom: 15px; }
+.experienceBody > p, .experienceBody details > p { font-size: 12px; line-height: 1.9; color: var(--brown); max-width: 560px; margin-bottom: 13px; }
+.experienceBody summary { min-height: 44px; display: inline-flex; align-items: center; gap: 30px; font-size: 10px; color: var(--olive); cursor: pointer; list-style: none; }
+.experienceBody summary::-webkit-details-marker { display: none; }
+.experienceBody details[open] summary { margin-bottom: 12px; }
+.experienceBody details[open] summary span { transform: rotate(45deg); }
+.experienceAside { padding-left: 35px; border-left: 1px solid var(--hairline); align-self: stretch; display: flex; flex-direction: column; align-items: flex-start; }
+.experienceAside > span { font-size: 10px; color: var(--olive); margin-top: 5px; }
+.experienceAside > p { font: italic 400 25px/1.2 var(--display); color: var(--brown); margin: 15px 0; }
+.experienceAside > a { margin-top: auto; font-size: 10px; }
+.empty { padding: 50px 0; }
+.empty h3 { font: 400 55px/.98 var(--display); color: var(--burgundy); margin-bottom: 20px; }
+.empty > p:not(:first-child) { font-size: 13px; line-height: 1.9; max-width: 420px; color: var(--brown); }
+.invitation { text-align: center; padding: 85px 0 90px; }
+.invitation h2 { font: 400 clamp(44px, 4.6vw, 75px)/.98 var(--display); color: var(--burgundy); letter-spacing: -.03em; margin-bottom: 25px; }
+.invitation > p:not(:first-child) { font-size: 13px; line-height: 1.9; color: var(--brown); margin-bottom: 28px; }
+@media (max-width: 900px) { .hero { grid-template-columns: 1fr; gap: 8px; } .hero > p { max-width: 530px; } .experience { grid-template-columns: 45px minmax(0, 1fr) 165px; gap: 20px; } .experienceAside { padding-left: 22px; } .filters { flex-wrap: wrap; gap: 22px; } .category { min-width: 180px; } }
+@media (max-width: 600px) { .hero h1 { font-size: 50px; } .landscape { margin: 0 0 45px; height: 250px; border-radius: 3px 20px 3px 3px; } .landscape img { object-position: 25% 45%; } .landscape figcaption { left: 13px; bottom: 14px; font-size: 7px; } .guideHeading { display: block; } .guideHeading > a { margin-top: 10px; font-size: 10px; } .filters { margin-top: 22px; padding-bottom: 15px; gap: 16px; } .destinations { gap: 0 22px; } .destinations button { font-size: 11px; } .category { width: 100%; } .category select { width: 100%; font-size: 16px; } .resultCount { margin: 18px 0 4px; } .experience { grid-template-columns: 30px minmax(0, 1fr); gap: 15px; padding: 30px 0; } .number { font-size: 35px; } .experienceBody > p:first-child { line-height: 1.7; margin-bottom: 13px; } .experienceBody h3 { font-size: 35px; } .experienceAside { grid-column: 2; border-left: 0; padding-left: 0; display: grid; grid-template-columns: 1fr auto; gap: 6px 18px; } .experienceAside > p { grid-column: 1; font-size: 21px; margin: 2px 0; } .experienceAside > a { grid-column: 2; grid-row: 1 / 3; align-self: center; font-size: 10px; gap: 12px; } .experienceAside > span { font-size: 9px; } .invitation { padding: 50px 0 60px; } .invitation h2 { font-size: 46px; } .invitation > p:not(:first-child) { font-size: 12px; } }
