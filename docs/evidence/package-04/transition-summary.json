@@ -1,0 +1,830 @@
+{
+  "method": "rAF DOM/media readiness samples, not pixel-level black detection; before event listeners missed React video mount, so use before seeking properties only",
+  "results": [
+    {
+      "viewport": "mobile",
+      "version": "before",
+      "samples": 837,
+      "invalidCheckpointSamples": 3,
+      "invalidIntervals": [
+        {
+          "at": 36386,
+          "state": "HALLWAY_PAUSED",
+          "imageWidth": 0,
+          "seeking": [
+            false,
+            false
+          ]
+        },
+        {
+          "at": 44496,
+          "state": "FINALE",
+          "imageWidth": 0,
+          "seeking": [
+            true,
+            false
+          ]
+        },
+        {
+          "at": 44503,
+          "state": "FINALE",
+          "imageWidth": 0,
+          "seeking": [
+            false,
+            false
+          ]
+        }
+      ],
+      "checkpoints": [
+        {
+          "at": 12929,
+          "state": "WELCOME_PAUSED",
+          "complete": true,
+          "width": 1920,
+          "videos": [
+            {
+              "time": 10,
+              "paused": true,
+              "seeking": true,
+              "ready": 1,
+              "opacity": "0",
+              "src": "/media/master-720.v1.mp4"
+            },
+            {
+              "time": 0,
+              "paused": true,
+              "seeking": false,
+              "ready": 0,
+              "opacity": "0",
+              "src": null
+            }
+          ]
+        },
+        {
+          "at": 21714,
+          "state": "HALLWAY_PAUSED",
+          "complete": true,
+          "width": 1920,
+          "videos": [
+            {
+              "time": 17.125,
+              "paused": true,
+              "seeking": true,
+              "ready": 1,
+              "opacity": "0",
+              "src": "/media/master-720.v1.mp4"
+            },
+            {
+              "time": 0,
+              "paused": true,
+              "seeking": false,
+              "ready": 0,
+              "opacity": "0",
+              "src": null
+            }
+          ]
+        },
+        {
+          "at": 29055,
+          "state": "ROOM_AT_B3",
+          "complete": true,
+          "width": 1920,
+          "videos": [
+            {
+              "time": 17.125,
+              "paused": true,
+              "seeking": false,
+              "ready": 4,
+              "opacity": "0",
+              "src": "/media/master-720.v1.mp4"
+            },
+            {
+              "time": 5.2083,
+              "paused": true,
+              "seeking": false,
+              "ready": 4,
+              "opacity": "0",
+              "src": "/media/room-forward-720.v1.mp4"
+            }
+          ]
+        },
+        {
+          "at": 36386,
+          "state": "HALLWAY_PAUSED",
+          "complete": false,
+          "width": 0,
+          "videos": [
+            {
+              "time": 17.125,
+              "paused": true,
+              "seeking": false,
+              "ready": 4,
+              "opacity": "0",
+              "src": "/media/master-720.v1.mp4"
+            },
+            {
+              "time": 5.2083,
+              "paused": true,
+              "seeking": false,
+              "ready": 4,
+              "opacity": "0",
+              "src": "/media/room-reverse-720.v1.mp4"
+            }
+          ]
+        },
+        {
+          "at": 44496,
+          "state": "FINALE",
+          "complete": false,
+          "width": 0,
+          "videos": [
+            {
+              "time": 23.375,
+              "paused": true,
+              "seeking": true,
+              "ready": 1,
+              "opacity": "0",
+              "src": "/media/master-720.v1.mp4"
+            },
+            {
+              "time": 5.2083,
+              "paused": true,
+              "seeking": false,
+              "ready": 4,
+              "opacity": "0",
+              "src": "/media/room-reverse-720.v1.mp4"
+            }
+          ]
+        }
+      ],
+      "handoffs": [],
+      "seeks": []
+    },
+    {
+      "viewport": "mobile",
+      "version": "after",
+      "samples": 1263,
+      "invalidCheckpointSamples": 0,
+      "invalidIntervals": [],
+      "checkpoints": [
+        {
+          "at": 13559,
+          "state": "WELCOME_PAUSED",
+          "frame": "10.0000",
+          "complete": true,
+          "width": 1920,
+          "videos": [
+            {
+              "time": 9.9984,
+              "paused": true,
+              "seeking": false,
+              "ready": 4,
+              "opacity": "0",
+              "src": "/media/master-720.v1.mp4"
+            },
+            {
+              "time": 0,
+              "paused": true,
+              "seeking": false,
+              "ready": 0,
+              "opacity": "0",
+              "src": null
+            }
+          ]
+        },
+        {
+          "at": 22863,
+          "state": "HALLWAY_PAUSED",
+          "frame": "17.1250",
+          "complete": true,
+          "width": 1920,
+          "videos": [
+            {
+              "time": 17.1137,
+              "paused": true,
+              "seeking": false,
+              "ready": 4,
+              "opacity": "0",
+              "src": "/media/master-720.v1.mp4"
+            },
+            {
+              "time": 0,
+              "paused": true,
+              "seeking": false,
+              "ready": 4,
+              "opacity": "0",
+              "src": "/media/room-forward-720.v1.mp4"
+            }
+          ]
+        },
+        {
+          "at": 30269,
+          "state": "ROOM_AT_B3",
+          "frame": "5.1667",
+          "complete": true,
+          "width": 1920,
+          "videos": [
+            {
+              "time": 17.1137,
+              "paused": true,
+              "seeking": false,
+              "ready": 4,
+              "opacity": "0",
+              "src": "/media/master-720.v1.mp4"
+            },
+            {
+              "time": 5.1849,
+              "paused": true,
+              "seeking": false,
+              "ready": 4,
+              "opacity": "0",
+              "src": "/media/room-forward-720.v1.mp4"
+            }
+          ]
+        },
+        {
+          "at": 33846,
+          "state": "ROOM_AT_B3",
+          "frame": "5.1667",
+          "complete": true,
+          "width": 1920,
+          "videos": [
+            {
+              "time": 17.1137,
+              "paused": true,
+              "seeking": false,
+              "ready": 4,
+              "opacity": "0",
+              "src": "/media/master-720.v1.mp4"
+            },
+            {
+              "time": 0,
+              "paused": true,
+              "seeking": false,
+              "ready": 4,
+              "opacity": "0",
+              "src": "/media/room-reverse-720.v1.mp4"
+            }
+          ]
+        },
+        {
+          "at": 39534,
+          "state": "HALLWAY_PAUSED",
+          "frame": "5.1667",
+          "complete": true,
+          "width": 1920,
+          "videos": [
+            {
+              "time": 17.1137,
+              "paused": true,
+              "seeking": false,
+              "ready": 4,
+              "opacity": "0",
+              "src": "/media/master-720.v1.mp4"
+            },
+            {
+              "time": 5.1448,
+              "paused": true,
+              "seeking": false,
+              "ready": 4,
+              "opacity": "0",
+              "src": "/media/room-reverse-720.v1.mp4"
+            }
+          ]
+        },
+        {
+          "at": 47988,
+          "state": "FINALE",
+          "frame": "23.3750",
+          "complete": true,
+          "width": 1920,
+          "videos": [
+            {
+              "time": 23.3667,
+              "paused": true,
+              "seeking": false,
+              "ready": 4,
+              "opacity": "0",
+              "src": "/media/master-720.v1.mp4"
+            },
+            {
+              "time": 5.1448,
+              "paused": true,
+              "seeking": false,
+              "ready": 4,
+              "opacity": "0",
+              "src": "/media/room-reverse-720.v1.mp4"
+            }
+          ]
+        }
+      ],
+      "handoffs": [
+        {
+          "state": "MASTER_TO_WELCOME",
+          "at": 13514,
+          "heldMs": 45,
+          "video": {
+            "time": 9.9984,
+            "paused": true,
+            "seeking": false,
+            "ready": 4,
+            "opacity": "1",
+            "src": "/media/master-720.v1.mp4"
+          }
+        },
+        {
+          "state": "MASTER_TO_HALLWAY",
+          "at": 22819,
+          "heldMs": 44,
+          "video": {
+            "time": 17.1137,
+            "paused": true,
+            "seeking": false,
+            "ready": 4,
+            "opacity": "1",
+            "src": "/media/master-720.v1.mp4"
+          }
+        },
+        {
+          "state": "ROOM_ENTERING",
+          "at": 30220,
+          "heldMs": 49,
+          "video": {
+            "time": 5.1849,
+            "paused": true,
+            "seeking": false,
+            "ready": 4,
+            "opacity": "1",
+            "src": "/media/room-forward-720.v1.mp4"
+          }
+        },
+        {
+          "state": "ROOM_EXITING",
+          "at": 39486,
+          "heldMs": 48,
+          "video": {
+            "time": 5.1448,
+            "paused": true,
+            "seeking": false,
+            "ready": 4,
+            "opacity": "1",
+            "src": "/media/room-reverse-720.v1.mp4"
+          }
+        },
+        {
+          "state": "MASTER_TO_FINALE",
+          "at": 47905,
+          "heldMs": 83,
+          "video": {
+            "time": 23.3667,
+            "paused": true,
+            "seeking": false,
+            "ready": 4,
+            "opacity": "1",
+            "src": "/media/master-720.v1.mp4"
+          }
+        }
+      ],
+      "seeks": []
+    },
+    {
+      "viewport": "desktop",
+      "version": "before",
+      "samples": 839,
+      "invalidCheckpointSamples": 4,
+      "invalidIntervals": [
+        {
+          "at": 31155,
+          "state": "ROOM_AT_B3",
+          "imageWidth": 0,
+          "seeking": [
+            false,
+            false
+          ]
+        },
+        {
+          "at": 39386,
+          "state": "HALLWAY_PAUSED",
+          "imageWidth": 0,
+          "seeking": [
+            false,
+            false
+          ]
+        },
+        {
+          "at": 48259,
+          "state": "FINALE",
+          "imageWidth": 0,
+          "seeking": [
+            true,
+            false
+          ]
+        },
+        {
+          "at": 48266,
+          "state": "FINALE",
+          "imageWidth": 0,
+          "seeking": [
+            false,
+            false
+          ]
+        }
+      ],
+      "checkpoints": [
+        {
+          "at": 13419,
+          "state": "WELCOME_PAUSED",
+          "complete": true,
+          "width": 1920,
+          "videos": [
+            {
+              "time": 10,
+              "paused": true,
+              "seeking": true,
+              "ready": 1,
+              "opacity": "0",
+              "src": "/media/master-1080.v1.mp4"
+            },
+            {
+              "time": 0,
+              "paused": true,
+              "seeking": false,
+              "ready": 0,
+              "opacity": "0",
+              "src": null
+            }
+          ]
+        },
+        {
+          "at": 23177,
+          "state": "HALLWAY_PAUSED",
+          "complete": true,
+          "width": 1920,
+          "videos": [
+            {
+              "time": 17.125,
+              "paused": true,
+              "seeking": true,
+              "ready": 1,
+              "opacity": "0",
+              "src": "/media/master-1080.v1.mp4"
+            },
+            {
+              "time": 0,
+              "paused": true,
+              "seeking": false,
+              "ready": 0,
+              "opacity": "0",
+              "src": null
+            }
+          ]
+        },
+        {
+          "at": 31155,
+          "state": "ROOM_AT_B3",
+          "complete": false,
+          "width": 0,
+          "videos": [
+            {
+              "time": 17.125,
+              "paused": true,
+              "seeking": false,
+              "ready": 4,
+              "opacity": "0",
+              "src": "/media/master-1080.v1.mp4"
+            },
+            {
+              "time": 5.2083,
+              "paused": true,
+              "seeking": false,
+              "ready": 4,
+              "opacity": "0",
+              "src": "/media/room-forward-1080.v1.mp4"
+            }
+          ]
+        },
+        {
+          "at": 39386,
+          "state": "HALLWAY_PAUSED",
+          "complete": false,
+          "width": 0,
+          "videos": [
+            {
+              "time": 17.125,
+              "paused": true,
+              "seeking": false,
+              "ready": 4,
+              "opacity": "0",
+              "src": "/media/master-1080.v1.mp4"
+            },
+            {
+              "time": 5.2083,
+              "paused": true,
+              "seeking": false,
+              "ready": 4,
+              "opacity": "0",
+              "src": "/media/room-reverse-1080.v1.mp4"
+            }
+          ]
+        },
+        {
+          "at": 48259,
+          "state": "FINALE",
+          "complete": false,
+          "width": 0,
+          "videos": [
+            {
+              "time": 23.375,
+              "paused": true,
+              "seeking": true,
+              "ready": 1,
+              "opacity": "0",
+              "src": "/media/master-1080.v1.mp4"
+            },
+            {
+              "time": 5.2083,
+              "paused": true,
+              "seeking": false,
+              "ready": 4,
+              "opacity": "0",
+              "src": "/media/room-reverse-1080.v1.mp4"
+            }
+          ]
+        }
+      ],
+      "handoffs": [],
+      "seeks": []
+    },
+    {
+      "viewport": "desktop",
+      "version": "after",
+      "samples": 1285,
+      "invalidCheckpointSamples": 0,
+      "invalidIntervals": [],
+      "checkpoints": [
+        {
+          "at": 14777,
+          "state": "WELCOME_PAUSED",
+          "frame": "10.0000",
+          "complete": true,
+          "width": 1920,
+          "videos": [
+            {
+              "time": 10.0147,
+              "paused": true,
+              "seeking": false,
+              "ready": 4,
+              "opacity": "0",
+              "src": "/media/master-1080.v1.mp4"
+            },
+            {
+              "time": 0,
+              "paused": true,
+              "seeking": false,
+              "ready": 0,
+              "opacity": "0",
+              "src": null
+            }
+          ]
+        },
+        {
+          "at": 24659,
+          "state": "HALLWAY_PAUSED",
+          "frame": "17.1250",
+          "complete": true,
+          "width": 1920,
+          "videos": [
+            {
+              "time": 17.1275,
+              "paused": true,
+              "seeking": false,
+              "ready": 4,
+              "opacity": "0",
+              "src": "/media/master-1080.v1.mp4"
+            },
+            {
+              "time": 0,
+              "paused": true,
+              "seeking": false,
+              "ready": 4,
+              "opacity": "0",
+              "src": "/media/room-forward-1080.v1.mp4"
+            }
+          ]
+        },
+        {
+          "at": 35357,
+          "state": "ROOM_AT_B3",
+          "frame": "5.1667",
+          "complete": true,
+          "width": 1920,
+          "videos": [
+            {
+              "time": 17.1275,
+              "paused": true,
+              "seeking": false,
+              "ready": 4,
+              "opacity": "0",
+              "src": "/media/master-1080.v1.mp4"
+            },
+            {
+              "time": 5.1799,
+              "paused": true,
+              "seeking": false,
+              "ready": 4,
+              "opacity": "0",
+              "src": "/media/room-forward-1080.v1.mp4"
+            }
+          ]
+        },
+        {
+          "at": 40422,
+          "state": "ROOM_AT_B3",
+          "frame": "5.1667",
+          "complete": true,
+          "width": 1920,
+          "videos": [
+            {
+              "time": 17.1275,
+              "paused": true,
+              "seeking": false,
+              "ready": 4,
+              "opacity": "0",
+              "src": "/media/master-1080.v1.mp4"
+            },
+            {
+              "time": 0,
+              "paused": true,
+              "seeking": false,
+              "ready": 4,
+              "opacity": "0",
+              "src": "/media/room-reverse-1080.v1.mp4"
+            }
+          ]
+        },
+        {
+          "at": 46596,
+          "state": "HALLWAY_PAUSED",
+          "frame": "5.1667",
+          "complete": true,
+          "width": 1920,
+          "videos": [
+            {
+              "time": 17.1275,
+              "paused": true,
+              "seeking": false,
+              "ready": 4,
+              "opacity": "0",
+              "src": "/media/master-1080.v1.mp4"
+            },
+            {
+              "time": 5.1836,
+              "paused": true,
+              "seeking": false,
+              "ready": 4,
+              "opacity": "0",
+              "src": "/media/room-reverse-1080.v1.mp4"
+            }
+          ]
+        },
+        {
+          "at": 55854,
+          "state": "FINALE",
+          "frame": "23.3750",
+          "complete": true,
+          "width": 1920,
+          "videos": [
+            {
+              "time": 23.3964,
+              "paused": true,
+              "seeking": false,
+              "ready": 4,
+              "opacity": "0",
+              "src": "/media/master-1080.v1.mp4"
+            },
+            {
+              "time": 5.1836,
+              "paused": true,
+              "seeking": false,
+              "ready": 4,
+              "opacity": "0",
+              "src": "/media/room-reverse-1080.v1.mp4"
+            }
+          ]
+        }
+      ],
+      "handoffs": [
+        {
+          "state": "MASTER_TO_WELCOME",
+          "at": 14714,
+          "heldMs": 63,
+          "video": {
+            "time": 10.0147,
+            "paused": true,
+            "seeking": false,
+            "ready": 4,
+            "opacity": "1",
+            "src": "/media/master-1080.v1.mp4"
+          }
+        },
+        {
+          "state": "MASTER_TO_HALLWAY",
+          "at": 24600,
+          "heldMs": 59,
+          "video": {
+            "time": 17.1275,
+            "paused": true,
+            "seeking": false,
+            "ready": 4,
+            "opacity": "1",
+            "src": "/media/master-1080.v1.mp4"
+          }
+        },
+        {
+          "state": "ROOM_ENTERING",
+          "at": 35312,
+          "heldMs": 45,
+          "video": {
+            "time": 5.1799,
+            "paused": true,
+            "seeking": false,
+            "ready": 4,
+            "opacity": "1",
+            "src": "/media/room-forward-1080.v1.mp4"
+          }
+        },
+        {
+          "state": "ROOM_EXITING",
+          "at": 46555,
+          "heldMs": 41,
+          "video": {
+            "time": 5.1836,
+            "paused": true,
+            "seeking": false,
+            "ready": 4,
+            "opacity": "1",
+            "src": "/media/room-reverse-1080.v1.mp4"
+          }
+        },
+        {
+          "state": "MASTER_TO_FINALE",
+          "at": 55776,
+          "heldMs": 78,
+          "video": {
+            "time": 23.3964,
+            "paused": true,
+            "seeking": false,
+            "ready": 4,
+            "opacity": "1",
+            "src": "/media/master-1080.v1.mp4"
+          }
+        }
+      ],
+      "seeks": []
+    },
+    {
+      "viewport": "landscape 844x390",
+      "version": "after",
+      "samples": 1387,
+      "invalidCheckpointSamples": 0,
+      "checkpoints": [
+        {
+          "state": "WELCOME_PAUSED",
+          "at": 13384,
+          "frame": "10.0000",
+          "width": 1920
+        },
+        {
+          "state": "HALLWAY_PAUSED",
+          "at": 22796,
+          "frame": "17.1250",
+          "width": 1920
+        },
+        {
+          "state": "ROOM_AT_B3",
+          "at": 30678,
+          "frame": "5.1667",
+          "width": 1920
+        },
+        {
+          "state": "ROOM_AT_B3",
+          "at": 34399,
+          "frame": "5.1667",
+          "width": 1920
+        },
+        {
+          "state": "HALLWAY_PAUSED",
+          "at": 40587,
+          "frame": "5.1667",
+          "width": 1920
+        },
+        {
+          "state": "FINALE",
+          "at": 49066,
+          "frame": "23.3750",
+          "width": 1920
+        }
+      ]
+    }
+  ]
+}

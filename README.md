@@ -1,6 +1,6 @@
 # RÜEGG HOTELS
 
-A cinematic boutique hospitality website built with React, strict TypeScript, Vite, React Router and GSAP. Packages 01–02 established the homepage; Package 03 completes `/partners`, `/book`, `/our-story` and `/contact`; Package 03.5 adds `/experiences` and `/passport`.
+A cinematic boutique hospitality website built with React, strict TypeScript, Vite, React Router and GSAP. Packages 01–02 established the homepage; Package 03 completes `/partners`, `/book`, `/our-story` and `/contact`; Package 03.5 adds `/experiences` and `/passport`. Package 04 makes the mobile Home immersive and hardens decoded still/video handoffs and restart behavior.
 
 ## Run locally
 
@@ -11,7 +11,9 @@ npm ci
 npm run dev
 ```
 
-Open `http://127.0.0.1:5173/`. **Step inside** starts the native video journey: reception at **10.000 s**, hallway at **17.125 s**, Room V3 forward → B3 → reverse → hallway, then the genuine final Master frame at **23.375 s**. Reduced motion and Save-Data start a complete still-image alternative.
+Open `http://127.0.0.1:5173/`. **Step inside** starts the native video journey: reception at **10.000 s**, hallway at **17.125 s**, Room V3 forward → B3 → reverse → hallway, then the genuine final Master frame at **23.375 s**. Reduced motion and Save-Data start a complete still-image alternative. **Back to Beginning** returns to the invitation from playback, pauses, room information, recovery and the menu, without autoplay.
+
+On phones the shared 16:9 source plane covers the usable viewport, with chapter-aware framing shared by both media layers and the door hotspot. Desktop retains its full-frame compositions. Checkpoint stills remain the editorial pause mechanism: the outgoing video is held until the replacement image is decoded and painted; playback is revealed only after a valid video frame arrives.
 
 ## Explore the website
 
@@ -46,13 +48,14 @@ npm run build
 npx playwright install chromium
 npm run test:e2e -- tests/browser/experiences-passport.spec.ts --project=desktop --project=mobile
 npm run test:e2e -- tests/browser/pages.spec.ts
-npm run test:e2e -- tests/browser/cinematic.spec.ts --project=desktop --project=mobile --grep 'approved master|skip, menu'
+npm run test:e2e -- tests/browser/cinematic.spec.ts --project=desktop --project=mobile
+npm run test:e2e -- tests/browser/cinematic-reliability.spec.ts --project=desktop --project=mobile
 npm run preview
 ```
 
-Playwright starts its own server when port 5173 is free. It uses Chromium and real native H.264 playback. Supporting-page tests cover 1440×900, 1920×1080, 390×844 and 375×812, including navigation, accessibility scans, filters, reservation completion and local enquiry copying. Evidence is in `docs/evidence/package-03/`; ignored HTML reports/traces are local only.
+Playwright starts its own server when port 5173 is free. It uses Chromium and real native H.264 playback. Supporting-page tests cover 1440×900, 1920×1080, 390×844 and 375×812, including navigation, accessibility scans, filters, reservation completion and local enquiry copying. Evidence is in `docs/evidence/package-03/`; ignored HTML reports/traces are local only. Package 04 evidence is in `docs/evidence/package-04/`. Set `RUEGG_EVIDENCE_ROOT` to an ignored directory when re-running supporting-page captures without replacing historical evidence.
 
-See [Package 03.5 report and focused screenshots](docs/07-package-03-5-report.md), [Package 03 report](docs/06-package-03-report.md), [Package 02 report](docs/05-package-02-report.md), and [Package 01 report](docs/04-package-01-report.md). The reports record scope and review boundaries; later packages and production deployment require separate approval.
+See [Package 04 report, viewport screenshots and transition recordings](docs/08-package-04-report.md), [Package 03.5 report and focused screenshots](docs/07-package-03-5-report.md), [Package 03 report](docs/06-package-03-report.md), [Package 02 report](docs/05-package-02-report.md), and [Package 01 report](docs/04-package-01-report.md). The reports record scope and review boundaries; later packages and production deployment require separate approval.
 
 ## Static hosting and deep links
 
@@ -71,7 +74,7 @@ npm run media:build
 npm run media:verify
 ```
 
-The scripts preserve originals and record hashes/probes in `public/media/manifest.v1.json`. See `docs/02-media.md` for source metadata and the accepted normalization/reverse recipe. Packages 03 and 03.5 do not change videos, posters, recipes or cinematic timing.
+The scripts preserve originals and record hashes/probes in `public/media/manifest.v1.json`. See `docs/02-media.md` for source metadata and the accepted normalization/reverse recipe. Packages 03, 03.5 and 04 do not change videos, posters, recipes or cinematic timing.
 
 ## Working policy
 

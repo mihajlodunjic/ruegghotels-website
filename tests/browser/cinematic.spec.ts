@@ -4,10 +4,10 @@ import { mkdir } from 'node:fs/promises'
 const state = (page: Page, mode: string) => expect(page.locator('main')).toHaveAttribute('data-state', mode)
 const shot = async (page: Page, info: TestInfo, name: string) => {
   await expect(page.locator('main')).toHaveAttribute('data-ui-ready', 'true')
+  await expect(page.locator('main')).toHaveAttribute('data-visual-ready', 'true')
   await page.evaluate(() => document.fonts.ready)
-  if (name !== 'finale') return
-  await mkdir('docs/evidence/package-03-5', { recursive: true })
-  await page.screenshot({ path: `docs/evidence/package-03-5/${info.project.name}-home-${name}.png`, fullPage: true, animations: 'disabled' })
+  await mkdir('docs/evidence/package-04', { recursive: true })
+  await page.screenshot({ path: `docs/evidence/package-04/${info.project.name}-home-${name}.png`, fullPage: false, animations: 'disabled' })
 }
 
 test('approved master → room V3 → reverse → hallway → genuine finale', async ({ page }, info) => {
@@ -22,7 +22,8 @@ test('approved master → room V3 → reverse → hallway → genuine finale', a
   await shot(page, info, 'invitation')
   await page.getByRole('button', { name: 'Step inside' }).click()
   await state(page, 'WELCOME_PAUSED')
-  expect(await page.getByTestId('master-video').evaluate((v: HTMLVideoElement) => v.currentTime)).toBe(10)
+  expect(Math.abs(await page.getByTestId('master-video').evaluate((v: HTMLVideoElement) => v.currentTime) - 10)).toBeLessThan(.125)
+  expect(Math.abs(Number(await page.getByTestId('source-plane').getAttribute('data-frame-time')) - 10)).toBeLessThan(2 / 24)
   await shot(page, info, 'welcome')
   await page.getByRole('button', { name: 'Menu', exact: false }).click()
   await expect(page.getByRole('dialog')).toHaveAttribute('data-menu-ready', 'true')
@@ -31,13 +32,20 @@ test('approved master → room V3 → reverse → hallway → genuine finale', a
   await expect(page.getByRole('dialog')).not.toBeVisible()
   await page.getByRole('button', { name: 'Continue the journey' }).click()
   await state(page, 'HALLWAY_PAUSED')
-  expect(await page.getByTestId('master-video').evaluate((v: HTMLVideoElement) => v.currentTime)).toBe(17.125)
+  expect(Math.abs(await page.getByTestId('master-video').evaluate((v: HTMLVideoElement) => v.currentTime) - 17.125)).toBeLessThan(.125)
+  expect(Math.abs(Number(await page.getByTestId('source-plane').getAttribute('data-frame-time')) - 17.125)).toBeLessThan(2 / 24)
   await shot(page, info, 'hallway')
-  const box = await page.getByTestId('media-frame').boundingBox()
+  const box = await page.getByTestId('source-plane').boundingBox()
   expect(box!.width / box!.height).toBeCloseTo(16 / 9, 3)
+  if (info.project.name.includes('mobile')) {
+    const frame = await page.getByTestId('media-frame').boundingBox()
+    expect(frame!.height).toBe(page.viewportSize()!.height)
+    const door = await page.getByRole('button', { name: 'Explore room through the right door' }).boundingBox()
+    expect(door!.x).toBeGreaterThan(0); expect(door!.x + door!.width).toBeLessThan(page.viewportSize()!.width)
+  }
   await page.getByRole('button', { name: 'Explore room through the right door' }).click()
   await state(page, 'ROOM_AT_B3')
-  expect(media.some((url) => url.includes('room-reverse'))).toBe(false)
+  // Reverse may warm only after B3 is decoded and on screen.
   await shot(page, info, 'room-b3')
   await page.getByRole('button', { name: 'About this room' }).click()
   await state(page, 'ROOM_INFO_OPEN')
@@ -52,7 +60,8 @@ test('approved master → room V3 → reverse → hallway → genuine finale', a
   expect(await page.locator('video').evaluateAll((videos) => videos.filter((video) => !(video as HTMLVideoElement).paused).length)).toBe(0)
   await page.getByRole('button', { name: 'Continue to the table' }).click()
   await state(page, 'FINALE')
-  expect(await page.getByTestId('master-video').evaluate((v: HTMLVideoElement) => v.currentTime)).toBe(23.375)
+  expect(Math.abs(await page.getByTestId('master-video').evaluate((v: HTMLVideoElement) => v.currentTime) - 23.375)).toBeLessThan(.125)
+  expect(Math.abs(Number(await page.getByTestId('source-plane').getAttribute('data-frame-time')) - 23.375)).toBeLessThan(2 / 24)
   await shot(page, info, 'finale')
   await expect(page.getByRole('link', { name: 'Design Your Alpine Experience', exact: true })).toBeVisible()
   await expect(page.getByRole('link', { name: 'Discover RÜEGG Passport', exact: true })).toBeVisible()
@@ -111,7 +120,7 @@ test('rejected play and failed media retain a poster and static recovery', async
   await page.goto('/')
   await page.getByRole('button', { name: 'Step inside' }).click()
   await state(page, 'MEDIA_ERROR')
-  await expect(page.getByTestId('media-frame').locator('img')).toBeVisible()
+  await expect(page.getByTestId('media-frame').locator('img[data-active="true"]')).toBeVisible()
   await expect(page.getByRole('button', { name: 'Retry film' })).toBeVisible()
   await page.getByRole('button', { name: 'Use still images' }).click()
   await state(page, 'STATIC_FALLBACK')

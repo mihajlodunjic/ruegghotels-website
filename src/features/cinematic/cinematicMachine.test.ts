@@ -66,6 +66,14 @@ describe('approved cinematic journey', () => {
     expect(step(failed, 'ENTER_STATIC_MODE').view).toEqual({ mode: 'STATIC_FALLBACK', chapter: 'hallway' })
     expect(step(failed, 'SKIP').view.mode).toBe('FINALE')
   })
+  it.each(['MASTER_TO_WELCOME', 'MASTER_TO_HALLWAY', 'ROOM_ENTERING', 'ROOM_AT_B3', 'ROOM_INFO_OPEN', 'ROOM_EXITING', 'MASTER_TO_FINALE', 'FINALE'] as Scene[])('resets %s and its menu context without autoplay or stale chapter events', (mode) => {
+    const state: CinematicState = { ...initialState(), view: { mode }, videoReady: true, activeHotel: 'agnes' }
+    for (const source of [state, step(state, 'OPEN_MENU')]) {
+      const reset = step(source, 'REPLAY', 'REPLAY', 'ROOM_FINISHED', 'REVERSE_FINISHED', 'MASTER_FINISHED', 'WELCOME_REACHED')
+      expect(reset).toEqual(initialState())
+    }
+    expect(step({ ...state, reducedMotion: true }, 'REPLAY')).toEqual(initialState(true))
+  })
   it('selects only validated hotel IDs and resets readiness between media scenes', () => {
     let state = step(initialState(), 'START', 'FRAME_READY')
     expect(state.videoReady).toBe(true)

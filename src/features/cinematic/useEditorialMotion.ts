@@ -8,11 +8,12 @@ type Command = Exclude<CinematicEvent['type'], 'SELECT_HOTEL' | 'PLAY_FAILED' | 
 type ElementRef<T extends HTMLElement> = RefObject<T | null>
 interface MotionOptions {
   stage: ElementRef<HTMLElement>; frame: ElementRef<HTMLDivElement>; panel: ElementRef<HTMLElement>; exits: ElementRef<HTMLDivElement>
-  mode: string; chapter: StaticChapter; info: boolean; showEditorial: boolean; reducedMotion: boolean; dispatch: Dispatch<CinematicEvent>
+  mode: string; chapter: StaticChapter; info: boolean; showEditorial: boolean; visualReady: boolean; reducedMotion: boolean; dispatch: Dispatch<CinematicEvent>
 }
 /** Presentation only: media checkpoints and playback remain owned by the accepted engine. */
-export function useEditorialMotion({ stage, frame, panel, exits, mode, chapter, info, showEditorial, reducedMotion, dispatch }: MotionOptions) {
+export function useEditorialMotion({ stage, frame, panel, exits, mode, chapter, info, showEditorial, visualReady, reducedMotion, dispatch }: MotionOptions) {
   const layout = useRef<ReturnType<typeof Flip.getState> | null>(null)
+  const focusInvitation = useRef(false)
   const reverseAfterClose = useRef(false)
   const exitAnimations = useRef<gsap.core.Tween[]>([])
   useLayoutEffect(() => () => {
@@ -31,11 +32,14 @@ export function useEditorialMotion({ stage, frame, panel, exits, mode, chapter, 
       if (reverseAfterClose.current && mode === 'ROOM_AT_B3') {
         reverseAfterClose.current = false
         dispatch({ type: 'BACK_TO_HALLWAY' })
+      } else if (focusInvitation.current && chapter === 'invitation' && element) {
+        focusInvitation.current = false; element.querySelector('button')?.focus({ preventScroll: true })
       } else if (showEditorial && chapter !== 'invitation') element?.querySelector('h2')?.focus({ preventScroll: true })
     }
+    if (!visualReady) return
     if (reducedMotion || !showEditorial || !element) { complete(); return }
     const context = gsap.context(() => {
-      if (previousLayout) Flip.from(previousLayout, { duration: .95, ease: 'power3.inOut', scale: true, onComplete: reverseAfterClose.current ? complete : undefined })
+      if (previousLayout) Flip.from(previousLayout, { duration: matchMedia('(max-width: 767px) and (orientation: portrait)').matches ? .5 : .95, ease: 'power3.inOut', scale: true, onComplete: reverseAfterClose.current ? complete : undefined })
       if (reverseAfterClose.current && mode === 'ROOM_AT_B3') { gsap.set(element, { autoAlpha: 0 }); return }
       const isFinale = chapter === 'finale'
       const delay = isFinale ? .95 : chapter === 'room' && !info ? previousLayout ? .75 : .55 : .08
@@ -45,7 +49,7 @@ export function useEditorialMotion({ stage, frame, panel, exits, mode, chapter, 
       timeline.fromTo(element.querySelectorAll('[data-reveal]'), { y: 12, opacity: 0 }, { y: 0, opacity: 1, duration: .7, stagger: .07, ease: 'power2.out' }, .35)
     }, root)
     return () => context.revert()
-  }, [stage, frame, panel, mode, chapter, info, showEditorial, reducedMotion, dispatch])
+  }, [stage, frame, panel, mode, chapter, info, showEditorial, visualReady, reducedMotion, dispatch])
 
   useLayoutEffect(() => {
     if (reducedMotion || !stage.current) return
@@ -66,7 +70,7 @@ export function useEditorialMotion({ stage, frame, panel, exits, mode, chapter, 
       handlers.forEach((cleanup) => cleanup())
       if (arrows.length) { gsap.killTweensOf(arrows); gsap.set(arrows, { clearProps: 'transform' }) }
     }
-  }, [stage, mode, chapter, reducedMotion])
+  }, [stage, mode, chapter, showEditorial, reducedMotion])
   const withdraw = () => {
     if (reducedMotion || !panel.current || !stage.current || !exits.current) return
     const rect = panel.current.getBoundingClientRect()
@@ -82,6 +86,12 @@ export function useEditorialMotion({ stage, frame, panel, exits, mode, chapter, 
     exitAnimations.current.push(animation)
   }
   const command = (type: Command) => {
+    if (type === 'REPLAY') {
+      focusInvitation.current = true
+      reverseAfterClose.current = false; layout.current = null
+      exitAnimations.current.forEach((animation) => animation.kill()); exitAnimations.current = []
+      exits.current?.replaceChildren(); dispatch({ type: 'REPLAY' }); return
+    }
     if (reverseAfterClose.current) return
     if (type === 'OPEN_ROOM_INFO' || type === 'CLOSE_ROOM_INFO' || (type === 'BACK_TO_HALLWAY' && info)) {
       if (!reducedMotion && frame.current) layout.current = Flip.getState(frame.current)
