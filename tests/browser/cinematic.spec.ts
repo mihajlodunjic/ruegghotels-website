@@ -11,6 +11,39 @@ const shot = async (page: Page, info: TestInfo, name: string) => {
   await page.screenshot({ path: `${root}/${info.project.name}-home-${name}.png`, fullPage: false, animations: 'disabled' })
 }
 
+test('desktop cinematic canvas covers wide and tall screens without letterboxing', async ({ page }, info) => {
+  test.skip(info.project.name !== 'desktop', 'one desktop viewport geometry check')
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+  for (const [width, height] of [[1740, 864], [1440, 900], [1920, 1080]]) {
+    await page.setViewportSize({ width, height })
+    await page.goto('/')
+    await expect(page.getByTestId('media-frame')).toBeVisible()
+    const frame = await page.getByTestId('media-frame').boundingBox()
+    const plane = await page.getByTestId('source-plane').boundingBox()
+    expect(frame).not.toBeNull()
+    expect(plane).not.toBeNull()
+    expect(frame!.x).toBeCloseTo(0, 0)
+    expect(frame!.y).toBeCloseTo(0, 0)
+    expect(frame!.width).toBeCloseTo(width, 0)
+    expect(frame!.height).toBeCloseTo(height, 0)
+    expect(plane!.x).toBeLessThanOrEqual(frame!.x + 1)
+    expect(plane!.y).toBeLessThanOrEqual(frame!.y + 1)
+    expect(plane!.x + plane!.width).toBeGreaterThanOrEqual(width - 1)
+    expect(plane!.y + plane!.height).toBeGreaterThanOrEqual(height - 1)
+    expect(plane!.width / plane!.height).toBeCloseTo(16 / 9, 3)
+  }
+  // The existing room-information split still uses its deliberate 64vw media frame.
+  await page.setViewportSize({ width: 1740, height: 864 })
+  await page.goto('/')
+  await page.getByRole('button', { name: 'Step inside' }).click()
+  await page.getByRole('button', { name: 'Continue the journey' }).click()
+  await page.getByRole('button', { name: /^Explore Room$/i }).click()
+  const infoFrame = await page.getByTestId('media-frame').boundingBox()
+  expect(infoFrame).not.toBeNull()
+  expect(infoFrame!.width / 1740).toBeCloseTo(.64, 2)
+  expect(infoFrame!.width / infoFrame!.height).toBeCloseTo(16 / 9, 2)
+})
+
 test('approved master → room V3 → reverse → hallway → genuine finale', async ({ page }, info) => {
   const errors: string[] = []
   const media: string[] = []

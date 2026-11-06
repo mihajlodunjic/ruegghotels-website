@@ -126,6 +126,26 @@
   .finale { padding-top: 110px; padding-bottom: 60px; }
   .roomInfo { padding-top: 110px; }
 }
+/* Keep the complete 16:9 source plane, but crop it to cover the entire desktop stage.
+   The previous min() sizing letterboxed wide (and tall) viewports. The room-info
+   64/36 split and the existing mobile source framing are intentionally excluded. */
+@media (min-width: 768px) and (min-height: 501px) {
+  .stage:not(.infoOpen) .mediaFrame {
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    transform: none;
+    overflow: hidden;
+  }
+  .stage:not(.infoOpen) .sourcePlane {
+    inset: auto;
+    top: 50%;
+    left: 50%;
+    width: max(100vw, 177.777778svh);
+    height: max(100svh, 56.25vw);
+    transform: translate(-50%, -50%);
+  }
+}
 @media (max-width: 767px) and (orientation: portrait), (max-width: 950px) and (max-height: 500px) {
   .home, .stage { height: 100vh; height: 100svh; min-height: 100vh; min-height: 100svh; overflow: hidden; }
   .stage { background: #30271f; }
