@@ -37,7 +37,14 @@ export function useEditorialMotion({ stage, frame, panel, exits, mode, chapter, 
       } else if (showEditorial && chapter !== 'invitation') element?.querySelector('h2')?.focus({ preventScroll: true })
     }
     if (!visualReady) return
-    if (reducedMotion || !showEditorial || !element) { complete(); return }
+    if (reducedMotion || !showEditorial || !element) {
+      complete()
+      if (previousLayout && !reducedMotion) {
+        const context = gsap.context(() => { Flip.from(previousLayout, { duration: .4, ease: 'power3.inOut', scale: true }) }, root)
+        return () => context.revert()
+      }
+      return
+    }
     const context = gsap.context(() => {
       if (previousLayout) Flip.from(previousLayout, { duration: matchMedia('(max-width: 767px) and (orientation: portrait)').matches ? .5 : .95, ease: 'power3.inOut', scale: true, onComplete: reverseAfterClose.current ? complete : undefined })
       if (reverseAfterClose.current && mode === 'ROOM_AT_B3') { gsap.set(element, { autoAlpha: 0 }); return }
@@ -86,11 +93,11 @@ export function useEditorialMotion({ stage, frame, panel, exits, mode, chapter, 
     exitAnimations.current.push(animation)
   }
   const command = (type: Command) => {
-    if (type === 'REPLAY') {
+    if (type === 'REPLAY' || type === 'REWIND') {
       focusInvitation.current = true
-      reverseAfterClose.current = false; layout.current = null
+      reverseAfterClose.current = false; layout.current = type === 'REWIND' && info && frame.current && !reducedMotion ? Flip.getState(frame.current) : null
       exitAnimations.current.forEach((animation) => animation.kill()); exitAnimations.current = []
-      exits.current?.replaceChildren(); dispatch({ type: 'REPLAY' }); return
+      exits.current?.replaceChildren(); dispatch({ type }); return
     }
     if (reverseAfterClose.current) return
     if (type === 'OPEN_ROOM_INFO' || type === 'CLOSE_ROOM_INFO' || (type === 'BACK_TO_HALLWAY' && info)) {

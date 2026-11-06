@@ -1,13 +1,14 @@
 import { test, expect, type Page, type TestInfo } from '@playwright/test'
 import AxeBuilder from '@axe-core/playwright'
 import { mkdir } from 'node:fs/promises'
+const root = process.env.RUEGG_EVIDENCE_ROOT || 'docs/evidence/package-04'
 const state = (page: Page, mode: string) => expect(page.locator('main')).toHaveAttribute('data-state', mode)
 const shot = async (page: Page, info: TestInfo, name: string) => {
   await expect(page.locator('main')).toHaveAttribute('data-ui-ready', 'true')
   await expect(page.locator('main')).toHaveAttribute('data-visual-ready', 'true')
   await page.evaluate(() => document.fonts.ready)
-  await mkdir('docs/evidence/package-04', { recursive: true })
-  await page.screenshot({ path: `docs/evidence/package-04/${info.project.name}-home-${name}.png`, fullPage: false, animations: 'disabled' })
+  await mkdir(root, { recursive: true })
+  await page.screenshot({ path: `${root}/${info.project.name}-home-${name}.png`, fullPage: false, animations: 'disabled' })
 }
 
 test('approved master → room V3 → reverse → hallway → genuine finale', async ({ page }, info) => {

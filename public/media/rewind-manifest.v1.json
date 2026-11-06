@@ -1,0 +1,46 @@
+{
+  "recipe": "media/scripts/build-rewind.mjs",
+  "ffmpeg": "ffmpeg version 7.1.5-0+deb13u1 Copyright (c) 2000-2026 the FFmpeg developers",
+  "sources": [
+    {
+      "path": "public/media/master-1080.v1.mp4",
+      "sha256": "c1a7d884a698f9ce947b4baa0320f8caaef2bda8d692ddc09f8920c9cb19bbef"
+    },
+    {
+      "path": "public/media/room-reverse-1080.v1.mp4",
+      "sha256": "7cf657a2f962ee30deaa715bc4bab7cc560a830de96b12285cedad75c2db583c"
+    }
+  ],
+  "outputs": [
+    {
+      "path": "public/media/master-reverse-1080.v1.mp4",
+      "sha256": "98dc0bb612b854477241d47d0985b32b4cdb763b6d1fc91048747419f1d7a632",
+      "bytes": 21326017,
+      "width": 1920,
+      "height": 1080,
+      "frames": 562,
+      "fps": 24,
+      "duration": 23.416667
+    },
+    {
+      "path": "public/media/master-reverse-5x-1080.v1.mp4",
+      "sha256": "9ff02c71ddee879fd3be42752e51b0dd1795a94a37bde998e10622e28aa73c97",
+      "bytes": 11498136,
+      "width": 1920,
+      "height": 1080,
+      "frames": 113,
+      "fps": 24,
+      "duration": 4.708333
+    },
+    {
+      "path": "public/media/room-reverse-5x-1080.v1.mp4",
+      "sha256": "85ac3a71dcced666aaa74100cbfada1e5818c3edb1f4262304d1ae7f75d99c6a",
+      "bytes": 2376776,
+      "width": 1920,
+      "height": 1080,
+      "frames": 25,
+      "fps": 24,
+      "duration": 1.041667
+    }
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "checks": [
+    "public/media/master-1080.v1.mp4: verified",
+    "public/media/room-reverse-1080.v1.mp4: verified",
+    "public/media/master-reverse-1080.v1.mp4: verified",
+    "public/media/master-reverse-5x-1080.v1.mp4: verified",
+    "public/media/room-reverse-5x-1080.v1.mp4: verified"
+  ],
+  "quality": {
+    "masterReverse": 0.987013,
+    "public/media/master-reverse-5x-1080.v1.mp4-start": 0.989328,
+    "public/media/master-reverse-5x-1080.v1.mp4-end": 0.970028,
+    "public/media/room-reverse-5x-1080.v1.mp4-start": 0.995761,
+    "public/media/room-reverse-5x-1080.v1.mp4-end": 0.988237
+  }
+}

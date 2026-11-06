@@ -20,7 +20,10 @@ export function useCinematicController(master: RefObject<HTMLVideoElement | null
     controller.current = instance
     return () => { instance.dispose(); stills.dispose(); controller.current = null }
   }, [master, branch, images, plane, dispatch])
-  useEffect(() => { controller.current?.sync(view) }, [view])
+  useEffect(() => {
+    controller.current?.sync(view)
+    if (view.mode === 'REWINDING') plane.current?.closest('main')?.querySelector<HTMLButtonElement>('footer button')?.focus({ preventScroll: true })
+  }, [view, plane])
   useEffect(() => {
     const onHidden = () => { if (document.hidden) dispatch({ type: 'PAUSE' }) }
     document.addEventListener('visibilitychange', onHidden)

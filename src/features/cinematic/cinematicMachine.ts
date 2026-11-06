@@ -2,7 +2,8 @@ export type HotelId = 'agnes' | 'spalloni' | 'schiebel'
 export type PlayingScene = 'MASTER_TO_WELCOME' | 'MASTER_TO_HALLWAY' | 'ROOM_ENTERING' | 'ROOM_EXITING' | 'MASTER_TO_FINALE'
 export type Scene = PlayingScene | 'INVITATION' | 'WELCOME_PAUSED' | 'HALLWAY_PAUSED' | 'ROOM_AT_B3' | 'ROOM_INFO_OPEN' | 'FINALE'
 export type StaticChapter = 'invitation' | 'welcome' | 'hallway' | 'room' | 'finale'
-type NonMenuView = { mode: Scene } | { mode: 'USER_PAUSED'; resumeState: PlayingScene } | { mode: 'MEDIA_ERROR'; resumeState: PlayingScene; errorCode: string } | { mode: 'STATIC_FALLBACK'; chapter: StaticChapter }
+export type JourneyView = { mode: Scene } | { mode: 'USER_PAUSED'; resumeState: PlayingScene } | { mode: 'MEDIA_ERROR'; resumeState: PlayingScene; errorCode: string } | { mode: 'STATIC_FALLBACK'; chapter: StaticChapter }
+type NonMenuView = JourneyView | { mode: 'REWINDING'; origin: JourneyView }
 export type View = NonMenuView | { mode: 'MENU_OPEN'; resumeState: NonMenuView; wasPlayingBeforeMenu: boolean }
 export interface CinematicState {
   view: View
@@ -12,7 +13,7 @@ export interface CinematicState {
   activeHotel: HotelId | null
 }
 export type CinematicEvent =
-  | { type: 'START' | 'WELCOME_REACHED' | 'CONTINUE' | 'HALLWAY_REACHED' | 'ENTER_ROOM' | 'ROOM_FINISHED' | 'OPEN_ROOM_INFO' | 'CLOSE_ROOM_INFO' | 'BACK_TO_HALLWAY' | 'REVERSE_FINISHED' | 'MASTER_FINISHED' | 'PAUSE' | 'RESUME' | 'OPEN_MENU' | 'CLOSE_MENU' | 'SKIP' | 'REPLAY' | 'RETRY' | 'ENTER_STATIC_MODE' | 'FRAME_READY' }
+  | { type: 'START' | 'WELCOME_REACHED' | 'CONTINUE' | 'HALLWAY_REACHED' | 'ENTER_ROOM' | 'ROOM_FINISHED' | 'OPEN_ROOM_INFO' | 'CLOSE_ROOM_INFO' | 'BACK_TO_HALLWAY' | 'REVERSE_FINISHED' | 'MASTER_FINISHED' | 'PAUSE' | 'RESUME' | 'OPEN_MENU' | 'CLOSE_MENU' | 'SKIP' | 'REPLAY' | 'RETRY' | 'ENTER_STATIC_MODE' | 'FRAME_READY' | 'REWIND' }
   | { type: 'PLAY_FAILED' | 'MEDIA_STALLED'; errorCode: string }
   | { type: 'SELECT_HOTEL'; hotel: HotelId }
 
@@ -22,7 +23,8 @@ export function initialState(staticMode = false): CinematicState {
 }
 export function underlyingView(view: View): NonMenuView { return view.mode === 'MENU_OPEN' ? view.resumeState : view }
 export function chapterOf(view: View): StaticChapter {
-  const v = underlyingView(view)
+  const underlying = underlyingView(view)
+  const v = underlying.mode === 'REWINDING' ? underlying.origin : underlying
   if (v.mode === 'STATIC_FALLBACK') return v.chapter
   const mode = v.mode === 'USER_PAUSED' || v.mode === 'MEDIA_ERROR' ? v.resumeState : v.mode
   if (mode === 'INVITATION' || mode === 'MASTER_TO_WELCOME') return 'invitation'
@@ -34,6 +36,18 @@ export function chapterOf(view: View): StaticChapter {
 export function cinematicReducer(state: CinematicState, event: CinematicEvent): CinematicState {
   const v = state.view
   if (event.type === 'REPLAY') return initialState(state.reducedMotion)
+  if (event.type === 'REWIND') {
+    const origin = underlyingView(v)
+    if (origin.mode === 'REWINDING') return state
+    if (state.reducedMotion || ['INVITATION', 'STATIC_FALLBACK', 'MEDIA_ERROR'].includes(origin.mode)) return initialState(state.reducedMotion)
+    return { ...state, view: { mode: 'REWINDING', origin }, videoReady: false }
+  }
+  if (v.mode === 'REWINDING') {
+    if (event.type === 'OPEN_MENU') return { ...initialState(state.reducedMotion), view: { mode: 'MENU_OPEN', resumeState: { mode: 'INVITATION' }, wasPlayingBeforeMenu: false } }
+    if (event.type === 'ENTER_STATIC_MODE') return initialState(true)
+    if (event.type === 'PAUSE') return initialState(state.reducedMotion)
+    return state // Ignore late forward checkpoints, errors and duplicate commands.
+  }
   const go = (view: View, interacted = state.userHasInteracted): CinematicState => ({ ...state, view, userHasInteracted: interacted, videoReady: false })
   if (event.type === 'ENTER_STATIC_MODE') return { ...go({ mode: 'STATIC_FALLBACK', chapter: chapterOf(v) }), reducedMotion: true }
   if (event.type === 'OPEN_MENU' && v.mode !== 'MENU_OPEN') return go({ mode: 'MENU_OPEN', resumeState: v, wasPlayingBeforeMenu: isPlaying(v.mode) })

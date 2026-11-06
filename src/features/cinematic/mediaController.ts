@@ -1,5 +1,7 @@
 import { mediaUrl, playback } from './chapterConfig'
 import { chapterOf, isPlaying, type CinematicEvent, type PlayingScene, type StaticChapter, type View } from './cinematicMachine'
+import { REWIND_RATE, rewindPlan, type RewindLeg } from './rewind'
+import type { JourneyView } from './cinematicMachine'
 import type { FilmSource } from './mobileFraming'
 import type { StillFrames } from './stillFrames'
 
@@ -43,6 +45,7 @@ export class CinematicPlayerController {
     this.pause()
     if (view.mode === 'MENU_OPEN' || view.mode === 'USER_PAUSED' || view.mode === 'MEDIA_ERROR') return
     const task = new AbortController(); this.task = task
+    if (view.mode === 'REWINDING') { void this.rewind(view.origin, task.signal); return }
     if (isPlaying(view.mode)) { void this.playScene(view.mode, task.signal); return }
     const target = chapterOf(view)
     if (target === 'invitation') this.lastScene = null
@@ -142,5 +145,100 @@ export class CinematicPlayerController {
       if (!signal.aborted) { video.pause(); this.dispatch({ type: 'PLAY_FAILED', errorCode: error instanceof Error ? error.message : 'Playback could not start.' }) }
     }
   }
+  private async rewind(origin: JourneyView, signal: AbortSignal) {
+    // Snapshot the actual media clock before any source changes. Checkpoints use exact anchors.
+    const plan = rewindPlan(origin, this.videos.master.currentTime, this.videos.branch.currentTime)
+    this.lastScene = null
+    void this.stills?.prepare('invitation').catch(() => undefined)
+    try {
+      for (const leg of plan) {
+        if (leg.last - leg.start < 1 / 24) continue
+        // Mobile uses the encoded 5x timeline proactively: no dependency on high-rate hardware decoding.
+        try { await this.rewindLeg(leg, this.mobile, signal) }
+        catch (error) {
+          signal.throwIfAborted()
+          if (!(error instanceof RewindRateError)) throw error
+          // The browser can reject, clamp, or silently under-deliver a high playbackRate.
+          // A 24fps edition with 5x encoded into its timeline plays at ordinary 1x.
+          await this.rewindLeg({ ...leg, start: error.time }, true, signal)
+        }
+      }
+      signal.throwIfAborted()
+      await this.showStill('invitation', signal)
+      signal.throwIfAborted()
+      this.dispatch({ type: 'REPLAY' })
+    } catch {
+      // Failure is a safe reset, never a forward play or an editorial checkpoint.
+      if (!signal.aborted) this.dispatch({ type: 'REPLAY' })
+    }
+  }
+  private async rewindLeg(leg: RewindLeg, encoded: boolean, signal: AbortSignal): Promise<void> {
+    signal.throwIfAborted()
+    const scale = encoded ? REWIND_RATE : 1
+    const source = encoded ? `${leg.source}-5x` as 'master-reverse-5x' | 'room-reverse-5x' : leg.source
+    // Always prepare on the inactive element. The outgoing decoded frame stays visible.
+    const slot = this.presentation.video === 'master' ? 'branch' : this.presentation.video === 'branch' ? 'master' : leg.source === 'master-reverse' ? 'master' : 'branch'
+    const video = this.videos[slot]
+    Object.values(this.videos).forEach((element) => element.pause())
+    this.activeVideo = video
+    this.show({ phase: this.presentation.video ? 'holding' : 'loading', error: undefined })
+    const url = mediaUrl(source, this.mobile)
+    if (video.getAttribute('src') !== url || video.error) { video.preload = 'auto'; video.src = url; this.decoded.delete(video); video.load() }
+    await waitForMedia(video, () => video.readyState >= 2, ['loadeddata', 'canplay'], signal)
+    await seekTo(video, leg.start / scale, signal)
+    signal.throwIfAborted()
+    try { video.playbackRate = encoded ? 1 : REWIND_RATE }
+    catch { throw new RewindRateError(leg.start) }
+    if (!encoded && Math.abs(video.playbackRate - REWIND_RATE) > .01) throw new RewindRateError(leg.start)
+    await new Promise<void>((resolve, reject) => {
+      let finished = false; let revealed = false; let frameRequest = 0; let firstAt: number | null = null; let firstTime = 0
+      let lastTime = leg.start / scale; let lastProgress = performance.now()
+      const callbacks = typeof video.requestVideoFrameCallback === 'function'
+      const cleanup = () => {
+        clearInterval(watchdog)
+        if (frameRequest) video.cancelVideoFrameCallback?.(frameRequest)
+        listeners.forEach(([event, handler]) => video.removeEventListener(event, handler))
+        signal.removeEventListener('abort', cancel)
+      }
+      const done = (error?: Error) => {
+        if (finished) return
+        finished = true; cleanup(); video.pause()
+        if (error) reject(error); else resolve()
+      }
+      const cancel = () => done(new DOMException('Cancelled', 'AbortError'))
+      const frame = (time: number) => {
+        if (signal.aborted || finished || video.seeking || video.readyState < 2 || time < leg.start / scale - 1 / 24) return
+        const now = performance.now()
+        if (firstAt === null) { firstAt = now; firstTime = time }
+        if (time > lastTime + .001) { lastProgress = now; lastTime = time }
+        this.decoded.set(video, time)
+        this.onFrame?.(leg.source === 'master-reverse' ? 'master' : 'room-reverse', leg.source === 'master-reverse' ? Math.max(0, leg.last - time * scale) : time * scale)
+        if (!revealed) { revealed = true; this.show({ video: slot, phase: 'ready' }) }
+        if (time >= Math.min(leg.last / scale, video.duration - 1 / 24) - .001) done()
+      }
+      const tick: VideoFrameRequestCallback = (_now, metadata) => { frame(metadata.mediaTime); if (!finished) frameRequest = video.requestVideoFrameCallback(tick) }
+      const native = () => { if (!callbacks && !video.paused) frame(video.currentTime) }
+      const ended = () => { if (!signal.aborted && video.currentTime >= Math.min(leg.last / scale, video.duration - 1 / 24) - .001) { frame(video.currentTime); done() } }
+      const failure = () => done(new Error('Reverse film unavailable'))
+      const listeners: [string, EventListener][] = [['timeupdate', native], ['seeked', native], ['playing', native], ['ended', ended], ['error', failure]]
+      const watchdog = setInterval(() => {
+        const now = performance.now()
+        if (signal.aborted) { cancel(); return }
+        // Check actual media progress as some mobile engines accept 5 while playing slowly.
+        if (!encoded && firstAt !== null && now - firstAt >= 600 && (video.currentTime - firstTime) / ((now - firstAt) / 1000) < 3.5) { done(new RewindRateError(lastTime)); return }
+        if (now - lastProgress > 4000) done(new Error('Reverse film stalled'))
+        // Native events cover throttled or missing frame callbacks, as in forward playback.
+        if (callbacks && now - lastProgress > 300 && !video.paused && !video.seeking && video.currentTime > lastTime) frame(video.currentTime)
+      }, 100)
+      signal.addEventListener('abort', cancel, { once: true })
+      listeners.forEach(([event, handler]) => video.addEventListener(event, handler))
+      if (callbacks) frameRequest = video.requestVideoFrameCallback(tick)
+      void video.play().then(() => {
+        if ((signal.aborted || finished) && this.activeVideo !== video) video.pause()
+      }).catch((error: unknown) => done(!encoded && error instanceof Error && error.name === 'NotSupportedError' ? new RewindRateError(lastTime) : error instanceof Error ? error : new Error('Reverse playback rejected')))
+    })
+  }
   dispose() { this.pause(); Object.values(this.videos).forEach((video) => { video.removeAttribute('src'); video.load() }) }
 }
+
+class RewindRateError extends Error { constructor(readonly time: number) { super('High speed playback unavailable') } }
