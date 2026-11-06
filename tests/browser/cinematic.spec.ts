@@ -5,8 +5,8 @@ const state = (page: Page, mode: string) => expect(page.locator('main')).toHaveA
 const shot = async (page: Page, info: TestInfo, name: string) => {
   await expect(page.locator('main')).toHaveAttribute('data-ui-ready', 'true')
   await page.evaluate(() => document.fonts.ready)
-  await mkdir('docs/evidence/package-02', { recursive: true })
-  await page.screenshot({ path: `docs/evidence/package-02/${info.project.name}-${name}.png`, fullPage: true, animations: 'disabled' })
+  await mkdir('docs/evidence/package-03', { recursive: true })
+  await page.screenshot({ path: `docs/evidence/package-03/home-${info.project.name}-${name}.png`, fullPage: true, animations: 'disabled' })
 }
 
 test('approved master → room V3 → reverse → hallway → genuine finale', async ({ page }, info) => {
@@ -56,8 +56,8 @@ test('approved master → room V3 → reverse → hallway → genuine finale', a
   for (const hotel of ['agnes', 'spalloni', 'schiebel']) await expect(page.locator(`a[href="/book?hotel=${hotel}"]`)).toBeVisible()
   await page.locator('a[href="/book?hotel=spalloni"]').click()
   await expect(page).toHaveURL(/book\?hotel=spalloni$/)
-  await expect(page.getByLabel('Your home')).toHaveValue('spalloni')
-  await expect(page.getByText('Preview only — no request is sent.', { exact: false })).toBeVisible()
+  await expect(page.getByRole('radio', { name: /Spalloni/ })).toBeChecked()
+  await expect(page.getByRole('button', { name: 'Find your room' })).toBeVisible()
   await page.goBack()
   await state(page, 'INVITATION')
   expect(await page.locator('video').count()).toBe(2)
@@ -93,7 +93,7 @@ test('skip, menu, keyboard focus, route shell and static accessible branch', asy
   for (const route of ['/partners', '/book?hotel=agnes', '/our-story', '/contact', '/not-a-page']) {
     await page.goto(route)
     await expect(page.locator('h1')).toBeVisible()
-    await expect(page.getByRole('link', { name: 'Return to the journey' })).toBeVisible()
+    await expect(page.getByRole('navigation', { name: 'Footer navigation' }).getByRole('link', { name: 'The journey', exact: true })).toBeVisible()
   }
   expect(media).toEqual([])
   if (info.project.name.includes('mobile')) {

@@ -1,0 +1,4 @@
+import { Link } from 'react-router-dom'
+import { SupportingPageLayout } from '../components/SupportingPageLayout'
+import shared from './Pages.module.css'
+export function NotFoundPage() { return <SupportingPageLayout><div className={shared.container}><header className={shared.hero}><p className="eyebrow" data-enter>A DIFFERENT PATH / 404</p><h1 className={shared.title} data-enter>A path still<br /><em>to discover.</em></h1><p className={shared.lead} data-enter>We couldn’t find this page. Your invitation is still waiting.</p><div className={shared.formActions} data-enter><Link className={shared.cta} to="/">Return to the journey <span aria-hidden="true">↗</span></Link><Link className={shared.link} to="/book">Find your alpine home <span aria-hidden="true">↗</span></Link></div></header></div></SupportingPageLayout> }

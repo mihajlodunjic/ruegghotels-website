@@ -1,0 +1,4 @@
+.shell { --muted: #6b6154; min-height: 100svh; background: var(--ivory); }
+.main { min-height: 50vh; }
+
+.shell :global(.skip-link:not(:focus)) { clip-path: inset(50%); }

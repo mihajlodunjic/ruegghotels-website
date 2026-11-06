@@ -1,0 +1,32 @@
+.opening { display: grid; grid-template-columns: 1.1fr 1fr; gap: 9%; align-items: center; padding-bottom: 75px; }
+.opening h1 { margin-bottom: 32px; }
+.opening figure { position: relative; margin: 0 0 0 auto; width: 100%; max-width: 490px; aspect-ratio: 4 / 4.5; }
+.opening img { width: 100%; height: 100%; object-fit: cover; object-position: 25% center; display: block; border-radius: 48% 48% 3px 3px; }
+.opening figcaption { position: absolute; bottom: -27px; left: 0; color: var(--olive); font-size: 8px; letter-spacing: .14em; }
+.family { border-top: 1px solid var(--hairline); padding: 75px 0; display: grid; grid-template-columns: 1fr 1fr; gap: 12%; }
+.family > div:last-child { max-width: 520px; padding-top: 15px; }
+.family p:not(:first-child), .family > div:last-child p { font-size: 13px; line-height: 1.95; color: var(--brown); }
+.chair { position: relative; min-height: 480px; display: flex; align-items: center; padding: 60px 5%; background: var(--paper-deep); overflow: hidden; border-radius: 3px 25px 3px 3px; }
+.chair > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.chair > div { position: relative; width: min(410px, 44%); margin-left: auto; padding: 35px 32px; color: var(--burgundy); background: var(--paper); border-radius: 3px 18px 3px 3px; }
+.chair h2 { font: 400 43px/1 var(--display); letter-spacing: -.025em; margin-bottom: 22px; }
+.chair div > p:not(:first-child) { font-size: 12px; line-height: 1.85; color: var(--brown); }
+.mountains { max-width: 740px; padding: 85px 0 65px; margin: 0 auto; text-align: center; }
+.mountains h2 { margin-bottom: 30px; }
+.mountains > p:not(:first-child) { font-size: 13px; line-height: 1.95; color: var(--brown); margin-inline: auto; max-width: 590px; }
+.mountains > a { margin-top: 10px; }
+.homes { padding: 55px 0 0; border-top: 1px solid var(--hairline); }
+.homesHeading { display: flex; justify-content: space-between; align-items: center; gap: 35px; margin-bottom: 30px; }
+.homesHeading > p { font-size: 12px; line-height: 1.9; color: var(--brown); margin: 0; }
+.hotelRow { display: grid; grid-template-columns: 40px 1fr 1fr 25px; gap: 25px; align-items: center; border-top: 1px solid var(--hairline); padding: 30px 0; text-decoration: none; color: var(--burgundy); }
+.hotelRow:last-child { border-bottom: 1px solid var(--hairline); }
+.hotelRow > span:first-child { color: var(--muted); font-size: 9px; }
+.hotelRow h3 { font: 400 40px/1 var(--display); letter-spacing: -.02em; margin: 0 0 10px; }
+.hotelRow div > p { font-size: 10px; color: var(--brown); margin: 0; }
+.hotelRow > p { font: italic 400 24px/1.2 var(--display); max-width: 310px; margin: 0; color: var(--olive); }
+.hotelRow > span:last-child { transition: transform .3s var(--ease-editorial); }
+.hotelRow:hover > span:last-child { transform: translate(3px, -3px); }
+.closing { padding: 85px 0; text-align: center; }
+.closing h2 { font: 400 clamp(44px, 4.5vw, 74px)/1 var(--display); color: var(--burgundy); letter-spacing: -.03em; margin-bottom: 32px; }
+@media (max-width: 900px) { .opening { gap: 6%; } .opening h1 { font-size: 76px; } .family { gap: 8%; } .chair > div { width: 50%; } .chair h2 { font-size: 39px; } .hotelRow { gap: 20px; grid-template-columns: 25px 1.3fr 1fr 20px; } .hotelRow h3 { font-size: 34px; } }
+@media (max-width: 600px) { .opening { display: block; padding-bottom: 45px; } .opening h1 { font-size: 62px; } .opening figure { width: 82%; margin: 35px 0 20px auto; aspect-ratio: 4 / 4.1; } .opening figcaption { font-size: 7px; } .family { display: block; padding: 40px 0 30px; } .family > div:last-child { padding-top: 0; } .family > div:last-child p { font-size: 12px; } .chair { display: block; padding: 0; min-height: 0; border-radius: 2px 20px 2px 2px; } .chair > img { position: relative; height: auto; aspect-ratio: 4 / 3; object-fit: cover; object-position: 25% center; } .chair > div { width: 100%; padding: 28px 25px; border-radius: 0; } .chair h2 { font-size: 39px; } .mountains { padding: 48px 0 38px; } .mountains > p:not(:first-child) { font-size: 12px; text-align: left; } .mountains h2 { text-align: left; font-size: 39px; } .mountains > p:first-child { text-align: left; line-height: 1.6; } .homes { padding-top: 35px; } .homesHeading { display: block; margin-bottom: 25px; } .homesHeading > p { font-size: 11px; } .hotelRow { grid-template-columns: 22px 1fr 18px; gap: 14px; padding: 26px 0; } .hotelRow > p { grid-column: 2; grid-row: 2; font-size: 22px; } .hotelRow > span:last-child { grid-column: 3; grid-row: 1 / 3; } .hotelRow h3 { font-size: 34px; } .closing { padding: 50px 0 60px; } .closing h2 { font-size: 43px; } }

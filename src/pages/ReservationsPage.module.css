@@ -1,0 +1,86 @@
+.hero { display: grid; grid-template-columns: 1.5fr 1fr; gap: 10%; align-items: end; }
+.heroAside { padding-bottom: 28px; }
+.heroAside > span { display: block; margin-top: 24px; font-size: 10px; color: var(--olive); }
+.progress { display: flex; list-style: none; padding: 0 0 24px; margin: 0 0 45px; gap: 44px; border-bottom: 1px solid var(--hairline); }
+.progress li { display: flex; gap: 11px; align-items: center; color: var(--muted); font-size: 11px; }
+.progress li > span { display: inline-grid; place-items: center; width: 29px; height: 29px; border: 1px solid var(--hairline); border-radius: 50%; font-size: 9px; }
+.progress .currentStep { color: var(--burgundy); } .currentStep > span { background: var(--burgundy); color: var(--paper); border-color: var(--burgundy); }
+.pastStep > span { background: var(--paper-deep); }
+.bookingGrid { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 8%; align-items: start; padding-bottom: 60px; }
+.bookingGrid[data-booking-step='COMPLETE'] { display: block; }
+.bookingPanel { scroll-margin-top: 36px; min-width: 0; }
+.hotelChoices { border: 0; padding: 0; margin: 10px 0 5px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.hotelChoice { position: relative; cursor: pointer; border: 1px solid var(--hairline); border-radius: 7px; padding: 20px 17px 22px; display: flex; flex-direction: column; min-height: 152px; transition: border-color .2s, background .2s; }
+.hotelChoice:hover { background: var(--paper); } .chosenHotel { background: var(--paper); border-color: var(--burgundy); }
+.hotelChoice input { position: absolute; inset: 0; z-index: 1; opacity: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; }
+.hotelChoice:has(input:focus-visible) { outline: 2px solid var(--olive); outline-offset: 4px; }
+.hotelNumber { font-size: 9px; color: var(--muted); margin-bottom: 19px; }
+.choiceName { font: 400 33px/1 var(--display); color: var(--burgundy); }
+.choiceName small { display: block; font: 400 9px/1.5 var(--sans); color: var(--brown); margin-top: 10px; }
+.radioMark { position: absolute; right: 16px; top: 19px; width: 12px; height: 12px; border: 1px solid #8b725360; border-radius: 50%; }
+.chosenHotel .radioMark { border-color: var(--burgundy); box-shadow: inset 0 0 0 3px var(--paper); background: var(--burgundy); }
+.formSection { padding: 32px 0 0; }
+.sectionHeading { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; margin-bottom: 18px; }
+.sectionHeading h3 { font: 400 30px/1 var(--display); color: var(--burgundy); margin: 0; }
+.sectionHeading > span { font-size: 10px; color: var(--muted); }
+.counter { display: flex; justify-content: space-between; align-items: center; padding: 16px 0; border-bottom: 1px solid var(--hairline); }
+.counter > div:first-child > span { color: var(--brown); font-size: 12px; }
+.counter small { display: block; margin-top: 6px; color: var(--muted); font-size: 10px; }
+.counterControls { display: flex; align-items: center; gap: 12px; }
+.counterControls button { width: 44px; min-height: 44px; display: grid; place-items: center; border: 1px solid var(--hairline); border-radius: 50%; background: none; color: var(--burgundy); font-size: 18px; }
+.counterControls button:disabled { opacity: .3; cursor: default; } .counterControls button:not(:disabled):hover { background: var(--paper-deep); }
+.counterControls output { min-width: 24px; text-align: center; color: var(--burgundy); font-size: 14px; }
+.summary { position: sticky; top: 30px; border-top: 1px solid var(--burgundy); padding: 27px 25px; background: #eeeadf; border-radius: 0 0 12px 0; }
+.summary h2 { font: 400 43px/.98 var(--display); color: var(--burgundy); margin-bottom: 13px; letter-spacing: -.02em; }
+.summaryDestination { font-size: 11px; color: var(--brown); }
+.summaryDates { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 24px 0; margin-top: 20px; border-top: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline); }
+.summaryDates div { display: grid; gap: 10px; }
+.summaryDates div > span { font-size: 8px; color: var(--muted); letter-spacing: .12em; }
+.summaryDates strong { font: 400 17px var(--display); color: var(--burgundy); }
+.summaryDates > span { font-size: 13px; color: var(--muted); }
+.summary dl { margin: 22px 0; }
+.summary dl > div { display: flex; justify-content: space-between; align-items: baseline; gap: 18px; margin-bottom: 15px; font-size: 10px; }
+.summary dt { color: var(--muted); } .summary dd { margin: 0; text-align: right; color: var(--brown); }
+.summary .summaryTotal { border-top: 1px solid var(--hairline); padding-top: 20px; margin-top: 24px; }
+.summaryTotal dt { color: var(--burgundy); } .summaryTotal dd { font: 400 30px var(--display); color: var(--burgundy); }
+.summaryQuote { font: 400 23px/1.2 var(--display); color: var(--olive); margin-top: 28px; }
+.summary > a { font-size: 10px; gap: 15px; }
+.availabilityNote { font-size: 10px; line-height: 1.8; color: var(--muted); max-width: 470px; margin-bottom: 28px; }
+.roomList { border-top: 1px solid var(--hairline); }
+.room { display: grid; grid-template-columns: minmax(0, 1fr) 160px; gap: 22px; padding: 28px 0; border-bottom: 1px solid var(--hairline); transition: background .25s; }
+.selectedRoom { background: var(--paper); box-shadow: -13px 0 0 var(--paper), 13px 0 0 var(--paper); }
+.roomStory > span:first-child { font-size: 8px; }
+.roomStory h3 { font: 400 40px/1 var(--display); color: var(--burgundy); margin: 15px 0; }
+.roomStory p { font-size: 12px; line-height: 1.8; color: var(--brown); margin-bottom: 15px; }
+.occupancy { font-size: 10px; color: var(--olive); }
+.roomStory ul { display: flex; flex-wrap: wrap; gap: 6px 14px; list-style: none; padding: 0; margin: 14px 0 0; font-size: 9px; color: var(--muted); }
+.roomStory li::before { content: '·'; margin-right: 6px; }
+.roomRate { text-align: right; padding-top: 26px; }
+.roomRate strong { display: block; font: 400 30px/1.1 var(--display); color: var(--burgundy); white-space: nowrap; }
+.roomRate > span, .roomRate > p { font-size: 9px; line-height: 1.8; color: var(--muted); margin: 7px 0 18px; }
+.roomRate > span { display: block; }
+.chooseRoom { display: inline-flex; align-items: center; justify-content: space-between; gap: 21px; min-height: 44px; padding: 9px 0 9px 10px; color: var(--burgundy); background: none; border: 0; font: 400 11px var(--sans); text-transform: none; letter-spacing: 0; }
+.chooseRoom[aria-pressed='true'] { color: var(--olive); }
+.chooseRoom span { display: grid; place-items: center; width: 28px; height: 28px; border: 1px solid var(--hairline); border-radius: 50%; }
+.empty { padding: 30px 0; } .empty h3 { font: 400 43px/1 var(--display); color: var(--burgundy); } .empty > p { font-size: 13px; line-height: 1.9; color: var(--brown); max-width: 410px; }
+.checkoutNotice { padding: 19px 22px; margin: 25px 0 13px; background: #eeeadf; border-radius: 5px; }
+.checkoutNotice strong { font-size: 11px; color: var(--olive); font-weight: 500; } .checkoutNotice p { font-size: 11px; line-height: 1.8; color: var(--brown); margin: 8px 0 0; }
+.acknowledgement { display: flex; gap: 13px; align-items: flex-start; margin: 27px 0 10px; color: var(--brown); font-size: 11px; line-height: 1.8; cursor: pointer; min-height: 44px; }
+.acknowledgement input { width: 18px; height: 18px; margin: 2px 0 0; accent-color: var(--burgundy); flex-shrink: 0; }
+.confirmation { max-width: 760px; margin: 0 auto; text-align: center; padding: 10px 0 20px; }
+.confirmation > img { width: 82px; height: 82px; margin-bottom: 20px; }
+.confirmation h2 { font: 400 clamp(48px, 5vw, 75px)/.95 var(--display); letter-spacing: -.035em; color: var(--burgundy); margin-bottom: 25px; }
+.transactionMessage { font-size: 13px; line-height: 1.85; color: var(--olive); }
+.reference { display: inline-block; padding: 11px 18px; border: 1px solid var(--hairline); border-radius: 4px; color: var(--muted); letter-spacing: .12em; font-size: 10px; margin: 12px 0 24px; }
+.confirmationDetails { padding: 25px; border-top: 1px solid var(--hairline); border-bottom: 1px solid var(--hairline); }
+.confirmationDetails h3 { font: 400 35px var(--display); color: var(--burgundy); margin-bottom: 10px; }
+.confirmationDetails p { font-size: 12px; line-height: 1.9; color: var(--brown); }
+.confirmationDetails strong { font: 400 38px var(--display); color: var(--burgundy); } .confirmationDetails small { font: 10px var(--sans); margin-left: 10px; color: var(--muted); }
+.confirmation > div:last-child { justify-content: center; }
+.closing { padding: 65px 0 75px; text-align: center; border-top: 1px solid var(--hairline); }
+.closing > p { font: 400 clamp(40px, 4.5vw, 70px)/1 var(--display); color: var(--burgundy); margin: 24px 0; letter-spacing: -.02em; }
+@media (max-width: 1100px) { .bookingGrid { gap: 5%; grid-template-columns: minmax(0, 1fr) 300px; } .hotelChoices { grid-template-columns: 1fr; gap: 10px; } .hotelChoice { flex-direction: row; min-height: 80px; gap: 20px; align-items: center; padding: 16px 20px; } .hotelNumber { margin: 0; } .choiceName small { margin-top: 6px; } .radioMark { top: 33px; right: 20px; } .choiceName { font-size: 29px; } .room { grid-template-columns: minmax(0, 1fr) 130px; gap: 15px; } }
+@media (max-width: 800px) { .hero { grid-template-columns: 1fr; gap: 0; } .heroAside { padding: 0; } .heroAside > span { display: none; } .bookingGrid { grid-template-columns: 1fr; gap: 35px; } .summary { position: static; max-width: none; padding: 25px; } .summaryDates { justify-content: flex-start; gap: 30px; } .summary dl > div { font-size: 11px; } .summaryQuote { font-size: 25px; } .progress { gap: 22px; margin-bottom: 32px; padding-bottom: 20px; } .progress li { font-size: 10px; gap: 8px; } .progress li > span { width: 25px; height: 25px; font-size: 8px; } .hero { padding-bottom: 35px; } }
+@media (max-width: 600px) { .progress { justify-content: space-between; gap: 10px; } .progress li { display: grid; justify-items: start; align-content: start; gap: 10px; max-width: 78px; font-size: 9px; line-height: 1.5; } .hotelChoices { gap: 10px; } .hotelChoice { min-height: 85px; padding: 17px 18px; } .sectionHeading { align-items: flex-start; } .sectionHeading h3 { font-size: 29px; } .sectionHeading > span { max-width: 100px; text-align: right; line-height: 1.6; font-size: 9px; } .counter { padding: 14px 0; } .counter small { font-size: 9px; } .counterControls { gap: 8px; } .bookingPanel { scroll-margin-top: 24px; } .room { grid-template-columns: 1fr; gap: 8px; padding: 27px 0; } .roomStory h3 { font-size: 39px; } .roomRate { padding-top: 4px; text-align: left; display: grid; grid-template-columns: 1fr auto; align-items: center; column-gap: 20px; } .roomRate strong { font-size: 30px; } .roomRate > span { grid-column: 1; margin: 0; } .roomRate > p { grid-column: 1; margin: 6px 0 0; font-size: 10px; } .chooseRoom { grid-column: 2; grid-row: 1 / 4; } .roomStory p { font-size: 12px; } .selectedRoom { box-shadow: -10px 0 0 var(--paper), 10px 0 0 var(--paper); } .checkoutNotice { padding: 17px 18px; } .acknowledgement { font-size: 11px; } .closing { padding: 40px 0 50px; } .closing > p { font-size: 45px; } .bookingGrid { padding-bottom: 42px; } .confirmation > img { width: 68px; height: 68px; } .confirmation h2 { font-size: 51px; } .confirmationDetails { padding: 23px 0; } .transactionMessage { font-size: 12px; } }
+
+.dateActions { display: flex; align-items: center; gap: 14px; color: var(--muted); font-size: 10px; flex-shrink: 0; } .dateActions > button { font-size: 9px; min-height: 44px; } @media (max-width: 600px) { .dateActions { gap: 8px; font-size: 9px; } }

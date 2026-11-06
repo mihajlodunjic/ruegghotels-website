@@ -13,7 +13,7 @@ const descriptions: Record<StaticChapter, string> = {
   invitation: 'An alpine timber house at dusk, with mountains to the left and a warmly lit entrance.',
   welcome: 'A timber reception with a central portrait and open book, green armchair and carved counter.',
   hallway: 'A warm walnut hallway. The near door on the right opens into the optional room journey.',
-  room: 'An imagined alpine bedroom, with a timber bed and a window looking towards the mountains.',
+  room: 'An alpine bedroom, with a timber bed and a window looking towards the mountains.',
   finale: 'A communal table on the left, with candlelight, flowers and an alpine lounge beyond.',
 }
 const labels: Record<StaticChapter, string> = { invitation: 'The invitation', welcome: 'The welcome', hallway: 'The choice', room: 'The room', finale: 'The table' }
@@ -58,7 +58,7 @@ export function CinematicHomePage() {
         {chapter === 'welcome' && <div className={styles.actions} data-reveal>{action('Continue the Journey', 'CONTINUE')}<Link className={styles.quietLink} to="/our-story">Our Story <span aria-hidden="true">↗</span></Link></div>}
         {chapter === 'hallway' && <div className={styles.actions} data-reveal>{action('Explore Room', 'ENTER_ROOM')}{action('Continue to the Table', 'CONTINUE', true)}</div>}
         {chapter === 'room' && <>
-          {info && <><p className={styles.introCopy} data-reveal>A quieter moment in the mountains.<br />Let the outside world wait a while.</p><p className={styles.disclosure} data-reveal>An imagined brand space.<br />Not verified bookable room inventory.</p></>}
+          {info && <><p className={styles.introCopy} data-reveal>A quieter moment in the mountains.<br />Let the outside world wait a while.</p><p className={styles.disclosure} data-reveal>Make space for quieter mornings.<br />And a little time for yourself.</p></>}
           {info && !staticMode && <button className={styles.closeInfo} onClick={() => send('CLOSE_ROOM_INFO')} aria-label="Close room information"><span aria-hidden="true">×</span></button>}
           <div className={styles.actions} data-reveal>{info ? <Link data-motion-link className={styles.action} to="/book"><span>Explore Our Stays</span><span data-motion-arrow className={styles.actionArrow} aria-hidden="true">↗</span></Link> : action('About this Room', 'OPEN_ROOM_INFO')}{action('Back to Hallway', 'BACK_TO_HALLWAY', true)}</div>
         </>}
