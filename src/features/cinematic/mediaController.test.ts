@@ -47,11 +47,28 @@ function setup(frames = true, stills?: StillFrames, mobile = false) {
 }
 afterEach(() => vi.useRealTimers())
 describe('native media controller', () => {
-  it('does not load either video for the invitation', () => {
+  it('prewarms the Master during the invitation without starting playback or loading the room', () => {
     const { controller, master, branch } = setup()
     controller.sync({ mode: 'INVITATION' })
-    expect(master.load).not.toHaveBeenCalled()
+    expect(master.src).toContain('master-1080')
+    expect(master.load).toHaveBeenCalledOnce()
+    expect(master.play).not.toHaveBeenCalled()
     expect(branch.load).not.toHaveBeenCalled()
+    controller.dispose()
+  })
+  it('reuses an in-flight Master preload when Step Inside is clicked', async () => {
+    const { controller, master } = setup()
+    master.readyState = 0
+    master.load.mockImplementation(() => undefined)
+    controller.sync({ mode: 'INVITATION' })
+    controller.sync({ mode: 'MASTER_TO_WELCOME' })
+    expect(master.load).toHaveBeenCalledOnce()
+    expect(master.play).not.toHaveBeenCalled()
+    master.readyState = 2
+    master.dispatchEvent(new Event('loadeddata'))
+    await settle()
+    expect(master.play).toHaveBeenCalledOnce()
+    expect(master.playbackRate).toBe(2)
     controller.dispose()
   })
   it.each([true, false])('hands off at the checkpoint without a new seek, frame callbacks=%s', async (frames) => {
@@ -225,14 +242,41 @@ describe('native media controller', () => {
     expect(master.paused).toBe(true)
     controller.dispose()
   })
-  it('bounds stalls and cancels their timeout after dispose', async () => {
+  it('tolerates ordinary buffering without an error and falls back to stills only after a prolonged stall', async () => {
     vi.useFakeTimers()
     const { controller, master, dispatch } = setup()
     controller.sync({ mode: 'MASTER_TO_WELCOME' }); await settle()
     master.dispatchEvent(new Event('waiting'))
-    await vi.advanceTimersByTimeAsync(10001)
-    expect(dispatch).toHaveBeenCalledWith(expect.objectContaining({ type: 'MEDIA_STALLED' }))
+    await vi.advanceTimersByTimeAsync(20000)
+    expect(dispatch).not.toHaveBeenCalledWith(expect.objectContaining({ type: 'MEDIA_STALLED' }))
+    expect(dispatch).not.toHaveBeenCalledWith({ type: 'ENTER_STATIC_MODE' })
+    await vi.advanceTimersByTimeAsync(40001)
+    expect(dispatch).toHaveBeenCalledWith({ type: 'ENTER_STATIC_MODE' })
     controller.dispose()
+    expect(vi.getTimerCount()).toBe(0)
+  })
+  it('clears the buffering fallback timer when playback resumes', async () => {
+    vi.useFakeTimers()
+    const { controller, master, dispatch } = setup()
+    controller.sync({ mode: 'MASTER_TO_WELCOME' }); await settle()
+    master.dispatchEvent(new Event('waiting'))
+    await vi.advanceTimersByTimeAsync(15000)
+    master.dispatchEvent(new Event('playing'))
+    await vi.advanceTimersByTimeAsync(60000)
+    expect(dispatch).not.toHaveBeenCalledWith({ type: 'ENTER_STATIC_MODE' })
+    controller.dispose()
+    expect(vi.getTimerCount()).toBe(0)
+  })
+  it('allows more than 12 seconds for a slow but valid media response', async () => {
+    vi.useFakeTimers()
+    const video = new FakeVideo() as unknown as HTMLVideoElement
+    video.readyState = 0
+    const waiting = waitForMedia(video, () => video.readyState >= 2, ['loadeddata'], new AbortController().signal)
+    const completion = expect(waiting).resolves.toBeUndefined()
+    await vi.advanceTimersByTimeAsync(20000)
+    video.readyState = 2
+    video.dispatchEvent(new Event('loadeddata'))
+    await completion
     expect(vi.getTimerCount()).toBe(0)
   })
   it('bounds readiness waits and aborts a pending seek', async () => {

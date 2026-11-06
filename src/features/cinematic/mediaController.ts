@@ -6,9 +6,13 @@ import type { FilmSource } from './mobileFraming'
 import type { StillFrames } from './stillFrames'
 
 export interface MediaPresentation { video: 'master' | 'branch' | null; phase: 'idle' | 'loading' | 'ready' | 'waiting' | 'holding' | 'error'; still: StaticChapter; error?: string }
+// Network buffering is not a fatal error. Allow longer preparation for presentation use.
+export const MEDIA_READY_TIMEOUT_MS = 90000
+export const MEDIA_STALL_GRACE_MS = 60000
+export class MediaTimeoutError extends Error { constructor() { super('The film took too long to respond.') } }
 type Videos = Record<'master' | 'branch', HTMLVideoElement>
 const ending: Record<PlayingScene, StaticChapter> = { MASTER_TO_WELCOME: 'welcome', MASTER_TO_HALLWAY: 'hallway', MASTER_TO_FINALE: 'finale', ROOM_ENTERING: 'room', ROOM_EXITING: 'hallway' }
-export function waitForMedia(video: HTMLVideoElement, ready: () => boolean, events: string[], signal: AbortSignal, timeout = 12000): Promise<void> {
+export function waitForMedia(video: HTMLVideoElement, ready: () => boolean, events: string[], signal: AbortSignal, timeout = MEDIA_READY_TIMEOUT_MS): Promise<void> {
   return new Promise((resolve, reject) => {
     if (signal.aborted) { reject(new DOMException('Cancelled', 'AbortError')); return }
     if (ready()) { resolve(); return }
@@ -16,7 +20,7 @@ export function waitForMedia(video: HTMLVideoElement, ready: () => boolean, even
     const check = () => { if (ready()) { cleanup(); resolve() } }
     const fail = () => { cleanup(); reject(new Error('The film could not be loaded.')) }
     const cancel = () => { cleanup(); reject(new DOMException('Cancelled', 'AbortError')) }
-    const timer = setTimeout(() => { cleanup(); reject(new Error('The film took too long to respond.')) }, timeout)
+    const timer = setTimeout(() => { cleanup(); reject(new MediaTimeoutError()) }, timeout)
     events.forEach((name) => video.addEventListener(name, check)); video.addEventListener('error', fail); signal.addEventListener('abort', cancel, { once: true })
   })
 }
@@ -45,6 +49,11 @@ export class CinematicPlayerController {
     this.pause()
     if (view.mode === 'MENU_OPEN' || view.mode === 'USER_PAUSED' || view.mode === 'MEDIA_ERROR') return
     const task = new AbortController(); this.task = task
+    // Prewarm the 1080p Master while the invitation still is visible. Browser
+    // preload=auto is a hint, not a mandatory full download; never block the UI.
+    if (view.mode === 'INVITATION' && this.allowWarm) this.warm('master')
+    // Load the optional room footage while the visitor reads the reception.
+    if (view.mode === 'WELCOME_PAUSED' && this.allowWarm) this.warm('room-forward')
     if (view.mode === 'REWINDING') { void this.rewind(view.origin, task.signal); return }
     if (isPlaying(view.mode)) { void this.playScene(view.mode, task.signal); return }
     const target = chapterOf(view)
@@ -66,8 +75,8 @@ export class CinematicPlayerController {
       if (!signal.aborted) this.show({ phase: 'error', error: error instanceof Error ? error.message : 'The scene image could not be loaded.' })
     }
   }
-  private warm(source: 'room-forward' | 'room-reverse') {
-    const video = this.videos.branch
+  private warm(source: 'master' | 'room-forward' | 'room-reverse') {
+    const video = source === 'master' ? this.videos.master : this.videos.branch
     if (this.activeVideo === video) return
     const url = mediaUrl(source, this.mobile)
     if (video.getAttribute('src') === url && !video.error) return
@@ -101,7 +110,9 @@ export class CinematicPlayerController {
     const stalled = () => {
       if (signal.aborted || completed) return
       this.show({ video: config.video, phase: hasFrame ? 'ready' : 'waiting' }); clearStall()
-      stallTimer = setTimeout(() => { if (!signal.aborted) this.dispatch({ type: 'MEDIA_STALLED', errorCode: 'The film paused while loading. Retry or continue with still images.' }) }, 10000)
+      // A slow connection should not produce an error panel. After a prolonged
+      // total stall, preserve a usable still-image journey instead.
+      stallTimer = setTimeout(() => { if (!signal.aborted && !completed) this.dispatch({ type: 'ENTER_STATIC_MODE' }) }, MEDIA_STALL_GRACE_MS)
     }
     const frame = (time: number, decoded: boolean) => {
       if (signal.aborted || completed || video.seeking) return
@@ -126,7 +137,8 @@ export class CinematicPlayerController {
     signal.addEventListener('abort', cleanup, { once: true })
     try {
       video.preload = 'auto'
-      if (!sameSource || video.error || video.readyState < 2) { video.src = mediaUrl(config.source, this.mobile); this.decoded.delete(video); video.load() }
+      // A matching prewarm may still be downloading: don't restart it on click.
+      if (!sameSource || video.error) { video.src = mediaUrl(config.source, this.mobile); this.decoded.delete(video); video.load() }
       await waitForMedia(video, () => video.readyState >= 2, ['loadeddata', 'canplay'], signal)
       signal.throwIfAborted()
       const start = sameScene && sameSource && video.currentTime >= config.start ? video.currentTime : config.start
@@ -142,7 +154,13 @@ export class CinematicPlayerController {
       if (signal.aborted && this.activeVideo !== video) video.pause()
     } catch (error) {
       cleanup()
-      if (!signal.aborted) { video.pause(); this.dispatch({ type: 'PLAY_FAILED', errorCode: error instanceof Error ? error.message : 'Playback could not start.' }) }
+      if (!signal.aborted) {
+        video.pause()
+        // A readiness timeout only means slow delivery; don't interrupt the
+        // presentation with a media-error overlay.
+        if (error instanceof MediaTimeoutError) this.dispatch({ type: 'ENTER_STATIC_MODE' })
+        else this.dispatch({ type: 'PLAY_FAILED', errorCode: error instanceof Error ? error.message : 'Playback could not start.' })
+      }
     }
   }
   private async rewind(origin: JourneyView, signal: AbortSignal) {

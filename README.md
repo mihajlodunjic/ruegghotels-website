@@ -15,6 +15,10 @@ Open `http://127.0.0.1:5173/`. **Step inside** starts the native video journey: 
 
 On phones the shared 16:9 source plane covers the usable viewport, with chapter-aware framing shared by both media layers and the door hotspot. Desktop retains its full-frame compositions. Checkpoint stills remain the editorial pause mechanism: the outgoing video is held until the replacement image is decoded and painted; playback is revealed only after a valid video frame arrives.
 
+## Presentation-friendly media loading
+
+The Master 1080p video is requested early while the invitation poster remains visible. The optional room-forward video is prewarmed at the reception pause; the room reverse remains ready on demand, and cinematic rewind footage still loads only when requested. Native `preload=auto` is a browser hint rather than a guarantee of full-file download. An in-progress preload is no longer restarted by Step Inside. Slow video readiness can wait up to 90 seconds without triggering an error panel; ordinary buffering is tolerated, and an exceptionally prolonged stall automatically switches to the usable still-image journey. Real missing-file/playback failures retain recovery controls. Static image decode waits also have extra tolerance. These safeguards reduce presentation interruptions but cannot guarantee playback without connectivity or a capable device.
+
 ## Explore the website
 
 - `/partners`: nine curated example experiences; combine destination and category filters, expand details, or follow hotel-specific booking/contact links. Filter state survives browser navigation.

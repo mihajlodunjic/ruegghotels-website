@@ -5,7 +5,7 @@ export interface StillFrames {
   prepare(chapter: StaticChapter): Promise<void>
   show(chapter: StaticChapter, signal: AbortSignal): Promise<void>
 }
-export function abortable<T>(work: Promise<T>, signal?: AbortSignal, timeout = 12000): Promise<T> {
+export function abortable<T>(work: Promise<T>, signal?: AbortSignal, timeout = 90000): Promise<T> {
   return new Promise((resolve, reject) => {
     const cleanup = () => { clearTimeout(timer); signal?.removeEventListener('abort', cancel) }
     const cancel = () => { cleanup(); reject(new DOMException('Cancelled', 'AbortError')) }

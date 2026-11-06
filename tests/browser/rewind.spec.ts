@@ -78,7 +78,7 @@ test('on-demand 5x rewind from reception, hallway and genuine finale restores in
   const requests: string[] = []; page.on('request', (r) => { if (r.url().includes('.mp4')) requests.push(r.url()) })
   for (const [chapter, start] of [['reception', 13.375], ['hallway', 6.25], ['finale', 0]] as const) {
     await page.goto('/'); await ready(page, 'INVITATION')
-    if (chapter === 'reception') { expect(requests).toEqual([]); await welcome(page) }
+    if (chapter === 'reception') { expect(requests.every((url) => url.includes('master-1080.v1.mp4'))).toBe(true); await welcome(page) }
     else { await hallway(page); if (chapter === 'finale') { await click(page, 'Continue to the Table'); await seekForward(page, 'master', 23.15); await ready(page, 'FINALE') } }
     expect(requests.some((r) => /master-reverse/.test(r))).toBe(chapter !== 'reception') // previous iterations only
     await click(page, 'Back to Beginning')

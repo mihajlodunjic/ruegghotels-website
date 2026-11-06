@@ -52,7 +52,8 @@ test('approved master → room V3 → reverse → hallway → genuine finale', a
   page.on('request', (request) => { if (request.url().includes('.mp4')) media.push(request.url()) })
   await page.goto('/')
   await expect(page.getByRole('button', { name: 'Step inside' })).toBeVisible()
-  expect(media).toEqual([])
+  // The Master can preload before the user starts; room and reverse clips must remain on demand.
+  expect(media.every((url) => url.includes('master-1080.v1.mp4'))).toBe(true)
   await shot(page, info, 'invitation')
   await page.getByRole('button', { name: 'Step inside' }).click()
   await state(page, 'WELCOME_PAUSED')
