@@ -1,0 +1,6 @@
+.copy { min-width: 0; }
+.status { color: var(--olive); font-size: 11px; line-height: 1.7; margin: 0; }
+.status:empty { display: none; }
+.manual { display: grid; gap: 10px; font-size: 11px; color: var(--brown); margin-top: 12px; }
+.manual textarea { width: 100%; border: 1px solid var(--hairline); padding: 14px; background: var(--paper); color: var(--ink); font: 12px/1.8 var(--sans); resize: vertical; }
+@media (max-width: 767px) { .manual textarea { font-size: 16px; } }

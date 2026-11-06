@@ -5,8 +5,9 @@ const state = (page: Page, mode: string) => expect(page.locator('main')).toHaveA
 const shot = async (page: Page, info: TestInfo, name: string) => {
   await expect(page.locator('main')).toHaveAttribute('data-ui-ready', 'true')
   await page.evaluate(() => document.fonts.ready)
-  await mkdir('docs/evidence/package-03', { recursive: true })
-  await page.screenshot({ path: `docs/evidence/package-03/home-${info.project.name}-${name}.png`, fullPage: true, animations: 'disabled' })
+  if (name !== 'finale') return
+  await mkdir('docs/evidence/package-03-5', { recursive: true })
+  await page.screenshot({ path: `docs/evidence/package-03-5/${info.project.name}-home-${name}.png`, fullPage: true, animations: 'disabled' })
 }
 
 test('approved master → room V3 → reverse → hallway → genuine finale', async ({ page }, info) => {
@@ -53,6 +54,8 @@ test('approved master → room V3 → reverse → hallway → genuine finale', a
   await state(page, 'FINALE')
   expect(await page.getByTestId('master-video').evaluate((v: HTMLVideoElement) => v.currentTime)).toBe(23.375)
   await shot(page, info, 'finale')
+  await expect(page.getByRole('link', { name: 'Design Your Alpine Experience', exact: true })).toBeVisible()
+  await expect(page.getByRole('link', { name: 'Discover RÜEGG Passport', exact: true })).toBeVisible()
   for (const hotel of ['agnes', 'spalloni', 'schiebel']) await expect(page.locator(`a[href="/book?hotel=${hotel}"]`)).toBeVisible()
   await page.locator('a[href="/book?hotel=spalloni"]').click()
   await expect(page).toHaveURL(/book\?hotel=spalloni$/)

@@ -68,19 +68,19 @@
 .roomInfo .secondary .actionArrow { flex-basis: 28px; width: 28px; height: 28px; font-size: 15px; border-color: var(--hairline); }
 .disclosure { font-size: 10px; color: var(--muted); line-height: 1.7; margin: 0 0 28px; }
 .closeInfo { position: absolute; top: 115px; right: 30px; display: grid; place-items: center; min-width: 44px; min-height: 44px; border: 0; background: none; color: var(--burgundy); font-size: 25px; font-weight: 300; }
-.finale { inset: 0 0 0 auto; width: 38%; background: var(--burgundy); color: var(--paper); padding: clamp(135px, 16vh, 180px) clamp(34px, 4vw, 78px) 80px; display: flex; flex-direction: column; justify-content: center; overflow-y: auto; }
-.finale .panelMasthead { margin-bottom: clamp(22px, 4vh, 42px); opacity: .8; }
-.finale h2 { font-size: clamp(46px, 4vw, 77px); line-height: .98; margin-bottom: clamp(25px, 4vh, 44px); }
+.finale { inset: 0 0 0 auto; width: 38%; background: var(--burgundy); color: var(--paper); padding: clamp(135px, 16vh, 180px) clamp(34px, 4vw, 78px) 50px; display: flex; flex-direction: column; justify-content: center; overflow-y: auto; }
+.finale .panelMasthead { margin-bottom: clamp(22px, 3vh, 30px); opacity: .8; }
+.finale h2 { font-size: clamp(46px, 4vw, 77px); line-height: .98; margin-bottom: 28px; }
 .selectorLabel { color: #e3d5c8; font-size: 10px; letter-spacing: .015em; margin: 0 0 15px; }
 .hotelList { border-top: 1px solid #f7f3e94a; }
-.hotelList a { display: flex; align-items: center; gap: 18px; min-height: 92px; padding: clamp(17px, 2.2vh, 25px) 0; color: inherit; border-bottom: 1px solid #f7f3e933; text-decoration: none; }
+.hotelList a { display: flex; align-items: center; gap: 18px; min-height: 86px; padding: 14px 0; color: inherit; border-bottom: 1px solid #f7f3e933; text-decoration: none; }
 .hotelNumber { align-self: flex-start; margin-top: 10px; font-size: 9px; letter-spacing: .05em; color: #e3d5c8; }
 .hotelName { font: 400 clamp(34px, 2.7vw, 52px)/1 var(--display); letter-spacing: -.015em; }
 .hotelName small { display: block; margin-top: 10px; color: #e3d5c8; font: 400 11px/1.4 var(--sans); letter-spacing: .005em; }
 .hotelArrow { margin-left: auto; font-size: 20px; color: #f0e4d7; transition: transform .45s var(--ease-editorial); }
 .hotelList a:hover .hotelArrow, .hotelList a:focus-visible .hotelArrow { transform: translate(4px, -4px); }
 .hotelList a:hover .hotelName { color: #e8d6bc; }
-.finaleLinks { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: clamp(24px, 4vh, 44px); }
+.finaleLinks { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 8px; }
 .finaleLinks .quietLink { font-size: 10px; gap: 10px; }
 .finale :focus-visible { outline-color: var(--paper); }
 .toolbar { position: absolute; z-index: 8; left: 3.5%; right: 3.5%; bottom: max(15px, env(safe-area-inset-bottom)); display: flex; justify-content: space-between; align-items: center; gap: 16px; color: var(--burgundy); }
@@ -197,3 +197,5 @@
   .playingCaption { display: none; }
   .stage[data-playing='true'] .toolbar { padding-bottom: 8px; }
 }
+
+.finaleDiscovery { margin-top: 18px; display: flex; flex-direction: column; } .finaleDiscovery > .quietLink { font: 400 21px/1.2 var(--display); min-height: 44px; } .finaleDiscovery > .quietLink > span { font: 14px var(--sans); } .finaleDiscovery .finaleLinks { padding-top: 8px; margin-top: 8px; border-top: 1px solid #f7f3e933; } @media (min-width: 768px) and (max-height: 750px) { .finaleDiscovery { margin-top: 10px; } .finaleDiscovery > .quietLink { font-size: 20px; } .finaleDiscovery .finaleLinks { padding-top: 4px; margin-top: 4px; } } @media (max-width: 767px), (max-width: 1024px) and (max-height: 550px) { .finaleDiscovery { margin-top: 19px; } .finaleDiscovery > .quietLink { font-size: 21px; } .finaleDiscovery .finaleLinks { margin-top: 11px; padding-top: 11px; } }
